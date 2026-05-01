@@ -1,0 +1,11 @@
+# PROSTIR — Express + static `public/` (not Next.js).
+# Admin UI lives at public/admin/ (leads.html, leads-app.js); cloned with the repo, not a separate root folder.
+# https://docs.railway.com/reference/config-as-code
+[build]
+buildCommand = "npm ci && npm run build"
+
+[deploy]
+startCommand = "node server.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"

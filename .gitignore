@@ -1,0 +1,6 @@
+node_modules/
+dist/
+gh-pages-out/
+.DS_Store
+*.log
+.env

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PROSTIR · 404</title>
+  <link rel="stylesheet" href="/app.css"/>
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+
+    .not-found-wrap {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+      padding-top: calc(68px + 2rem);
+      position: relative; overflow: hidden;
+    }
+
+    /* Ambient glow */
+    .not-found-wrap::before {
+      content: ''; position: absolute;
+      top: 30%; left: 50%; transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    /* Animated grid lines */
+    .nf-grid {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.35;
+    }
+    .nf-grid::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(139,92,246,0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,92,246,0.12) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+    }
+
+    /* 404 big number */
+    .nf-code {
+      font-size: clamp(6rem, 20vw, 11rem);
+      font-weight: 900; letter-spacing: -0.06em; line-height: 1;
+      color: transparent;
+      background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.35) 50%, rgba(139,92,246,0.15) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      border: none; position: relative; z-index: 1;
+      animation: nfPulse 4s ease-in-out infinite;
+      user-select: none;
+    }
+    body.theme-noir .nf-code {
+      background: linear-gradient(135deg, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.6) 50%, rgba(139,92,246,0.25) 100%);
+      -webkit-background-clip: text; background-clip: text;
+    }
+    @keyframes nfPulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.7; }
+    }
+
+    /* Icon */
+    .nf-icon {
+      width: 72px; height: 72px; border-radius: 22px;
+      background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.18);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem; position: relative; z-index: 1;
+      animation: nfFloat 5s ease-in-out infinite;
+    }
+    body.theme-noir .nf-icon { background: rgba(139,92,246,0.14); border-color: rgba(139,92,246,0.28); }
+    @keyframes nfFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    .nf-headline {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800; letter-spacing: -0.04em; line-height: 1.15;
+      color: var(--jet); margin-bottom: 0.75rem;
+      position: relative; z-index: 1;
+    }
+    body.theme-noir .nf-headline { color: #fff; }
+
+    .nf-desc {
+      font-size: 1rem; color: var(--grey-soft); line-height: 1.7;
+      max-width: 42ch; margin: 0 auto 2.5rem;
+      position: relative; z-index: 1;
+    }
+    body.theme-noir .nf-desc { color: rgba(255,255,255,0.4); }
+
+    /* Action buttons */
+    .nf-actions {
+      display: flex; flex-wrap: wrap; gap: 0.75rem;
+      justify-content: center; position: relative; z-index: 1;
+      margin-bottom: 3.5rem;
+    }
+    .nf-btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.75rem; border-radius: 14px;
+      background: #8B5CF6; color: #fff; text-decoration: none;
+      font-size: 0.9rem; font-weight: 700;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .nf-btn-primary:hover {
+      background: #7c3aed; transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(139,92,246,0.35);
+    }
+    .nf-btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.75rem; border-radius: 14px;
+      border: 1px solid rgba(139,92,246,0.25); background: transparent;
+      color: #8B5CF6; text-decoration: none;
+      font-size: 0.9rem; font-weight: 600;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .nf-btn-secondary:hover {
+      border-color: rgba(139,92,246,0.5);
+      background: rgba(139,92,246,0.06);
+      transform: translateY(-2px);
+    }
+
+    /* Quick-links chips */
+    .nf-links {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      justify-content: center; position: relative; z-index: 1;
+    }
+    .nf-link-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.9rem; border-radius: 999px;
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.05em;
+      border: 1px solid var(--grey-line); color: var(--grey-soft);
+      text-decoration: none; background: var(--grey-fill);
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    body.theme-noir .nf-link-chip {
+      border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.04);
+    }
+    .nf-link-chip:hover {
+      border-color: rgba(139,92,246,0.35); color: #8B5CF6;
+      transform: translateY(-1px);
+    }
+
+    /* Mono eyebrow */
+    .nf-eyebrow {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(139,92,246,0.7);
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      margin-bottom: 0.5rem; position: relative; z-index: 1;
+    }
+    .nf-eyebrow::before, .nf-eyebrow::after {
+      content: ''; display: block; height: 1px; width: 32px;
+      background: rgba(139,92,246,0.25);
+    }
+  </style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<header id="dock">
+  <a class="logo" href="/" aria-label="PROSTIR home">
+    <span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span>
+  </a>
+  <nav aria-label="Main navigation">
+    <a href="/dine.html"    data-magnetic data-mag-r="44" data-mag-s="7" id="nav-dine">Dine</a>
+    <a href="/working.html" data-magnetic data-mag-r="44" data-mag-s="7" id="nav-working">Working</a>
+    <a href="/moments.html" data-magnetic data-mag-r="44" data-mag-s="7" id="nav-moments">Moments</a>
+    <a href="/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+  </nav>
+  <div class="header-right">
+    <a href="/download.html" class="header-download" data-magnetic data-mag-r="40" data-mag-s="6">Незабаром</a>
+    <a href="/profile.html" class="user-avatar" title="Профіль" aria-label="Профіль">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </a>
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ua" aria-pressed="true" aria-label="Українська">
+        <span class="lang-flag" aria-hidden="true">🇺🇦</span><span class="lang-code">UA</span>
+      </button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+        <span class="lang-flag" aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span>
+      </button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Мобільне меню">
+  <a href="/download.html" class="header-download">Незабаром</a>
+  <a href="/dine.html">Dine</a>
+  <a href="/working.html">Working</a>
+  <a href="/moments.html">Moments</a>
+  <a href="/business.html">Business</a>
+</div>
+
+<main class="not-found-wrap">
+  <div class="nf-grid" aria-hidden="true"></div>
+
+  <div class="nf-icon" aria-hidden="true">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4C9.4 4 4 9.4 4 16s5.4 12 12 12 12-5.4 12-12S22.6 4 16 4z"/>
+      <path d="M16 11v6M16 21v.5"/>
+    </svg>
+  </div>
+
+  <div class="nf-eyebrow" id="nf-eyebrow">404 · Сторінку не знайдено</div>
+  <div class="nf-code" aria-label="404">404</div>
+
+  <h1 class="nf-headline" id="nf-headline">Ця сторінка<br>десь у місті.</h1>
+  <p class="nf-desc" id="nf-desc">Схоже, адреса, за якою ви перейшли, не існує або була переміщена. Поверніться на головну — ваш ритм міста чекає.</p>
+
+  <div class="nf-actions">
+    <a href="/" class="nf-btn-primary" data-magnetic data-mag-r="55" data-mag-s="10" id="nf-home-btn">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l6-6 6 6M4 6v8h3v-4h2v4h3V6"/></svg>
+      <span id="nf-home-label">На головну</span>
+    </a>
+    <a href="/dine.html" class="nf-btn-secondary" data-magnetic data-mag-r="55" data-mag-s="8" id="nf-dine-btn">
+      🍽 <span id="nf-dine-label">Забронювати стіл</span>
+    </a>
+  </div>
+
+  <div class="nf-links">
+    <a href="/working.html" class="nf-link-chip">💻 Working</a>
+    <a href="/moments.html" class="nf-link-chip">👥 Moments</a>
+    <a href="/business.html" class="nf-link-chip">📊 Business</a>
+    <a href="/profile.html" class="nf-link-chip">○ Профіль</a>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="/" aria-label="PROSTIR"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+    <span class="footer-copy">© 2026 PROSTIR · Urban OS · Kyiv</span>
+    <a href="/legal.html" class="footer-offer">Публічна оферта</a>
+    <nav class="footer-links">
+      <a href="#">Умови</a><a href="#">Конфіденційність</a><a href="#">Контакти</a>
+      <a href="#" class="faq-link">FAQ</a>
+    </nav>
+  </div>
+</footer>
+
+<button id="theme-toggle-fab" class="theme-fab hidden" type="button" aria-label="Змінити тему">
+  <span id="theme-toggle-icon" aria-hidden="true">◐</span>
+  <span id="theme-toggle-label">Theme</span>
+</button>
+
+<script>
+function $(id){ return document.getElementById(id); }
+
+/* ── Theme ── */
+(function(){
+  const fab = $('theme-toggle-fab'), icon = $('theme-toggle-icon'), label = $('theme-toggle-label');
+  const mq  = window.matchMedia('(prefers-color-scheme: dark)');
+  function apply(t){ document.body.classList.toggle('theme-noir', t==='dark'); if(icon) icon.textContent=t==='dark'?'☾':'☀'; if(label) label.textContent=t==='dark'?'Dark':'Light'; }
+  const saved = localStorage.getItem('prostir_theme_choice');
+  apply(saved||(mq.matches?'dark':'light'));
+  if(fab){ fab.classList.remove('hidden'); if(saved) fab.classList.add('ghosted'); }
+  mq.addEventListener('change', e=>{ if(!localStorage.getItem('prostir_theme_choice')) apply(e.matches?'dark':'light'); });
+  fab && fab.addEventListener('click', ()=>{ const n=document.body.classList.contains('theme-noir')?'light':'dark'; localStorage.setItem('prostir_theme_choice',n); apply(n); fab.classList.add('ghosted'); });
+})();
+
+/* ── Header scroll ── */
+window.addEventListener('scroll', ()=>{ $('dock').classList.toggle('scrolled', window.scrollY > 8); }, { passive: true });
+
+/* ── Mobile nav ── */
+(function(){
+  const btn=$('hamburger'),nav=$('mobile-nav');
+  btn&&btn.addEventListener('click',()=>{ const o=nav.classList.toggle('open'); btn.setAttribute('aria-expanded',o); });
+})();
+
+/* ── i18n ── */
+(function(){
+  const switcher=$('lang-switch'); if(!switcher) return;
+  const T = {
+    ua: { eyebrow:'404 · Сторінку не знайдено', headline:'Ця сторінка<br>десь у місті.', desc:'Схоже, адреса, за якою ви перейшли, не існує або була переміщена. Поверніться на головну — ваш ритм міста чекає.', homeLabel:'На головну', dineLabel:'Забронювати стіл' },
+    en: { eyebrow:'404 · Page not found', headline:'This page<br>is lost in the city.', desc:'The address you followed doesn\'t exist or was moved. Head back to the main page — your urban rhythm is waiting.', homeLabel:'Back to home', dineLabel:'Book a table' }
+  };
+  function apply(lang){
+    const t=T[lang];
+    const ey=$('nf-eyebrow'); if(ey) ey.textContent=t.eyebrow.replace(' · ','\u00a0·\u00a0');
+    const hl=$('nf-headline'); if(hl) hl.innerHTML=t.headline;
+    const ds=$('nf-desc'); if(ds) ds.textContent=t.desc;
+    const hb=$('nf-home-label'); if(hb) hb.textContent=t.homeLabel;
+    const db=$('nf-dine-label'); if(db) db.textContent=t.dineLabel;
+    switcher.querySelectorAll('.lang-btn').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang?'true':'false'));
+  }
+  const saved=localStorage.getItem('prostir_lang')||'ua';
+  apply(saved==='en'?'en':'ua');
+  switcher.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{ const l=b.dataset.lang==='en'?'en':'ua'; localStorage.setItem('prostir_lang',l); apply(l); }));
+})();
+</script>
+
+<!-- Magnetic Button Effect -->
+<script>
+(function(){if(window.matchMedia("(hover: none)").matches)return;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const K=150,D=15;function spring(){return{pos:0,vel:0,target:0};}function stepSpring(s,dt){const F=-K*(s.pos-s.target)-D*s.vel;s.vel+=F*dt;s.pos+=s.vel*dt;}function atRest(s){return Math.abs(s.pos-s.target)<0.015&&Math.abs(s.vel)<0.015;}let mx=-9999,my=-9999;document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;},{passive:true});const buttons=[];let lastT=0;function loop(now){const dt=Math.min((now-(lastT||now))/1000,0.05);lastT=now;for(const b of buttons){const r=b.el.getBoundingClientRect();const cx=r.left+r.width*.5,cy=r.top+r.height*.5;const dx=mx-cx,dy=my-cy;const dist=Math.hypot(dx,dy);if(dist<b.radius){const pull=(1-dist/b.radius);b.sx.target=(dx/b.radius)*b.maxShift*pull;b.sy.target=(dy/b.radius)*b.maxShift*pull;b.near=true;}else{b.sx.target=b.sy.target=0;b.near=false;}stepSpring(b.sx,dt);stepSpring(b.sy,dt);const x=b.sx.pos,y=b.sy.pos;b.el.style.transform="translate("+x.toFixed(2)+"px,"+y.toFixed(2)+"px)";if(b.inner){b.inner.style.transform="translate("+(x*b.innerR).toFixed(2)+"px,"+(y*b.innerR).toFixed(2)+"px)";}const g=b.near?Math.max(0,(b.radius-dist)/b.radius):0;const gq=Math.round(g*32)/32;if(gq!==b._gq){b._gq=gq;if(gq>0.01){const s1=(18+gq*32).toFixed(0);const a1=(0.10+gq*0.40).toFixed(2);b.el.style.boxShadow="0 0 "+s1+"px rgba(139,92,246,"+a1+"),0 0 "+(gq*72).toFixed(0)+"px rgba(139,92,246,"+(gq*0.12).toFixed(2)+")";}else if(atRest(b.sx)&&atRest(b.sy)){b.el.style.boxShadow="";b.el.style.transform="";if(b.inner)b.inner.style.transform="";}}}requestAnimationFrame(loop);}function initButton(el){if(el._magInit)return;el._magInit=true;const radius=parseInt(el.dataset.magR,10)||70;const maxShift=parseInt(el.dataset.magS,10)||18;const innerR=parseFloat(el.dataset.magI)||0.45;let inner=el.querySelector(":scope > .mag-inner");if(!inner){inner=document.createElement("span");inner.className="mag-inner";while(el.firstChild)inner.appendChild(el.firstChild);el.appendChild(inner);}buttons.push({el,inner,radius,maxShift,innerR,sx:spring(),sy:spring(),near:false,_gq:-1});}function init(){document.querySelectorAll(".cta-btn,.diia-btn,[data-magnetic]").forEach(initButton);if(buttons.length)requestAnimationFrame(loop);}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{requestAnimationFrame(init);}})();
+</script>
+<script src="/diia-auth.bundle.js" defer></script>
+<script src="/shell-enhancements.js" defer></script>
+<script src="/faq.js" defer></script>
+<script src="/legal.js" defer></script>
+</body>
+</html>

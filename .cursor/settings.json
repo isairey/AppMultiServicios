@@ -1,0 +1,13 @@
+{
+  "plugins": {
+    "figma": {
+      "enabled": true
+    },
+    "encore": {
+      "enabled": true
+    },
+    "stripe": {
+      "enabled": true
+    }
+  }
+}

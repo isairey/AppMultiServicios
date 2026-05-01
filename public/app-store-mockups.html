@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PROSTIR — App Store mockups (export)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --violet: #8B5CF6;
+      --black: #000000;
+    }
+
+    body {
+      background: #111;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .mockups-legal-fab {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 100000;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: rgba(196, 181, 253, 0.95);
+      padding: 6px 10px;
+      border: 1px solid rgba(139, 92, 246, 0.45);
+      border-radius: 2px;
+      background: rgba(0, 0, 0, 0.65);
+    }
+    .mockups-legal-fab:hover {
+      color: #fff;
+      border-color: rgba(139, 92, 246, 0.75);
+    }
+
+    .preview-hint {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 99999;
+      color: #888;
+      font-size: 11px;
+      max-width: 280px;
+      line-height: 1.35;
+      pointer-events: none;
+    }
+
+    /* ── Artboard ── */
+    .artboard {
+      position: relative;
+      width: var(--W);
+      height: var(--H);
+      background: var(--black);
+      overflow: hidden;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .artboard__breathe {
+      position: absolute;
+      inset: -18%;
+      background:
+        radial-gradient(ellipse 68% 52% at 12% 8%, rgba(139, 92, 246, 0.34), transparent 58%),
+        radial-gradient(ellipse 58% 48% at 92% 18%, rgba(139, 92, 246, 0.22), transparent 55%),
+        radial-gradient(ellipse 72% 60% at 50% 102%, rgba(139, 92, 246, 0.26), transparent 52%),
+        radial-gradient(ellipse 50% 44% at 4% 88%, rgba(139, 92, 246, 0.14), transparent 50%);
+      animation: breathe 11s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes breathe {
+      0% { opacity: 0.55; transform: scale(1); }
+      100% { opacity: 0.95; transform: scale(1.04); }
+    }
+
+    .artboard__dof {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      mask-image: radial-gradient(ellipse 120% 95% at 50% 58%, transparent 22%, black 72%);
+      -webkit-mask-image: radial-gradient(ellipse 120% 95% at 50% 58%, transparent 22%, black 72%);
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .headline {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: calc(var(--W) * 0.11) calc(var(--W) * 0.06) calc(var(--W) * 0.04);
+      font-size: calc(var(--W) * 0.026);
+      font-weight: 600;
+      letter-spacing: 0.42em;
+      line-height: 1.35;
+      text-transform: uppercase;
+      color: #fafafa;
+      text-shadow:
+        0 0 28px rgba(139, 92, 246, 0.75),
+        0 0 64px rgba(139, 92, 246, 0.35),
+        0 0 2px rgba(255, 255, 255, 0.4);
+    }
+
+    .subline {
+      display: block;
+      margin-top: calc(var(--W) * 0.022);
+      font-size: calc(var(--W) * 0.016);
+      letter-spacing: 0.52em;
+      font-weight: 500;
+      opacity: 0.92;
+      text-shadow: 0 0 20px rgba(139, 92, 246, 0.45);
+    }
+
+    .stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(var(--H) - var(--W) * 0.32);
+      perspective: 2200px;
+    }
+
+    /* ── Device (Pro Max titanium / deep purple) ── */
+    .device {
+      position: relative;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 calc(var(--W) * 0.045) calc(var(--W) * 0.09) rgba(0, 0, 0, 0.72))
+              drop-shadow(0 0 calc(var(--W) * 0.08) rgba(139, 92, 246, 0.12));
+    }
+
+    .device__bezel {
+      position: relative;
+      width: var(--phone-w);
+      padding: calc(var(--phone-w) * 0.018);
+      border-radius: calc(var(--phone-w) * 0.118);
+      background:
+        linear-gradient(155deg,
+          rgba(88, 60, 120, 0.55) 0%,
+          rgba(18, 16, 22, 1) 38%,
+          rgba(12, 12, 14, 1) 52%,
+          rgba(45, 32, 62, 0.9) 100%);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(139, 92, 246, 0.12);
+    }
+
+    .device__bezel::before {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border-radius: inherit;
+      background: linear-gradient(125deg, rgba(255,255,255,0.08), transparent 40%, transparent 60%, rgba(139,92,246,0.06));
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.55;
+    }
+
+    .device__screen {
+      position: relative;
+      border-radius: calc(var(--phone-w) * 0.092);
+      overflow: hidden;
+      background: #000;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .device__screen img {
+      display: block;
+      width: 100%;
+      height: auto;
+      vertical-align: top;
+    }
+
+    .device__island {
+      position: absolute;
+      top: calc(var(--phone-w) * 0.028);
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(var(--phone-w) * 0.28);
+      height: calc(var(--phone-w) * 0.078);
+      background: #0a0a0c;
+      border-radius: 999px;
+      z-index: 5;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        0 4px 14px rgba(0,0,0,0.55);
+    }
+
+    /* Variants */
+    .device--portrait { transform: translateZ(0); }
+
+    .device--angled {
+      transform: rotateZ(-42deg) rotateX(10deg) translateY(calc(var(--W) * 0.02));
+    }
+
+    .device--landscape {
+      transform: rotateZ(-90deg) scale(0.92) translateY(calc(var(--W) * 0.04));
+    }
+
+    .device--peek {
+      align-self: flex-start;
+      margin-top: calc(var(--W) * 0.06);
+    }
+
+    .device--peek .device__bezel {
+      padding-bottom: 0;
+    }
+
+    .device--peek .device__screen {
+      height: calc(var(--phone-w) * 1.05);
+    }
+
+    .device--peek .device__screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .device--peek .device__island {
+      top: calc(var(--phone-w) * 0.032);
+    }
+
+    /* White void */
+    .whiteVoid {
+      width: 100%;
+      aspect-ratio: 551 / 1024;
+      min-height: 400px;
+      background: #ffffff;
+      box-shadow: inset 0 0 80px rgba(139, 92, 246, 0.08);
+    }
+
+    /* Brand screen */
+    .brand-screen {
+      aspect-ratio: 551 / 1024;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 42%, rgba(139, 92, 246, 0.22), #000000 58%);
+    }
+
+    .brand-word {
+      font-size: calc(var(--phone-w) * 0.11);
+      font-weight: 700;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow:
+        0 0 32px rgba(139, 92, 246, 0.95),
+        0 0 80px rgba(139, 92, 246, 0.45),
+        0 0 120px rgba(139, 92, 246, 0.25);
+      animation: halo 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes halo {
+      from { filter: brightness(1); }
+      to { filter: brightness(1.12); }
+    }
+
+    .brand-sub {
+      margin-top: calc(var(--phone-w) * 0.06);
+      font-size: calc(var(--phone-w) * 0.028);
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    /* 3D chips overlay (mockup 3) — volumetric filters */
+    .menu-3d-layer {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 20%;
+      display: flex;
+      gap: calc(var(--phone-w) * 0.018);
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      pointer-events: none;
+      z-index: 6;
+      transform: translateZ(24px) rotateX(6deg);
+      transform-style: preserve-3d;
+    }
+
+    .chip-3d {
+      padding: calc(var(--phone-w) * 0.022) calc(var(--phone-w) * 0.04);
+      border-radius: 999px;
+      font-size: calc(var(--phone-w) * 0.032);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.88);
+      background: linear-gradient(165deg, rgba(55, 55, 62, 0.95), rgba(22, 22, 26, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.22),
+        0 calc(var(--phone-w) * 0.018) calc(var(--phone-w) * 0.04) rgba(0, 0, 0, 0.55),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .chip-3d--hot {
+      background: linear-gradient(165deg, rgba(139, 92, 246, 0.95), rgba(91, 33, 182, 0.92));
+      border-color: rgba(196, 181, 253, 0.35);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.35),
+        0 calc(var(--phone-w) * 0.022) calc(var(--phone-w) * 0.055) rgba(139, 92, 246, 0.45),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+    }
+
+    .wrap-export {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 24px;
+    }
+  </style>
+</head>
+<body>
+  <p class="preview-hint">Export: <code>npm run app-store:export</code> → <code>public/app-store-export/</code></p>
+  <div class="wrap-export">
+
+    <!-- 6.7" 1242×2688 -->
+    <section class="artboard" id="m1-1242" style="--W: 1242px; --H: 2688px; --phone-w: 770px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">ENTER THE NOIR DIMENSION</h1>
+      <div class="stage">
+        <div class="device device--portrait">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <img src="assets/app-store/screen_intro.png" alt="" width="551" height="1024" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m2-1242" style="--W: 1242px; --H: 2688px; --phone-w: 760px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">YOUR CITY, DIGITALIZED</h1>
+      <div class="stage">
+        <div class="device device--angled">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <div class="brand-screen" style="--phone-w: 760px;">
+                <div>
+                  <div class="brand-word">PROSTIR</div>
+                  <div class="brand-sub">URBAN OS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m3-1242" style="--W: 1242px; --H: 2688px; --phone-w: 900px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">PREMIUM ACCESS. ZERO FRICTION.</h1>
+      <div class="stage">
+        <div class="device device--landscape">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <img src="assets/app-store/screen_menu.png" alt="" width="548" height="1024" />
+              <div class="menu-3d-layer">
+                <span class="chip-3d chip-3d--hot">Всі</span>
+                <span class="chip-3d">Кафе</span>
+                <span class="chip-3d">Ресторани</span>
+                <span class="chip-3d">Коворк</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m4-1242" style="--W: 1242px; --H: 2688px; --phone-w: 770px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">STEP THROUGH THE PORTAL</h1>
+      <div class="stage">
+        <div class="device device--portrait">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <div class="whiteVoid" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m5-1242" style="--W: 1242px; --H: 2688px; --phone-w: 820px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">SOON IN APP STORE<span class="subline">PROSTIR.THE/HUB</span></h1>
+      <div class="stage">
+        <div class="device device--portrait device--peek">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <img src="assets/app-store/screen_settings.png" alt="" width="551" height="1024" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6.9" 1290×2796 -->
+    <section class="artboard" id="m1-1290" style="--W: 1290px; --H: 2796px; --phone-w: 798px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">ENTER THE NOIR DIMENSION</h1>
+      <div class="stage">
+        <div class="device device--portrait">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <img src="assets/app-store/screen_intro.png" alt="" width="551" height="1024" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m2-1290" style="--W: 1290px; --H: 2796px; --phone-w: 788px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">YOUR CITY, DIGITALIZED</h1>
+      <div class="stage">
+        <div class="device device--angled">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <div class="brand-screen" style="--phone-w: 788px;">
+                <div>
+                  <div class="brand-word">PROSTIR</div>
+                  <div class="brand-sub">URBAN OS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m3-1290" style="--W: 1290px; --H: 2796px; --phone-w: 932px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">PREMIUM ACCESS. ZERO FRICTION.</h1>
+      <div class="stage">
+        <div class="device device--landscape">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <img src="assets/app-store/screen_menu.png" alt="" width="548" height="1024" />
+              <div class="menu-3d-layer">
+                <span class="chip-3d chip-3d--hot">Всі</span>
+                <span class="chip-3d">Кафе</span>
+                <span class="chip-3d">Ресторани</span>
+                <span class="chip-3d">Коворк</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m4-1290" style="--W: 1290px; --H: 2796px; --phone-w: 798px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">STEP THROUGH THE PORTAL</h1>
+      <div class="stage">
+        <div class="device device--portrait">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <div class="whiteVoid" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artboard" id="m5-1290" style="--W: 1290px; --H: 2796px; --phone-w: 850px;">
+      <div class="artboard__breathe" aria-hidden="true"></div>
+      <div class="artboard__dof" aria-hidden="true"></div>
+      <h1 class="headline">SOON IN APP STORE<span class="subline">PROSTIR.THE/HUB</span></h1>
+      <div class="stage">
+        <div class="device device--portrait device--peek">
+          <div class="device__bezel">
+            <div class="device__screen">
+              <span class="device__island" aria-hidden="true"></span>
+              <img src="assets/app-store/screen_settings.png" alt="" width="551" height="1024" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <a href="/legal.html" class="mockups-legal-fab">Публічна оферта</a>
+</body>
+</html>

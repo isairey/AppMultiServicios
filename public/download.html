@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#000000"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Незабаром у App Store — PROSTIR</title>
+  <link rel="stylesheet" href="/app.css"/>
+  <style>
+    /* Obsidian full-bleed: нуль відступів у кореня, #000 до краю вʼюпорта */
+    html.dl-teaser-root {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      width: 100%;
+      background-color: #000000 !important;
+      overflow-x: hidden;
+    }
+    body.dl-teaser {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%;
+      background-color: #000000 !important;
+      overflow-x: hidden;
+    }
+    body.dl-teaser .grain { opacity: 0.045; }
+
+    /* Навбар edge-to-edge (перебиває theme-noir «картку» з margin) */
+    body.dl-teaser.theme-noir header#dock,
+    body.dl-teaser header#dock {
+      width: 100%;
+      max-width: none !important;
+      margin: 0 !important;
+      margin-inline: 0 !important;
+      border-radius: 0 !important;
+      border-left: none !important;
+      border-right: none !important;
+      border-top: none !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      padding-inline: max(5vw, env(safe-area-inset-left, 0px)) max(5vw, env(safe-area-inset-right, 0px));
+      padding-top: env(safe-area-inset-top, 0px);
+      box-sizing: border-box;
+      background: #000000 !important;
+      /* Без blur — інакше під шапкою трохи «сіє» від контенту і не збігається з #000 рамок PNG */
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    body.dl-teaser #dock.scrolled {
+      box-shadow: none !important;
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    body.dl-teaser #dock .logo .lp { color: rgba(255, 255, 255, 0.92); }
+    body.dl-teaser #dock .logo .lrest { color: rgba(255, 255, 255, 0.38); }
+    body.dl-teaser #dock nav a {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    body.dl-teaser #dock nav a:hover,
+    body.dl-teaser #dock nav a.nav-active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    body.dl-teaser footer {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 1.75rem max(5vw, env(safe-area-inset-left, 0px)) 2.5rem max(5vw, env(safe-area-inset-right, 0px));
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: #000;
+      box-sizing: border-box;
+    }
+    body.dl-teaser footer .footer-inner {
+      max-width: none;
+      width: 100%;
+      margin: 0;
+    }
+    body.dl-teaser .mobile-nav {
+      top: calc(56px + env(safe-area-inset-top, 0px));
+      left: 0;
+      right: 0;
+      width: 100%;
+      max-width: none;
+      padding-left: max(5vw, env(safe-area-inset-left, 0px));
+      padding-right: max(5vw, env(safe-area-inset-right, 0px));
+      box-sizing: border-box;
+      background: #000000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    body.dl-teaser .footer-logo .lp { color: rgba(255, 255, 255, 0.92); }
+    body.dl-teaser .footer-logo .lrest { color: rgba(255, 255, 255, 0.38); }
+    body.dl-teaser .footer-copy { color: rgba(255, 255, 255, 0.38); }
+
+    .dl-shell {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      box-sizing: border-box;
+      padding-top: calc(56px + env(safe-area-inset-top, 0px) + 2.5rem);
+      padding-bottom: 5rem;
+      padding-left: max(5vw, env(safe-area-inset-left, 0px));
+      padding-right: max(5vw, env(safe-area-inset-right, 0px));
+    }
+
+    .dl-hero {
+      width: 100%;
+      text-align: center;
+      margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+      /* Достатньо повітря знизу, щоб тріо з перекриттям не «різалось» по краю секції */
+      padding-bottom: clamp(2.75rem, 7vw, 4.5rem);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.12);
+    }
+    .dl-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(139, 92, 246, 0.85);
+      margin-bottom: 1rem;
+    }
+    .dl-h1 {
+      font-size: clamp(1.85rem, 4.5vw, 2.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      line-height: 1.12;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 48px rgba(139, 92, 246, 0.22);
+    }
+    .dl-sub {
+      font-size: clamp(0.92rem, 2.1vw, 1.08rem);
+      color: rgba(255, 255, 255, 0.72);
+      max-width: 40rem;
+      margin: 0 auto clamp(0.75rem, 2.5vw, 1.35rem);
+      line-height: 1.68;
+      text-shadow: 0 0 40px rgba(139, 92, 246, 0.12);
+    }
+
+    /* Телефони в hero: flex + перекриття як раніше; без mix-blend; без жорсткого max-height */
+    .dl-trio-wrap {
+      position: relative;
+      isolation: isolate;
+      width: 100%;
+      max-width: none;
+      margin: clamp(1.15rem, 3.2vw, 2rem) auto 0;
+      padding: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 3vw, 1.5rem) clamp(1.5rem, 5vw, 3rem);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: visible;
+      box-sizing: border-box;
+    }
+    .dl-trio-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -4% -14% -6% -14%;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse 70% 52% at 50% 58%,
+        transparent 40%,
+        rgba(139, 92, 246, 0.13) 52%,
+        rgba(99, 102, 241, 0.07) 64%,
+        transparent 78%
+      );
+    }
+    .dl-trio-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -14% -22% -10% -22%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.75;
+      background: radial-gradient(
+        circle at 50% 54%,
+        rgba(139, 92, 246, 0.1) 0%,
+        transparent 48%
+      );
+      filter: blur(42px);
+    }
+    .dl-trio {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 0;
+      width: fit-content;
+      max-width: 100%;
+      margin-inline: auto;
+      overflow: visible;
+    }
+    .dl-trio__shot {
+      margin: 0;
+      padding: 0;
+      flex: 0 0 auto;
+      width: fit-content;
+      min-width: 0;
+      max-width: none;
+      background: transparent;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      isolation: isolate;
+      overflow: visible;
+    }
+    .dl-trio__shot img {
+      width: auto;
+      max-width: min(248px, 26vw);
+      height: auto;
+      display: block;
+      margin-inline: 0;
+      border: 0;
+      outline: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      object-fit: contain;
+      clip-path: inset(4.6% 11.5% 1.8% 11.5% round clamp(18px, 2.8vw, 26px));
+      transform: scale(1.02);
+      transform-origin: center bottom;
+    }
+    .dl-trio__shot--center {
+      position: relative;
+      z-index: 2;
+      transform: translateY(clamp(-0.45rem, -1.6vw, -0.2rem));
+    }
+    .dl-trio__shot--center img {
+      max-width: min(292px, 30vw);
+    }
+    @media (min-width: 521px) {
+      .dl-trio__shot:nth-child(2),
+      .dl-trio__shot:nth-child(3) {
+        margin-left: clamp(-5.25rem, -17vw, -2.85rem);
+      }
+    }
+    @media (max-width: 520px) {
+      .dl-trio__shot:nth-child(2),
+      .dl-trio__shot:nth-child(3) {
+        margin-left: clamp(-3.25rem, -14vw, -1.65rem);
+      }
+      .dl-trio__shot--center {
+        transform: translateY(clamp(-0.28rem, -1.2vw, -0.1rem));
+      }
+      .dl-trio__shot img {
+        max-width: min(168px, 28vw);
+      }
+      .dl-trio__shot--center img {
+        max-width: min(188px, 31vw);
+      }
+    }
+
+    .dl-feature {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+      gap: clamp(1.75rem, 5vw, 3.5rem);
+      align-items: center;
+      padding: clamp(2rem, 5vw, 3.75rem) 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      box-sizing: border-box;
+    }
+    .dl-feature:last-of-type {
+      border-bottom: none;
+    }
+    .dl-feature--flip .dl-feature__copy { order: 2; }
+    .dl-feature--flip .dl-feature__shot { order: 1; }
+
+    @media (max-width: 900px) {
+      .dl-feature,
+      .dl-feature--flip {
+        grid-template-columns: 1fr;
+      }
+      .dl-feature--flip .dl-feature__copy,
+      .dl-feature--flip .dl-feature__shot {
+        order: unset;
+      }
+      .dl-feature__copy { text-align: center; max-width: 36rem; margin: 0 auto; }
+    }
+
+    .dl-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(196, 181, 253, 0.9);
+      margin-bottom: 0.75rem;
+    }
+    .dl-h2 {
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.85rem;
+    }
+    /* 01 · Місто: «ролик» слів у другому рядку заголовка */
+    .dl-s1-h2 {
+      display: block;
+    }
+    .dl-s1-h2__line1 {
+      display: block;
+    }
+    .dl-s1-h2__line2 {
+      display: block;
+      margin-top: 0.06em;
+    }
+    .dl-s1-h2__slot,
+    .dl-s2-h2__slot {
+      display: inline-block;
+      overflow: hidden;
+      height: 1.25em;
+      line-height: 1.25;
+      vertical-align: bottom;
+      width: max-content;
+      max-width: 100%;
+    }
+    .dl-s1-h2__rail,
+    .dl-s2-h2__rail {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .dl-s1-h2__word,
+    .dl-s2-h2__word {
+      flex-shrink: 0;
+      display: block;
+      height: 1.25em;
+      line-height: 1.25;
+      white-space: nowrap;
+      color: #fff;
+    }
+    .dl-s1-h2__word.is-final {
+      color: rgba(196, 181, 253, 0.98);
+    }
+    .dl-s2-h2__word.is-final {
+      color: rgba(129, 230, 217, 0.95);
+    }
+    .dl-s2-h2 {
+      display: block;
+    }
+    .dl-s2-h2__pre,
+    .dl-s2-h2__tail {
+      display: inline;
+    }
+    /* 03 · Профіль: каскад по фразах (blur → чітко), не слот і не typewriter */
+    .dl-s3-h2 {
+      display: block;
+    }
+    .dl-s3-h2__chunk {
+      display: inline-block;
+      margin-right: 0.28em;
+      opacity: 0;
+      transform: translateY(0.45em);
+      filter: blur(8px);
+      transition:
+        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform, filter;
+    }
+    .dl-s3-h2__chunk:last-child {
+      margin-right: 0;
+    }
+    .dl-s3-h2.is-revealed .dl-s3-h2__chunk {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+    .dl-lead {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 36ch;
+    }
+    @media (max-width: 900px) {
+      .dl-lead { max-width: none; }
+    }
+
+    .dl-feature__shot {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .dl-feature__shot img {
+      /* Один кадр для всіх телефонних мокапів у рядку (як city.jpg 653×1024) */
+      width: min(360px, 88vw);
+      height: auto;
+      aspect-ratio: 653 / 1024;
+      display: block;
+      margin-inline: auto;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      object-fit: contain;
+    }
+
+    /* Бронювання: суцільний #000 як у чорних полів PNG — без фіолетового підсвічування, щоб не було «рамки» */
+    .dl-book-hero {
+      position: relative;
+      width: 100%;
+      overflow: visible;
+      padding: clamp(2rem, 5vw, 3.75rem) 0;
+      box-sizing: border-box;
+      border: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      outline: none;
+      box-shadow: none;
+      background-color: #000000;
+    }
+    .dl-book-hero__inner {
+      position: relative;
+      z-index: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+      gap: clamp(1.75rem, 5vw, 3.5rem);
+      align-items: center;
+      margin: 0 auto;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      background-color: #000000;
+      overflow: visible;
+    }
+    /* Дозволяє колонці стискатися під вузький вʼюпорт; інакше макет 332px вилазить і body overflow-x ріже край */
+    .dl-book-hero__inner > .dl-book-hero__copy,
+    .dl-book-hero__inner > .dl-book-hero__shot {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      background-color: #000000;
+    }
+    .dl-book-hero__h {
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.25;
+      margin: 0 0 0.85rem;
+    }
+    .dl-book-type {
+      display: block;
+      min-height: 2.75em;
+    }
+    .dl-book-type__text {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .dl-book-type__cursor {
+      display: inline-block;
+      width: 2px;
+      height: 0.95em;
+      margin-left: 2px;
+      background: rgba(196, 181, 253, 0.9);
+      vertical-align: -0.12em;
+      animation: dl-book-cursor-blink 1s steps(1, end) infinite;
+    }
+    .dl-book-type.is-done .dl-book-type__cursor {
+      display: none;
+    }
+    @keyframes dl-book-cursor-blink {
+      50% {
+        opacity: 0;
+      }
+    }
+    .dl-book-hero__lead {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 36ch;
+    }
+    .dl-book-hero__shot {
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      position: relative;
+      background-color: #000000;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      overflow: visible;
+      box-sizing: border-box;
+    }
+    .dl-book-hero__device {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 100%;
+      margin-inline: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+      background-color: #000000;
+    }
+    .dl-book-hero__device img {
+      position: relative;
+      display: block;
+      width: auto;
+      max-width: min(360px, 100%);
+      height: auto;
+      margin: 0 auto;
+      border: 0;
+      outline: none;
+      border-radius: 0;
+      box-shadow: none;
+      object-fit: contain;
+      background-color: #000000;
+      mix-blend-mode: normal;
+    }
+    @media (max-width: 900px) {
+      .dl-book-hero__inner {
+        grid-template-columns: 1fr;
+      }
+      .dl-book-hero__copy {
+        text-align: center;
+        max-width: 36rem;
+        margin: 0 auto;
+        order: 1;
+      }
+      .dl-book-hero__shot {
+        order: 2;
+      }
+      .dl-book-hero__lead {
+        max-width: none;
+      }
+    }
+
+    body.dl-teaser .mobile-nav.open {
+      background: #000000;
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+    body.dl-teaser .mobile-nav a {
+      color: rgba(255, 255, 255, 0.58);
+    }
+    body.dl-teaser .mobile-nav a:hover,
+    body.dl-teaser .mobile-nav a.nav-active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    body.dl-teaser .hamburger {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+    body.dl-teaser .hamburger span {
+      background: #fff;
+    }
+  </style>
+</head>
+<body class="theme-noir dl-teaser">
+<script>document.documentElement.classList.add('dl-teaser-root');</script>
+<div class="grain" aria-hidden="true"></div>
+
+<header id="dock">
+  <a class="logo" href="/" aria-label="PROSTIR home"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+  <nav aria-label="Main navigation">
+    <a href="/dine.html" data-magnetic data-mag-r="44" data-mag-s="7">Dine</a>
+    <a href="/working.html" data-magnetic data-mag-r="44" data-mag-s="7">Working</a>
+    <a href="/moments.html" data-magnetic data-mag-r="44" data-mag-s="7">Moments</a>
+    <a href="/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+  </nav>
+  <div class="header-right">
+    <a href="/download.html" class="header-download" aria-current="page" data-i18n="nav.download">Незабаром</a>
+    <a href="#" class="diia-btn" aria-label="Вхід через Дію"><span class="diia-logo" aria-hidden="true">Дія</span><span class="btn-label" data-i18n="common.quickLogin">Вхід через Дію</span></a>
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ua" aria-pressed="true" aria-label="Українська"><span class="lang-flag" aria-hidden="true">🇺🇦</span><span class="lang-code">UA</span></button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English"><span class="lang-flag" aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span></button>
+    </div>
+    <a href="/profile.html" class="user-avatar" title="Профіль" aria-label="Профіль">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="/download.html" class="header-download" aria-current="page" data-i18n="nav.download">Незабаром</a>
+  <a href="/dine.html">Dine</a>
+  <a href="/working.html">Working</a>
+  <a href="/moments.html">Moments</a>
+  <a href="/business.html">Business</a>
+</div>
+
+<main class="dl-shell">
+  <section class="dl-hero" aria-labelledby="dl-hero-h1">
+    <p class="dl-eyebrow" data-i18n="dl.eyebrow">PROSTIR · РЕЛІЗ НА iOS</p>
+    <h1 class="dl-h1" id="dl-hero-h1" data-i18n="dl.h1">Скоро в App Store — лічильник уже пішов</h1>
+    <p class="dl-sub" data-i18n="dl.sub">Ми на фінішній прямій: нижче не макети «на потім», а живий інтерфейс — місто, заклади, твій профіль у noir-ритмі. Залишайся в контакті: коли з’явиться «Отримати», перший тап має бути твій.</p>
+    <div class="dl-trio-wrap">
+      <div class="dl-trio" role="group" aria-label="Скріншоти інтерфейсу PROSTIR">
+        <figure class="dl-trio__shot">
+          <img src="/assets/download-teaser/screen2.png" alt="" width="566" height="1230" loading="eager" decoding="async"/>
+        </figure>
+        <figure class="dl-trio__shot dl-trio__shot--center">
+          <img src="/assets/download-teaser/screen1.png" alt="" width="566" height="1230" loading="eager" decoding="async"/>
+        </figure>
+        <figure class="dl-trio__shot">
+          <img src="/assets/download-teaser/screen3.png" alt="" width="566" height="1230" loading="eager" decoding="async"/>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="dl-book-hero" id="dl-book-section" aria-labelledby="dl-book-h">
+    <div class="dl-book-hero__inner">
+      <div class="dl-book-hero__copy">
+        <p class="dl-kicker" data-i18n="dl.book.k">БРОНЮВАННЯ · ДІЯ</p>
+        <h2 class="dl-book-hero__h" id="dl-book-h">
+          <span class="dl-book-type" aria-live="polite">
+            <span class="dl-book-type__text" id="dl-book-type-text"></span><span class="dl-book-type__cursor" aria-hidden="true"></span>
+          </span>
+        </h2>
+        <p class="dl-book-hero__lead" data-i18n="dl.book.p">Заклад, стіл, час і кількість гостей збираються в одну картку. Статус «Підтверджено» видно одразу; можна додати в календар або закрити екран — бронь уже зафіксована.</p>
+      </div>
+      <figure class="dl-book-hero__shot">
+        <div class="dl-book-hero__device">
+          <img src="/assets/download-teaser/book-apple-pay.jpg" alt="" width="655" height="1024" loading="lazy" decoding="async"/>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="dl-feature" id="dl-s1-section" aria-labelledby="dl-s1-h">
+    <div class="dl-feature__copy">
+      <p class="dl-kicker" data-i18n="dl.s1.k">01 · Місто</p>
+      <h2 class="dl-h2 dl-s1-h2" id="dl-s1-h">
+        <span class="dl-s1-h2__line1" id="dl-s1-h-line1"></span>
+        <span class="dl-s1-h2__line2">
+          <span class="dl-s1-h2__slot" aria-hidden="true">
+            <span class="dl-s1-h2__rail" id="dl-s1-h-rail"></span>
+          </span>
+        </span>
+      </h2>
+      <p class="dl-lead" data-i18n="dl.s1.p">Бачиш місто як шар: заклади поруч, маршрут і контекст — без зайвого шуму.</p>
+    </div>
+    <figure class="dl-feature__shot">
+      <img src="/assets/download-teaser/city.jpg" alt="" width="653" height="1024" loading="lazy" decoding="async"/>
+    </figure>
+  </section>
+
+  <section class="dl-feature dl-feature--flip" id="dl-s2-section" aria-labelledby="dl-s2-h">
+    <div class="dl-feature__copy">
+      <p class="dl-kicker" data-i18n="dl.s2.k">02 · Заклади</p>
+      <h2 class="dl-h2 dl-s2-h2" id="dl-s2-h">
+        <span class="dl-s2-h2__pre" id="dl-s2-h-line1"></span><span class="dl-s2-h2__slot" aria-hidden="true"><span class="dl-s2-h2__rail" id="dl-s2-h-rail"></span></span><span class="dl-s2-h2__tail" id="dl-s2-h-tail"></span>
+      </h2>
+      <p class="dl-lead" data-i18n="dl.s2.p">Фільтри, статус залу та чіткий наступний крок — щоб зайти, а не «заповнити форму».</p>
+    </div>
+    <figure class="dl-feature__shot">
+      <img src="/assets/download-teaser/venues-list.jpg" alt="" width="653" height="1024" loading="lazy" decoding="async"/>
+    </figure>
+  </section>
+
+  <section class="dl-feature" id="dl-s3-section" aria-labelledby="dl-s3-h">
+    <div class="dl-feature__copy">
+      <p class="dl-kicker" data-i18n="dl.s3.k">03 · Профіль</p>
+      <h2 class="dl-h2 dl-s3-h2" id="dl-s3-h"></h2>
+      <p class="dl-lead" data-i18n="dl.s3.p">Тема, мова, ghost mode і Safe Exit — все поруч, у зрозумілій bento-сітці.</p>
+    </div>
+    <figure class="dl-feature__shot">
+      <img src="/assets/download-teaser/profile.jpg" alt="" width="653" height="1024" loading="lazy" decoding="async"/>
+    </figure>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="/" aria-label="PROSTIR"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+    <span class="footer-copy">© 2026 PROSTIR · Urban OS</span>
+    <a href="/legal.html" class="footer-offer" id="dl-footer-offer">Публічна оферта</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const dock = document.getElementById('dock');
+  window.addEventListener('scroll', function(){
+    if (dock) dock.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  const btn = document.getElementById('hamburger');
+  const drawer = document.getElementById('mobile-nav');
+  if (btn && drawer) {
+    btn.addEventListener('click', function(){
+      const open = drawer.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      const s = btn.querySelectorAll('span');
+      if (open) {
+        s[0].style.transform = 'translateY(6.5px) rotate(45deg)';
+        s[1].style.opacity = '0';
+        s[2].style.transform = 'translateY(-6.5px) rotate(-45deg)';
+      } else {
+        s.forEach(function(x){ x.style.transform = ''; x.style.opacity = ''; });
+      }
+    });
+  }
+
+  const T = {
+    ua: {
+      nav: { download: 'Незабаром' },
+      common: { quickLogin: 'Вхід через Дію' },
+      dl: {
+        eyebrow: 'PROSTIR · РЕЛІЗ НА iOS',
+        h1: 'Скоро в App Store — лічильник уже пішов',
+        sub: 'Ми на фінішній прямій: нижче не макети «на потім», а живий інтерфейс — місто, заклади, твій профіль у noir-ритмі. Залишайся в контакті: коли з’явиться «Отримати», перший тап має бути твій.',
+        book: {
+          k: 'БРОНЮВАННЯ · ДІЯ',
+          h: 'Підтвердження без паперу — підпис через Дію',
+          type1: 'Форми, PDF, «надішліть скан» — знайоме довго.',
+          type2: 'Тут один тап: підпис у Дії — без паперу.',
+          p: 'Заклад, стіл, час і кількість гостей збираються в одну картку. Статус «Підтверджено» видно одразу; можна додати в календар або закрити екран — бронь уже зафіксована.',
+        },
+        s1: {
+          k: '01 · Місто',
+          hLine1: 'Карта, яка веде тебе далі за',
+          slotWords: ['шум', 'черги', 'шаблон', 'навігатор'],
+          hFull: 'Карта, яка веде тебе далі за навігатор',
+          p: 'Партнерська мережа, контекст і маршрут — без шуму й зайвих екранів. Місто як один шар, а ти всередині.',
+        },
+        s2: {
+          k: '02 · Заклади',
+          hLine1: 'Зайти, а не «заповнити ',
+          slotWords: ['чергу', 'PDF', 'анкету', 'форму'],
+          hTail: '»',
+          hFull: 'Зайти, а не «заповнити форму»',
+          p: 'Пошук, фільтри й статус залу в одному диханні. Менше тертя — більше вайбу до того, як ти вже за столом.',
+        },
+        s3: {
+          k: '03 · Профіль',
+          hParts: ['Твій акаунт:', 'тема,', 'приватність,', 'оплата'],
+          hFull: 'Твій акаунт: тема, приватність, оплата',
+          p: 'Diia, мова, сповіщення й оплата — в одному екрані «Акаунт». Ghost mode і Safe Exit лишаються поруч, коли застосунок стає щоденним ритмом.',
+        },
+      },
+    },
+    en: {
+      nav: { download: 'Coming soon' },
+      common: { quickLogin: 'Sign in with Diia' },
+      dl: {
+        eyebrow: 'PROSTIR · iOS LAUNCH',
+        h1: 'App Store — the countdown is on',
+        sub: 'We’re on the home stretch. What you see below isn’t “someday” mockups — it’s the live UI: your city, venues, your profile in full noir rhythm. Stay close. When Get appears, you’ll want to be first in line.',
+        book: {
+          k: 'BOOKING · DIIA',
+          h: 'Confirmed without the paperwork — signed with Diia',
+          type1: 'Forms, PDFs, “send a scan” — the slow spiral.',
+          type2: 'Here: one tap. Diia-signed — no paperwork.',
+          p: 'Venue, table, time, and party size in one card. “Confirmed” is instant; add to calendar or tap done — your reservation is already locked in.',
+        },
+        s1: {
+          k: '01 · City',
+          hLine1: 'A map that takes you past the',
+          slotWords: ['noise', 'friction', 'templates', 'obvious'],
+          hFull: 'A map that takes you past the obvious',
+          p: 'Partner network, context, route — no clutter. One layer for the city; you’re already inside.',
+        },
+        s2: {
+          k: '02 · Venues',
+          hLine1: "Walk in — don't wrestle a ",
+          slotWords: ['queue', 'portal', 'login', 'form'],
+          hTail: '',
+          hFull: "Walk in — don't wrestle a form",
+          p: 'Search, filters, floor status in one breath. Less friction, more anticipation before you’re seated.',
+        },
+        s3: {
+          k: '03 · Profile',
+          hParts: ['Your account:', 'look,', 'privacy,', 'pay'],
+          hFull: 'Your account: look, privacy, pay',
+          p: 'Diia, language, notifications, and payments — one Account screen. Ghost mode and Safe Exit stay close when the app becomes your daily cadence.',
+        },
+      },
+    },
+  };
+
+  var s1SlotGen = 0;
+  function runS1Slot(lang) {
+    var line1El = document.getElementById('dl-s1-h-line1');
+    var rail = document.getElementById('dl-s1-h-rail');
+    var h2 = document.getElementById('dl-s1-h');
+    var section = document.getElementById('dl-s1-section');
+    if (!line1El || !rail || !h2 || !T[lang] || !T[lang].dl || !T[lang].dl.s1) return;
+    var s1 = T[lang].dl.s1;
+    var words = s1.slotWords;
+    if (!words || !words.length) return;
+
+    line1El.textContent = s1.hLine1 || '';
+    h2.setAttribute('aria-label', s1.hFull || (s1.hLine1 + ' ' + words[words.length - 1]));
+
+    function sleep(ms) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, ms);
+      });
+    }
+
+    s1SlotGen++;
+    var gen = s1SlotGen;
+    var reduced =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    rail.innerHTML = '';
+    rail.style.transition = 'none';
+    rail.style.transform = 'translateY(0)';
+
+    if (!reduced) {
+      for (var wi = 0; wi < words.length; wi++) {
+        var sp = document.createElement('span');
+        sp.className = 'dl-s1-h2__word' + (wi === words.length - 1 ? ' is-final' : '');
+        sp.textContent = words[wi];
+        rail.appendChild(sp);
+      }
+    }
+
+    function setY(idx, ms) {
+      rail.style.transition =
+        ms > 0 ? 'transform ' + ms + 'ms cubic-bezier(0.18, 0.9, 0.22, 1)' : 'none';
+      rail.style.transform = 'translateY(-' + idx * 1.25 + 'em)';
+    }
+
+    async function animate() {
+      if (gen !== s1SlotGen) return;
+      await sleep(480);
+      var durations = [400, 360, 780];
+      var i;
+      for (i = 1; i < words.length; i++) {
+        if (gen !== s1SlotGen) return;
+        setY(i, durations[i - 1] || 420);
+        await sleep(durations[i - 1] || 420);
+      }
+    }
+
+    function kickReduced() {
+      if (gen !== s1SlotGen) return;
+      rail.innerHTML = '';
+      var wf = document.createElement('span');
+      wf.className = 'dl-s1-h2__word is-final';
+      wf.textContent = words[words.length - 1];
+      rail.appendChild(wf);
+      rail.style.transition = 'none';
+      rail.style.transform = 'translateY(0)';
+    }
+
+    var started = false;
+    function kick() {
+      if (started || gen !== s1SlotGen) return;
+      started = true;
+      if (reduced) kickReduced();
+      else animate();
+    }
+
+    if (section && typeof IntersectionObserver !== 'undefined') {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            io.disconnect();
+            kick();
+          });
+        },
+        { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+      );
+      io.observe(section);
+    } else {
+      kick();
+    }
+  }
+
+  var s2SlotGen = 0;
+  function runS2Slot(lang) {
+    var pre = document.getElementById('dl-s2-h-line1');
+    var tail = document.getElementById('dl-s2-h-tail');
+    var rail = document.getElementById('dl-s2-h-rail');
+    var h2 = document.getElementById('dl-s2-h');
+    var section = document.getElementById('dl-s2-section');
+    if (!pre || !rail || !h2 || !T[lang] || !T[lang].dl || !T[lang].dl.s2) return;
+    var s2 = T[lang].dl.s2;
+    var words = s2.slotWords;
+    if (!words || !words.length) return;
+
+    pre.textContent = s2.hLine1 || '';
+    if (tail) tail.textContent = s2.hTail || '';
+    h2.setAttribute('aria-label', s2.hFull || (s2.hLine1 + words[words.length - 1] + (s2.hTail || '')));
+
+    function sleep(ms) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, ms);
+      });
+    }
+
+    s2SlotGen++;
+    var gen = s2SlotGen;
+    var reduced =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    rail.innerHTML = '';
+    rail.style.transition = 'none';
+    rail.style.transform = 'translateY(0)';
+
+    if (!reduced) {
+      for (var wi = 0; wi < words.length; wi++) {
+        var sp = document.createElement('span');
+        sp.className = 'dl-s2-h2__word' + (wi === words.length - 1 ? ' is-final' : '');
+        sp.textContent = words[wi];
+        rail.appendChild(sp);
+      }
+    }
+
+    function setY(idx, ms) {
+      rail.style.transition =
+        ms > 0 ? 'transform ' + ms + 'ms cubic-bezier(0.2, 0.88, 0.24, 1)' : 'none';
+      rail.style.transform = 'translateY(-' + idx * 1.25 + 'em)';
+    }
+
+    async function animate() {
+      if (gen !== s2SlotGen) return;
+      await sleep(420);
+      var durations = [340, 300, 680];
+      var i;
+      for (i = 1; i < words.length; i++) {
+        if (gen !== s2SlotGen) return;
+        setY(i, durations[i - 1] || 400);
+        await sleep(durations[i - 1] || 400);
+      }
+    }
+
+    function kickReduced() {
+      if (gen !== s2SlotGen) return;
+      rail.innerHTML = '';
+      var wf = document.createElement('span');
+      wf.className = 'dl-s2-h2__word is-final';
+      wf.textContent = words[words.length - 1];
+      rail.appendChild(wf);
+      rail.style.transition = 'none';
+      rail.style.transform = 'translateY(0)';
+    }
+
+    var started = false;
+    function kick() {
+      if (started || gen !== s2SlotGen) return;
+      started = true;
+      if (reduced) kickReduced();
+      else animate();
+    }
+
+    if (section && typeof IntersectionObserver !== 'undefined') {
+      var io2 = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            io2.disconnect();
+            kick();
+          });
+        },
+        { threshold: 0.16, rootMargin: '0px 0px -8% 0px' }
+      );
+      io2.observe(section);
+    } else {
+      kick();
+    }
+  }
+
+  var s3RevealGen = 0;
+  function runS3Reveal(lang) {
+    var h2 = document.getElementById('dl-s3-h');
+    var section = document.getElementById('dl-s3-section');
+    if (!h2 || !T[lang] || !T[lang].dl || !T[lang].dl.s3) return;
+    var s3 = T[lang].dl.s3;
+    var parts = s3.hParts;
+    if (!parts || !parts.length) return;
+
+    s3RevealGen++;
+    var gen = s3RevealGen;
+    h2.classList.remove('is-revealed');
+    h2.innerHTML = '';
+    h2.setAttribute('aria-label', s3.hFull || '');
+
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var stepMs = 72;
+    var i;
+    for (i = 0; i < parts.length; i++) {
+      var ch = document.createElement('span');
+      ch.className = 'dl-s3-h2__chunk';
+      ch.textContent = parts[i];
+      ch.style.transitionDelay = reduced ? '0ms' : i * stepMs + 'ms';
+      h2.appendChild(ch);
+    }
+
+    function reveal() {
+      if (gen !== s3RevealGen) return;
+      if (reduced) {
+        h2.querySelectorAll('.dl-s3-h2__chunk').forEach(function (ch) {
+          ch.style.transition = 'none';
+          ch.style.transitionDelay = '0ms';
+        });
+        h2.classList.add('is-revealed');
+        return;
+      }
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          if (gen !== s3RevealGen) return;
+          h2.classList.add('is-revealed');
+        });
+      });
+    }
+
+    var started = false;
+    function kick() {
+      if (started || gen !== s3RevealGen) return;
+      started = true;
+      reveal();
+    }
+
+    if (section && typeof IntersectionObserver !== 'undefined') {
+      var io3 = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            io3.disconnect();
+            kick();
+          });
+        },
+        { threshold: 0.16, rootMargin: '0px 0px -8% 0px' }
+      );
+      io3.observe(section);
+    } else {
+      kick();
+    }
+  }
+
+  var bookTypeGen = 0;
+  function runBookTypewriter(lang) {
+    var section = document.getElementById('dl-book-section');
+    var textEl = document.getElementById('dl-book-type-text');
+    var wrap = document.querySelector('.dl-book-type');
+    var h2 = document.getElementById('dl-book-h');
+    if (!textEl || !wrap || !T[lang] || !T[lang].dl || !T[lang].dl.book) return;
+
+    bookTypeGen++;
+    var gen = bookTypeGen;
+    var book = T[lang].dl.book;
+    var line1 = book.type1 || '';
+    var line2 = book.type2 || '';
+    var ariaFull = book.h || line2;
+
+    wrap.classList.remove('is-done');
+    textEl.textContent = '';
+    if (h2) h2.setAttribute('aria-label', ariaFull);
+
+    function sleep(ms) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, ms);
+      });
+    }
+
+    function cancelled() {
+      return gen !== bookTypeGen;
+    }
+
+    async function runReduced() {
+      textEl.textContent = line2 || '';
+      if (!cancelled()) wrap.classList.add('is-done');
+    }
+
+    async function runFull() {
+      var typeMs = 34;
+      var delMs = 18;
+      var i;
+      for (i = 0; i <= line1.length; i++) {
+        if (cancelled()) return;
+        textEl.textContent = line1.slice(0, i);
+        await sleep(typeMs);
+      }
+      await sleep(820);
+      for (i = line1.length; i >= 0; i--) {
+        if (cancelled()) return;
+        textEl.textContent = line1.slice(0, i);
+        await sleep(delMs);
+      }
+      await sleep(320);
+      for (i = 0; i <= line2.length; i++) {
+        if (cancelled()) return;
+        textEl.textContent = line2.slice(0, i);
+        await sleep(typeMs);
+      }
+      if (!cancelled()) wrap.classList.add('is-done');
+    }
+
+    var started = false;
+    function kick() {
+      if (started || gen !== bookTypeGen) return;
+      started = true;
+      var reduced =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) runReduced();
+      else runFull();
+    }
+
+    if (section && typeof IntersectionObserver !== 'undefined') {
+      var iob = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            iob.disconnect();
+            kick();
+          });
+        },
+        { threshold: 0.16, rootMargin: '0px 0px -8% 0px' }
+      );
+      iob.observe(section);
+    } else {
+      kick();
+    }
+  }
+
+  function apply(lang) {
+    var t = T[lang];
+    var fo = document.getElementById('dl-footer-offer');
+    if (fo) fo.textContent = lang === 'en' ? 'Public offer' : 'Публічна оферта';
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var path = el.getAttribute('data-i18n');
+      var parts = path.split('.');
+      var cur = t;
+      for (var i = 0; i < parts.length; i++) {
+        cur = cur && cur[parts[i]];
+      }
+      if (typeof cur === 'string') el.textContent = cur;
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+    try { localStorage.setItem('prostir_lang', lang); } catch (e) {}
+    runBookTypewriter(lang);
+    runS1Slot(lang);
+    runS2Slot(lang);
+    runS3Reveal(lang);
+  }
+
+  var saved = localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua';
+  apply(saved);
+
+  var switcher = document.getElementById('lang-switch');
+  if (switcher) {
+    switcher.querySelectorAll('.lang-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        apply(b.getAttribute('data-lang') === 'en' ? 'en' : 'ua');
+      });
+    });
+  }
+})();
+</script>
+<script src="/shell-enhancements.js" defer></script>
+</body>
+</html>

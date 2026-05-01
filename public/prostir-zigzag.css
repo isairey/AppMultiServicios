@@ -1,0 +1,185 @@
+/* Shared zigzag “how it works” layout (Moments, Dine, Working, …) */
+.module-explain--zigzag { padding-bottom: 1.5rem; }
+.mom-zig-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vw, 3rem);
+  margin-top: 1.35rem;
+}
+.mom-zig-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: center;
+  min-width: 0;
+}
+.mom-zig-row--reverse .mom-zig-copy { order: 2; }
+.mom-zig-row--reverse .mom-zig-art { order: 1; }
+.mom-zig-copy { min-width: 0; }
+.mom-zig-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grey-muted);
+  margin-bottom: 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.mom-zig-eyebrow span:first-child {
+  color: var(--violet);
+  font-weight: 700;
+}
+.mom-zig-body {
+  font-size: 0.84rem;
+  color: var(--grey-soft);
+  line-height: 1.65;
+  margin: 0;
+}
+.mom-zig-art {
+  border-radius: 20px;
+  min-height: clamp(168px, 28vw, 220px);
+  border: 1px solid var(--grey-line);
+  background: var(--grey-fill);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 3vw, 1.25rem);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.mom-zig-art::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.65;
+  pointer-events: none;
+}
+.mom-zig-art svg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  flex-shrink: 1;
+  color: var(--violet);
+  shape-rendering: geometricPrecision;
+}
+/* Thicker vector illos — centered in card, no clipped edges */
+.mom-zig-art--illu {
+  min-height: clamp(176px, 30vw, 228px);
+}
+.mom-zig-art--illu svg {
+  max-width: min(220px, 100%);
+  margin: 0 auto;
+}
+body.theme-noir .mom-zig-art--illu svg {
+  filter: drop-shadow(0 0 1px rgba(196, 181, 253, 0.35));
+}
+.mom-zig-art--hero {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mom-zig-hero-emoji {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(2.25rem, 9vw, 4rem);
+  line-height: 1;
+  max-width: 100%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: clip;
+}
+.mom-zig-hero-open {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.mom-zig-ho-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 10px rgba(52, 211, 153, 0.14);
+  flex-shrink: 0;
+  animation: prostirZigOpenPulse 2.2s ease-in-out infinite;
+}
+.mom-zig-ho-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+body.theme-noir .mom-zig-ho-label { color: #c4b5fd; }
+@keyframes prostirZigOpenPulse {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.12); transform: scale(1); }
+  50% { box-shadow: 0 0 0 16px rgba(52, 211, 153, 0.06); transform: scale(1.05); }
+}
+.mom-zig-art--verify { position: relative; }
+.mom-zig-phone {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(2.25rem, 8vw, 3.5rem);
+  line-height: 1;
+  max-width: 100%;
+  overflow: hidden;
+}
+.mom-zig-badge {
+  position: absolute;
+  bottom: max(0.65rem, 2.5vw);
+  right: max(0.65rem, 2.5vw);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+body.theme-noir .mom-zig-art {
+  background: linear-gradient(155deg, rgba(139,92,246,0.12) 0%, rgba(10,10,12,0.95) 55%, #0a0a0c 100%);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(139,92,246,0.08);
+}
+body.theme-noir .mom-zig-art svg { color: #c4b5fd; }
+body.theme-noir .mom-zig-eyebrow { color: rgba(255,255,255,0.45); }
+body.theme-noir .mom-zig-body { color: rgba(255,255,255,0.62); }
+@keyframes momVizPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.95; }
+}
+.mom-viz-pulse { animation: momVizPulse 2.6s ease-in-out infinite; }
+@media (max-width: 860px) {
+  .mom-zig-row,
+  .mom-zig-row--reverse {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+  .mom-zig-row--reverse .mom-zig-copy,
+  .mom-zig-row--reverse .mom-zig-art { order: unset; }
+  .mom-zig-art { min-height: 160px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mom-viz-pulse { animation: none !important; }
+  .mom-zig-ho-dot { animation: none !important; }
+}

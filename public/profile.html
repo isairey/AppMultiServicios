@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PROSTIR · Профіль</title>
+  <link rel="stylesheet" href="/app.css"/>
+  <style>
+    /* ══════════════════════════════════════════
+       PROFILE PAGE
+    ══════════════════════════════════════════ */
+    body { min-height: 100vh; }
+
+    .profile-wrap {
+      max-width: 980px; margin: 0 auto;
+      padding: calc(68px + 2.5rem) 2rem 6rem;
+      display: grid; grid-template-columns: 320px 1fr; gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 760px) {
+      .profile-wrap { grid-template-columns: 1fr; padding-top: calc(68px + 1.5rem); }
+    }
+
+    /* ══ SIDEBAR ══ */
+    .profile-sidebar {
+      position: sticky; top: calc(var(--header-h) + 1.5rem);
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+
+    /* Identity hero card */
+    .prof-hero {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 26px; overflow: hidden;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 32px rgba(139,92,246,0.08), 0 1px 4px rgba(0,0,0,0.05);
+    }
+    body.theme-noir .prof-hero {
+      background: #0D0D0F; border-color: rgba(139,92,246,0.12);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 8px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Cover strip */
+    .prof-cover {
+      height: 88px; position: relative;
+      background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 40%, #8b5cf6 70%, #c4b5fd 100%);
+      overflow: hidden;
+    }
+    .prof-cover::after {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='1'%3E%3Cpath d='M0 30h60M30 0v60M0 0l60 60M60 0L0 60'/%3E%3C/g%3E%3C/svg%3E") repeat;
+    }
+
+    /* Avatar */
+    .prof-avatar-area { padding: 0 1.5rem 0; position: relative; }
+    .prof-avatar {
+      width: 82px; height: 82px; border-radius: 50%;
+      background: linear-gradient(145deg, #7c3aed, #4c1d95);
+      border: 3px solid white;
+      box-shadow: 0 4px 16px rgba(139,92,246,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 800; color: #fff;
+      margin-top: -42px; position: relative; z-index: 1; flex-shrink: 0;
+      letter-spacing: -0.04em;
+    }
+    body.theme-noir .prof-avatar { border-color: #0D0D0F; }
+    .prof-diia-badge {
+      position: absolute; bottom: 1px; right: 1px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #22c55e; border: 2.5px solid white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.62rem; color: #fff; font-weight: 700;
+      box-shadow: 0 2px 6px rgba(34,197,94,0.4);
+    }
+    body.theme-noir .prof-diia-badge { border-color: #0D0D0F; }
+
+    .prof-identity { padding: 0.75rem 1.5rem 1.4rem; }
+    .prof-name-row { display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap; margin-bottom: 0.18rem; }
+    .prof-name {
+      font-size: 1.22rem; font-weight: 800; letter-spacing: -0.04em;
+      color: var(--jet);
+    }
+    body.theme-noir .prof-name { color: #fff; }
+    .prof-age {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em;
+      color: var(--grey-muted); background: var(--grey-fill);
+      padding: 0.15rem 0.55rem; border-radius: 6px;
+    }
+    body.theme-noir .prof-age { color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.06); }
+    .prof-handle {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      color: var(--grey-muted); margin-bottom: 0.9rem;
+    }
+    body.theme-noir .prof-handle { color: rgba(255,255,255,0.3); }
+
+    /* Meta rows */
+    .prof-meta-row {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-size: 0.78rem; margin-bottom: 0.45rem; flex-wrap: wrap;
+    }
+    .prof-meta-icon {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .prof-meta-icon svg { width: 13px; height: 13px; }
+    .pmi-green { background: rgba(34,197,94,0.1); }
+    .pmi-violet { background: rgba(139,92,246,0.1); }
+    .pmi-blue  { background: rgba(10,132,255,0.1); }
+    .prof-meta-text { font-size: 0.78rem; color: var(--jet); flex: 1; }
+    body.theme-noir .prof-meta-text { color: rgba(255,255,255,0.7); }
+    .prof-meta-val {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      color: var(--grey-soft); text-align: right;
+    }
+    body.theme-noir .prof-meta-val { color: rgba(255,255,255,0.35); }
+    .prof-meta-val.green { color: #22c55e; }
+    .prof-divider { height: 1px; background: var(--grey-line); margin: 0.9rem 0; opacity: 0.6; }
+    body.theme-noir .prof-divider { background: rgba(255,255,255,0.06); }
+
+    /* Stats row */
+    .prof-stats {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+    .prof-stat {
+      background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.1);
+      border-radius: 12px; padding: 0.65rem 0.5rem; text-align: center;
+    }
+    body.theme-noir .prof-stat { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.15); }
+    .ps-val { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.04em; color: #8B5CF6; line-height: 1; }
+    .ps-label { font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--grey-muted); margin-top: 0.2rem; }
+    body.theme-noir .ps-label { color: rgba(255,255,255,0.3); }
+
+    /* Interests */
+    .prof-interests-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 1.25rem 1.35rem;
+      backdrop-filter: blur(16px);
+    }
+    body.theme-noir .prof-interests-card { background: #0D0D0F; border-color: rgba(255,255,255,0.06); }
+    .prof-card-label {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--grey-muted); margin-bottom: 0.85rem;
+    }
+    body.theme-noir .prof-card-label { color: rgba(255,255,255,0.25); }
+    .interest-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .interest-tag {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.78rem; font-weight: 500; padding: 0.38rem 0.85rem;
+      border-radius: 999px; border: 1px solid;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .interest-tag:hover { transform: translateY(-1px); }
+    .tag-v { background: rgba(139,92,246,0.09); border-color: rgba(139,92,246,0.22); color: #7c3aed; }
+    body.theme-noir .tag-v { background: rgba(139,92,246,0.14); color: #c4b5fd; }
+    .tag-g { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.2); color: #16a34a; }
+    body.theme-noir .tag-g { background: rgba(34,197,94,0.1); color: #4ade80; }
+    .tag-b { background: rgba(10,132,255,0.08); border-color: rgba(10,132,255,0.2); color: #0062cc; }
+    body.theme-noir .tag-b { background: rgba(10,132,255,0.1); color: #60a5fa; }
+    .tag-o { background: rgba(251,146,60,0.09); border-color: rgba(251,146,60,0.22); color: #ea580c; }
+    body.theme-noir .tag-o { background: rgba(251,146,60,0.12); color: #fb923c; }
+
+    /* Logout */
+    .logout-btn {
+      width: 100%; padding: 0.85rem;
+      background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.18);
+      border-radius: 14px; color: #ef4444;
+      font-size: 0.84rem; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .logout-btn:hover { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); }
+
+    /* ══ MAIN ══ */
+    .profile-main { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .profile-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 22px; padding: 1.5rem;
+      backdrop-filter: blur(16px);
+    }
+    body.theme-noir .profile-card { background: #0D0D0F; border-color: rgba(255,255,255,0.06); }
+    .profile-section-title {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--grey-muted); margin-bottom: 1rem;
+    }
+    body.theme-noir .profile-section-title { color: rgba(255,255,255,0.25); }
+
+    /* Favourite venues */
+    .venue-grid { display: flex; flex-direction: column; gap: 0.7rem; }
+    .venue-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 1rem; border-radius: 16px;
+      background: rgba(139,92,246,0.04); border: 1px solid rgba(139,92,246,0.09);
+      transition: border-color 0.22s, transform 0.22s;
+    }
+    .venue-card:hover { border-color: rgba(139,92,246,0.22); transform: translateX(3px); }
+    body.theme-noir .venue-card { background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.12); }
+    .venue-emoji {
+      width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;
+      background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.16);
+      display: flex; align-items: center; justify-content: center; font-size: 1.35rem;
+    }
+    body.theme-noir .venue-emoji { background: rgba(139,92,246,0.14); }
+    .venue-info { flex: 1; min-width: 0; }
+    .venue-name { font-size: 0.9rem; font-weight: 600; letter-spacing: -0.02em; color: var(--jet); }
+    body.theme-noir .venue-name { color: #fff; }
+    .venue-meta { font-family: var(--font-mono); font-size: 0.62rem; color: var(--grey-muted); margin-top: 0.15rem; }
+    body.theme-noir .venue-meta { color: rgba(255,255,255,0.3); }
+    .venue-visits {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+      color: #8B5CF6; text-align: right;
+    }
+    .venue-visits span { display: block; font-size: 0.52rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey-muted); }
+    body.theme-noir .venue-visits span { color: rgba(255,255,255,0.25); }
+
+    /* Booking cards */
+    .booking-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 1rem; border-radius: 16px;
+      background: rgba(139,92,246,0.03); border: 1px solid rgba(139,92,246,0.08);
+      transition: border-color 0.22s, transform 0.22s; margin-bottom: 0.55rem;
+    }
+    .booking-card:last-child { margin-bottom: 0; }
+    .booking-card:hover { border-color: rgba(139,92,246,0.2); transform: translateX(3px); }
+    body.theme-noir .booking-card { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05); }
+    body.theme-noir .booking-card:hover { border-color: rgba(139,92,246,0.22); }
+    .booking-icon {
+      width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+      background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.16);
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    }
+    .booking-info { flex: 1; min-width: 0; }
+    .booking-title { font-size: 0.9rem; font-weight: 600; letter-spacing: -0.02em; color: var(--jet); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    body.theme-noir .booking-title { color: #fff; }
+    .booking-meta { font-family: var(--font-mono); font-size: 0.63rem; color: var(--grey-muted); margin-top: 0.18rem; }
+    body.theme-noir .booking-meta { color: rgba(255,255,255,0.28); }
+    .booking-badge { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.22rem 0.65rem; border-radius: 999px; flex-shrink: 0; }
+    .badge-active { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.22); }
+    .badge-done   { background: rgba(139,92,246,0.1); color: #8B5CF6; border: 1px solid rgba(139,92,246,0.2); }
+    .badge-cancel { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.18); }
+
+    /* Settings */
+    .settings-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 0; border-bottom: 1px solid rgba(139,92,246,0.07);
+    }
+    .settings-row:last-child { border-bottom: none; }
+    body.theme-noir .settings-row { border-bottom-color: rgba(255,255,255,0.04); }
+    .settings-label { font-size: 0.88rem; color: var(--jet); font-weight: 500; }
+    body.theme-noir .settings-label { color: rgba(255,255,255,0.75); }
+    .settings-sub { font-size: 0.7rem; color: var(--grey-muted); margin-top: 0.1rem; }
+    body.theme-noir .settings-sub { color: rgba(255,255,255,0.28); }
+    .settings-value { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--grey-soft); }
+    body.theme-noir .settings-value { color: rgba(255,255,255,0.32); }
+
+    /* Toggle */
+    .toggle-switch {
+      width: 38px; height: 22px; border-radius: 999px;
+      background: rgba(139,92,246,0.18); border: 1px solid rgba(139,92,246,0.28);
+      position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.25s;
+    }
+    .toggle-switch.on { background: #8B5CF6; border-color: #8B5CF6; }
+    .toggle-knob { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform 0.25s cubic-bezier(0.22,1,0.36,1); box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+    .toggle-switch.on .toggle-knob { transform: translateX(16px); }
+
+    /* Last login pill */
+    .last-login-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em;
+      background: rgba(10,132,255,0.07); border: 1px solid rgba(10,132,255,0.18);
+      color: #0A84FF; border-radius: 10px; padding: 0.4rem 0.75rem;
+      margin-top: 0.6rem; width: 100%; justify-content: center;
+    }
+    body.theme-noir .last-login-pill { background: rgba(10,132,255,0.1); border-color: rgba(10,132,255,0.22); }
+
+    @media (max-width: 760px) {
+      .profile-sidebar { position: static; }
+      .prof-cover { height: 70px; }
+    }
+  </style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<header id="dock">
+  <a class="logo" href="/" aria-label="PROSTIR home">
+    <span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span>
+  </a>
+  <nav aria-label="Main navigation">
+    <a href="/dine.html"     data-i18n="nav.dine"    data-magnetic data-mag-r="44" data-mag-s="7">Dine</a>
+    <a href="/working.html"  data-i18n="nav.working" data-magnetic data-mag-r="44" data-mag-s="7">Working</a>
+    <a href="/moments.html"  data-i18n="nav.moments" data-magnetic data-mag-r="44" data-mag-s="7">Moments</a>
+    <a href="/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+  </nav>
+  <div class="header-right">
+    <a href="/download.html" class="header-download" data-magnetic data-mag-r="40" data-mag-s="6">Незабаром</a>
+    <a href="/profile.html" class="diia-btn nav-active" aria-label="Профіль">
+      <span class="diia-logo" aria-hidden="true">О</span>
+      <span class="btn-label" id="profile-header-name">Олена К.</span>
+    </a>
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ua" aria-pressed="true" aria-label="Українська">
+        <span class="lang-flag" aria-hidden="true">🇺🇦</span><span class="lang-code">UA</span>
+      </button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+        <span class="lang-flag" aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span>
+      </button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Мобільне меню">
+  <a href="/download.html" class="header-download">Незабаром</a>
+  <a href="/dine.html">Dine</a>
+  <a href="/working.html">Working</a>
+  <a href="/moments.html">Moments</a>
+  <a href="/business.html">Business</a>
+</div>
+
+<main class="profile-wrap">
+
+  <!-- ══════════════════════════
+       LEFT SIDEBAR
+  ══════════════════════════ -->
+  <aside class="profile-sidebar">
+
+    <!-- Identity hero card -->
+    <div class="prof-hero reveal">
+      <div class="prof-cover"></div>
+      <div class="prof-avatar-area">
+        <div class="prof-avatar">
+          О
+          <span class="prof-diia-badge" aria-label="Верифіковано через Дія">✓</span>
+        </div>
+      </div>
+      <div class="prof-identity">
+        <div class="prof-name-row">
+          <span class="prof-name" id="prof-name">Олена Коваленко</span>
+          <span class="prof-age" id="prof-age">24</span>
+        </div>
+        <div class="prof-handle" id="prof-handle">@olena.k · Kyiv</div>
+
+        <!-- Verified via Diia -->
+        <div class="prof-meta-row">
+          <div class="prof-meta-icon pmi-green">
+            <svg viewBox="0 0 13 13" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="6.5" cy="6.5" r="5"/><path d="M4 6.5l2 2 3.5-3.5"/>
+            </svg>
+          </div>
+          <span class="prof-meta-text" id="prof-diia-label">Підтверджено · Дія</span>
+          <span class="prof-meta-val green">ACTIVE</span>
+        </div>
+
+        <!-- Member since -->
+        <div class="prof-meta-row">
+          <div class="prof-meta-icon pmi-violet">
+            <svg viewBox="0 0 13 13" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round">
+              <rect x="1.5" y="2.5" width="10" height="9" rx="1.5"/>
+              <path d="M1.5 5.5h10M4 1.5v2M9 1.5v2"/>
+            </svg>
+          </div>
+          <span class="prof-meta-text" id="prof-since-label">На платформі з</span>
+          <span class="prof-meta-val" id="prof-since-val">15 лют. 2026</span>
+        </div>
+
+        <!-- Last login -->
+        <div class="prof-meta-row">
+          <div class="prof-meta-icon pmi-blue">
+            <svg viewBox="0 0 13 13" fill="none" stroke="#0A84FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 1.5h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2"/>
+              <path d="M5.5 9.5l3-3-3-3M8.5 6.5H1.5"/>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="prof-meta-text" id="prof-login-label">Останній вхід</div>
+            <div class="prof-meta-val" style="font-size:.62rem" id="prof-login-method">через Дію · 29 бер. · 20:14</div>
+          </div>
+        </div>
+
+        <div class="prof-divider"></div>
+
+        <!-- Stats -->
+        <div class="prof-stats">
+          <div class="prof-stat">
+            <div class="ps-val">12</div>
+            <div class="ps-label" id="prof-stat1">Бронювань</div>
+          </div>
+          <div class="prof-stat">
+            <div class="ps-val">4.9</div>
+            <div class="ps-label" id="prof-stat2">Рейтинг</div>
+          </div>
+          <div class="prof-stat">
+            <div class="ps-val">3</div>
+            <div class="ps-label" id="prof-stat3">Заклади</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Interests / Preferences -->
+    <div class="prof-interests-card reveal" style="animation-delay:.08s">
+      <div class="prof-card-label" id="interests-label">Вподобання</div>
+      <div class="interest-tags">
+        <span class="interest-tag tag-v">☕ Кава</span>
+        <span class="interest-tag tag-b">💻 Технології</span>
+        <span class="interest-tag tag-o">🎵 Jazz</span>
+        <span class="interest-tag tag-g">🌿 Коворкінг</span>
+        <span class="interest-tag tag-v">📚 Читання</span>
+        <span class="interest-tag tag-b">🏙 Урбаністика</span>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <button class="logout-btn reveal" style="animation-delay:.14s" id="logout-btn">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 1.5H11.5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9"/><path d="M6 10l3-3-3-3M9 7H2"/>
+      </svg>
+      <span id="logout-label">Вийти з акаунту</span>
+    </button>
+
+  </aside>
+
+  <!-- ══════════════════════════
+       RIGHT MAIN CONTENT
+  ══════════════════════════ -->
+  <div class="profile-main">
+
+    <!-- Favourite venues -->
+    <div class="profile-card reveal" style="animation-delay:.05s">
+      <div class="profile-section-title" id="sec-venues">Улюблені заклади</div>
+      <div class="venue-grid">
+
+        <div class="venue-card">
+          <div class="venue-emoji">☕</div>
+          <div class="venue-info">
+            <div class="venue-name">Cafe Aura</div>
+            <div class="venue-meta" id="vm1">Кафе · Ленінградська, 4 · Стіл #5 улюблений</div>
+          </div>
+          <div class="venue-visits">
+            8
+            <span id="vv-label">візитів</span>
+          </div>
+        </div>
+
+        <div class="venue-card">
+          <div class="venue-emoji">💻</div>
+          <div class="venue-info">
+            <div class="venue-name">PROSTIR Hub</div>
+            <div class="venue-meta" id="vm2">Коворкінг · Хрещатик · Aurora Booth</div>
+          </div>
+          <div class="venue-visits">
+            4
+            <span id="vv-label2">візитів</span>
+          </div>
+        </div>
+
+        <div class="venue-card">
+          <div class="venue-emoji">🍷</div>
+          <div class="venue-info">
+            <div class="venue-name">Mimosa Bistro</div>
+            <div class="venue-meta" id="vm3">Ресторан · Пейзажна алея · Тераса</div>
+          </div>
+          <div class="venue-visits">
+            2
+            <span id="vv-label3">візитів</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Active bookings -->
+    <div class="profile-card reveal" style="animation-delay:.1s">
+      <div class="profile-section-title" id="sec-active">Активні бронювання</div>
+      <div class="booking-card">
+        <div class="booking-icon">🍽</div>
+        <div class="booking-info">
+          <div class="booking-title" id="b1-title">Cafe Aura · Стіл #5 · Вікно</div>
+          <div class="booking-meta" id="b1-meta">Сьогодні · 19:30 · 2 особи</div>
+        </div>
+        <span class="booking-badge badge-active" id="b1-badge">Активне</span>
+      </div>
+      <div class="booking-card">
+        <div class="booking-icon">💻</div>
+        <div class="booking-info">
+          <div class="booking-title" id="b2-title">PROSTIR Hub · Aurora Booth</div>
+          <div class="booking-meta" id="b2-meta">Завтра · 10:00 – 14:00</div>
+        </div>
+        <span class="booking-badge badge-active" id="b2-badge">Заброньовано</span>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="profile-card reveal" style="animation-delay:.15s">
+      <div class="profile-section-title" id="sec-history">Історія</div>
+      <div class="booking-card">
+        <div class="booking-icon">🍽</div>
+        <div class="booking-info">
+          <div class="booking-title" id="h1-title">Cafe Aura · Стіл #9</div>
+          <div class="booking-meta" id="h1-meta">28 берез. · Safe Exit · ₴315</div>
+        </div>
+        <span class="booking-badge badge-done" id="h1-badge">Завершено</span>
+      </div>
+      <div class="booking-card">
+        <div class="booking-icon">💻</div>
+        <div class="booking-info">
+          <div class="booking-title" id="h2-title">PROSTIR Hub · Mono Desk</div>
+          <div class="booking-meta" id="h2-meta">25 берез. · 4 год · ₴480</div>
+        </div>
+        <span class="booking-badge badge-done" id="h2-badge">Завершено</span>
+      </div>
+      <div class="booking-card">
+        <div class="booking-icon">🍽</div>
+        <div class="booking-info">
+          <div class="booking-title" id="h3-title">Cafe Aura · Стіл #2</div>
+          <div class="booking-meta" id="h3-meta">20 берез. · Скасовано</div>
+        </div>
+        <span class="booking-badge badge-cancel" id="h3-badge">Скасовано</span>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="profile-card reveal" style="animation-delay:.2s">
+      <div class="profile-section-title" id="sec-settings">Налаштування</div>
+      <div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label" id="set1-label">Ghost Mode</div>
+            <div class="settings-sub" id="set1-sub">Приховати в Moments</div>
+          </div>
+          <div class="toggle-switch" id="ghost-toggle" role="switch" aria-checked="false" tabindex="0"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label" id="set2-label">Safe Exit авто-оплата</div>
+            <div class="settings-sub" id="set2-sub">Геофенсинг 50м</div>
+          </div>
+          <div class="toggle-switch on" id="safe-toggle" role="switch" aria-checked="true" tabindex="0"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label" id="set3-label">Push-сповіщення</div>
+            <div class="settings-sub" id="set3-sub">Бронювання та Safe Exit</div>
+          </div>
+          <div class="toggle-switch on" id="push-toggle" role="switch" aria-checked="true" tabindex="0"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label" id="set4-label">Мова інтерфейсу</div></div>
+          <div class="settings-value" id="set4-val">Українська</div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label" id="set5-label">Diia верифікація</div>
+            <div class="settings-sub" id="set5-sub">Підтверджено 29.03.2026</div>
+          </div>
+          <div class="settings-value" style="color:#22c55e">✓ ACTIVE</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="/" aria-label="PROSTIR"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+    <span class="footer-copy">© 2026 PROSTIR · Urban OS · Kyiv</span>
+    <a href="/legal.html" class="footer-offer">Публічна оферта</a>
+    <nav class="footer-links">
+      <a href="#">Умови</a>
+      <a href="#">Конфіденційність</a>
+      <a href="#" class="faq-link">FAQ</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function $(id){ return document.getElementById(id); }
+
+/* ── Header scroll ── */
+(function(){
+  const h = document.getElementById('dock');
+  if(h) window.addEventListener('scroll', ()=>{ h.classList.toggle('scrolled', window.scrollY > 10); }, {passive:true});
+})();
+
+/* ── Mobile nav ── */
+(function(){
+  const btn = $('hamburger'), nav = $('mobile-nav');
+  if(btn && nav){ btn.addEventListener('click', ()=>{ const o = nav.classList.toggle('open'); btn.setAttribute('aria-expanded', o); }); }
+  nav && nav.addEventListener('click', e=>{ if(e.target.tagName==='A'){ nav.classList.remove('open'); $('hamburger').setAttribute('aria-expanded','false'); } });
+})();
+
+/* ── Toggles ── */
+document.querySelectorAll('.toggle-switch').forEach(sw=>{
+  function tog(){ sw.classList.toggle('on'); sw.setAttribute('aria-checked', sw.classList.contains('on')); }
+  sw.addEventListener('click', tog);
+  sw.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tog(); } });
+});
+
+/* ── Logout ── */
+const lb = $('logout-btn');
+if(lb) lb.addEventListener('click', ()=>{
+  lb.style.opacity = '0.5';
+  lb.style.pointerEvents = 'none';
+  setTimeout(()=>{ window.location.href='/'; }, 700);
+});
+
+/* ── Theme ── */
+(function(){
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('prostir_theme_choice');
+  document.body.classList.toggle('theme-noir', saved ? saved==='dark' : mq.matches);
+})();
+
+/* ── Reveal ── */
+(function(){
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* ── i18n ── */
+(function(){
+  const switcher = document.getElementById('lang-switch');
+  if(!switcher) return;
+  const T = {
+    ua: {
+      headerName: 'Олена К.',
+      name: 'Олена Коваленко', age: '24', handle: '@olena.k · Kyiv',
+      diiaLabel: 'Підтверджено · Дія',
+      sinceLabel: 'На платформі з', sinceVal: '15 лют. 2026',
+      loginLabel: 'Останній вхід', loginMethod: 'через Дію · 29 бер. · 20:14',
+      stat1: 'Бронювань', stat2: 'Рейтинг', stat3: 'Заклади',
+      interestsLabel: 'Вподобання',
+      logoutLabel: 'Вийти з акаунту',
+      secVenues: 'Улюблені заклади',
+      vm1: 'Кафе · Ленінградська, 4 · Стіл #5 улюблений',
+      vm2: 'Коворкінг · Хрещатик · Aurora Booth',
+      vm3: 'Ресторан · Пейзажна алея · Тераса',
+      vvLabel: 'візитів',
+      secActive: 'Активні бронювання', secHistory: 'Історія', secSettings: 'Налаштування',
+      b1t: 'Cafe Aura · Стіл #5 · Вікно',    b1m: 'Сьогодні · 19:30 · 2 особи', b1b: 'Активне',
+      b2t: 'PROSTIR Hub · Aurora Booth',      b2m: 'Завтра · 10:00 – 14:00',     b2b: 'Заброньовано',
+      h1t: 'Cafe Aura · Стіл #9',             h1m: '28 берез. · Safe Exit · ₴315', h1b: 'Завершено',
+      h2t: 'PROSTIR Hub · Mono Desk',         h2m: '25 берез. · 4 год · ₴480',    h2b: 'Завершено',
+      h3t: 'Cafe Aura · Стіл #2',             h3m: '20 берез. · Скасовано',        h3b: 'Скасовано',
+      set1l: 'Ghost Mode', set1s: 'Приховати в Moments',
+      set2l: 'Safe Exit авто-оплата', set2s: 'Геофенсинг 50м',
+      set3l: 'Push-сповіщення', set3s: 'Бронювання та Safe Exit',
+      set4l: 'Мова інтерфейсу', set4v: 'Українська',
+      set5l: 'Diia верифікація', set5s: 'Підтверджено 29.03.2026',
+    },
+    en: {
+      headerName: 'Olena K.',
+      name: 'Olena Kovalenko', age: '24', handle: '@olena.k · Kyiv',
+      diiaLabel: 'Verified · Diia',
+      sinceLabel: 'Member since', sinceVal: 'Feb 15, 2026',
+      loginLabel: 'Last sign-in', loginMethod: 'via Diia · Mar 29 · 20:14',
+      stat1: 'Bookings', stat2: 'Rating', stat3: 'Venues',
+      interestsLabel: 'Preferences',
+      logoutLabel: 'Sign out',
+      secVenues: 'Favourite venues',
+      vm1: 'Café · Leninhradska, 4 · Table #5 favourite',
+      vm2: 'Coworking · Khreshchatyk · Aurora Booth',
+      vm3: 'Restaurant · Peizazhna Alley · Terrace',
+      vvLabel: 'visits',
+      secActive: 'Active bookings', secHistory: 'History', secSettings: 'Settings',
+      b1t: 'Cafe Aura · Table #5 · Window',  b1m: 'Today · 19:30 · 2 guests',   b1b: 'Active',
+      b2t: 'PROSTIR Hub · Aurora Booth',     b2m: 'Tomorrow · 10:00 – 14:00',   b2b: 'Booked',
+      h1t: 'Cafe Aura · Table #9',           h1m: 'Mar 28 · Safe Exit · ₴315',  h1b: 'Completed',
+      h2t: 'PROSTIR Hub · Mono Desk',        h2m: 'Mar 25 · 4 hrs · ₴480',      h2b: 'Completed',
+      h3t: 'Cafe Aura · Table #2',           h3m: 'Mar 20 · Cancelled',          h3b: 'Cancelled',
+      set1l: 'Ghost Mode',            set1s: 'Hide in Moments',
+      set2l: 'Safe Exit auto-pay',    set2s: 'Geofencing 50m',
+      set3l: 'Push notifications',    set3s: 'Bookings and Safe Exit',
+      set4l: 'Interface language',    set4v: 'English',
+      set5l: 'Diia verification',     set5s: 'Confirmed 29.03.2026',
+    }
+  };
+
+  function set(id, v){ const el = $(id); if(el) el.textContent = v; }
+
+  function apply(lang){
+    const t = T[lang];
+    set('profile-header-name', t.headerName);
+    set('prof-name', t.name);
+    set('prof-age', t.age);
+    set('prof-handle', t.handle);
+    set('prof-diia-label', t.diiaLabel);
+    set('prof-since-label', t.sinceLabel);
+    set('prof-since-val', t.sinceVal);
+    set('prof-login-label', t.loginLabel);
+    set('prof-login-method', t.loginMethod);
+    set('prof-stat1', t.stat1); set('prof-stat2', t.stat2); set('prof-stat3', t.stat3);
+    set('interests-label', t.interestsLabel);
+    set('logout-label', t.logoutLabel);
+    set('sec-venues', t.secVenues);
+    set('vm1', t.vm1); set('vm2', t.vm2); set('vm3', t.vm3);
+    ['vv-label','vv-label2','vv-label3'].forEach(id=>set(id, t.vvLabel));
+    set('sec-active', t.secActive); set('sec-history', t.secHistory); set('sec-settings', t.secSettings);
+    set('b1-title', t.b1t); set('b1-meta', t.b1m); set('b1-badge', t.b1b);
+    set('b2-title', t.b2t); set('b2-meta', t.b2m); set('b2-badge', t.b2b);
+    set('h1-title', t.h1t); set('h1-meta', t.h1m); set('h1-badge', t.h1b);
+    set('h2-title', t.h2t); set('h2-meta', t.h2m); set('h2-badge', t.h2b);
+    set('h3-title', t.h3t); set('h3-meta', t.h3m); set('h3-badge', t.h3b);
+    set('set1-label', t.set1l); set('set1-sub', t.set1s);
+    set('set2-label', t.set2l); set('set2-sub', t.set2s);
+    set('set3-label', t.set3l); set('set3-sub', t.set3s);
+    set('set4-label', t.set4l); set('set4-val', t.set4v);
+    set('set5-label', t.set5l); set('set5-sub', t.set5s);
+    switcher.querySelectorAll('.lang-btn').forEach(b=>
+      b.setAttribute('aria-pressed', b.dataset.lang===lang ? 'true' : 'false')
+    );
+  }
+
+  const saved = localStorage.getItem('prostir_lang') || 'ua';
+  apply(saved === 'en' ? 'en' : 'ua');
+  switcher.querySelectorAll('.lang-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const l = b.dataset.lang === 'en' ? 'en' : 'ua';
+      localStorage.setItem('prostir_lang', l);
+      apply(l);
+    });
+  });
+})();
+</script>
+
+<button id="theme-toggle-fab" class="theme-fab hidden" type="button" aria-label="Змінити тему">
+  <span id="theme-toggle-icon" aria-hidden="true">◐</span>
+  <span id="theme-toggle-label">Theme</span>
+</button>
+
+<script>
+(function(){
+  const fab   = document.getElementById('theme-toggle-fab');
+  const icon  = document.getElementById('theme-toggle-icon');
+  const label = document.getElementById('theme-toggle-label');
+  const mq    = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyTheme(theme){
+    document.body.classList.toggle('theme-noir', theme === 'dark');
+    if(icon)  icon.textContent  = theme === 'dark' ? '☾' : '☀';
+    if(label) label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  }
+  const saved = localStorage.getItem('prostir_theme_choice');
+  applyTheme(saved || (mq.matches ? 'dark' : 'light'));
+  if(fab){ fab.classList.remove('hidden'); if(saved) fab.classList.add('ghosted'); }
+  mq.addEventListener('change', e => { if(!localStorage.getItem('prostir_theme_choice')) applyTheme(e.matches ? 'dark' : 'light'); });
+  fab && fab.addEventListener('click', ()=>{
+    const next = document.body.classList.contains('theme-noir') ? 'light' : 'dark';
+    localStorage.setItem('prostir_theme_choice', next);
+    applyTheme(next);
+    fab.classList.add('ghosted');
+  });
+})();
+</script>
+<script src="/diia-auth.bundle.js" defer></script>
+<script src="/shell-enhancements.js" defer></script>
+
+<!-- Magnetic Button Effect -->
+<script>
+(function(){if(window.matchMedia("(hover: none)").matches)return;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const K=150,D=15;function spring(){return{pos:0,vel:0,target:0};}function stepSpring(s,dt){const F=-K*(s.pos-s.target)-D*s.vel;s.vel+=F*dt;s.pos+=s.vel*dt;}function atRest(s){return Math.abs(s.pos-s.target)<0.015&&Math.abs(s.vel)<0.015;}let mx=-9999,my=-9999;document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;},{passive:true});const buttons=[];let lastT=0;function loop(now){const dt=Math.min((now-(lastT||now))/1000,0.05);lastT=now;for(const b of buttons){const r=b.el.getBoundingClientRect();const cx=r.left+r.width*.5,cy=r.top+r.height*.5;const dx=mx-cx,dy=my-cy;const dist=Math.hypot(dx,dy);if(dist<b.radius){const pull=(1-dist/b.radius);b.sx.target=(dx/b.radius)*b.maxShift*pull;b.sy.target=(dy/b.radius)*b.maxShift*pull;b.near=true;}else{b.sx.target=b.sy.target=0;b.near=false;}stepSpring(b.sx,dt);stepSpring(b.sy,dt);const x=b.sx.pos,y=b.sy.pos;b.el.style.transform="translate("+x.toFixed(2)+"px,"+y.toFixed(2)+"px)";if(b.inner){b.inner.style.transform="translate("+(x*b.innerR).toFixed(2)+"px,"+(y*b.innerR).toFixed(2)+"px)";}const g=b.near?Math.max(0,(b.radius-dist)/b.radius):0;const gq=Math.round(g*32)/32;if(gq!==b._gq){b._gq=gq;if(gq>0.01){const s1=(18+gq*32).toFixed(0);const a1=(0.10+gq*0.40).toFixed(2);b.el.style.boxShadow="0 0 "+s1+"px rgba(139,92,246,"+a1+"),0 0 "+(gq*72).toFixed(0)+"px rgba(139,92,246,"+(gq*0.12).toFixed(2)+")";}else if(atRest(b.sx)&&atRest(b.sy)){b.el.style.boxShadow="";b.el.style.transform="";if(b.inner)b.inner.style.transform="";}}}requestAnimationFrame(loop);}function initButton(el){if(el._magInit)return;el._magInit=true;const radius=parseInt(el.dataset.magR,10)||70;const maxShift=parseInt(el.dataset.magS,10)||18;const innerR=parseFloat(el.dataset.magI)||0.45;let inner=el.querySelector(":scope > .mag-inner");if(!inner){inner=document.createElement("span");inner.className="mag-inner";while(el.firstChild)inner.appendChild(el.firstChild);el.appendChild(inner);}buttons.push({el,inner,radius,maxShift,innerR,sx:spring(),sy:spring(),near:false,_gq:-1});}function init(){document.querySelectorAll(".cta-btn,.diia-btn,[data-magnetic]").forEach(initButton);if(buttons.length)requestAnimationFrame(loop);}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{requestAnimationFrame(init);}})();
+</script>
+<script src="/faq.js" defer></script>
+<script src="/legal.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>PROSTIR / Control — Leads</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-hover: #111111;
+      --border: #222222;
+      --text: #ffffff;
+      --text-secondary: #666666;
+      --accent: #8a2be2;
+      --accent-glow: rgba(138, 43, 226, 0.45);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, textarea, select {
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    .gate {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .gate-card {
+      width: min(400px, 100%);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .gate-card h1 { font-size: 1rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+    .gate-card p { font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 1rem; }
+    .gate-card input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .gate-card input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--surface-hover); border-color: #333; }
+    .btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn-accent:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .btn-ghost { background: transparent; }
+    .app { display: none; min-height: 100%; }
+    .app.ready { display: flex; }
+    .sidebar {
+      width: 64px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+    .sb-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sb-btn:hover { color: var(--text); background: var(--surface); border-color: var(--border); }
+    .sb-btn.active { color: var(--accent); border-color: var(--border); background: var(--surface); }
+    .sb-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .header {
+      height: 56px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      flex-shrink: 0;
+    }
+    .header-title { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.02em; }
+    .header-right { display: flex; align-items: center; gap: 0.75rem; }
+    .pill {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .pill-live { border-color: rgba(74, 222, 128, 0.35); color: #4ade80; }
+    .pill-maint { border-color: rgba(251, 191, 36, 0.4); color: #fbbf24; }
+    .content { flex: 1; padding: 1.25rem; overflow: auto; }
+    .section-title { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1rem; }
+    .placeholder { color: var(--text-secondary); font-size: 0.875rem; max-width: 40ch; line-height: 1.6; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+    .toolbar span { font-size: 0.75rem; color: var(--text-secondary); }
+    .table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: transparent; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+    thead th {
+      text-align: left;
+      padding: 0.65rem 1rem;
+      font-weight: 600;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      background: var(--surface);
+      transition: all 0.3s ease;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface-hover); }
+    tbody td { padding: 0.75rem 1rem; color: var(--text); vertical-align: middle; }
+    tbody td.muted { color: var(--text-secondary); }
+    tr.row-enter { animation: fadeRow 0.55s ease forwards; }
+    @keyframes fadeRow {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.22rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+    }
+    .badge-new {
+      border-color: var(--accent);
+      color: #e9d5ff;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .badge-contacted, .badge-pilot { color: #aaa; }
+    .badge-rejected { color: #888; opacity: 0.85; }
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(420px, 100%);
+      height: 100%;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 210;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+    .drawer-head h2 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.02em; }
+    .drawer-close {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .drawer-close:hover { color: var(--text); border-color: #333; }
+    .drawer-field { margin-bottom: 1rem; }
+    .drawer-field label { display: block; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.35rem; }
+    .drawer-field p, .drawer-field a { font-size: 0.875rem; color: var(--text); word-break: break-word; }
+    .drawer-field a { color: var(--accent); }
+    textarea.notes {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.8125rem;
+      resize: vertical;
+    }
+    textarea.notes:focus { outline: none; border-color: var(--accent); }
+    select.status {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+    select.status:focus { outline: none; border-color: var(--accent); }
+    .drawer-actions { margin-top: auto; padding-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .err { font-size: 0.75rem; color: #f87171; margin-top: 0.5rem; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="gate" class="gate">
+    <div class="gate-card">
+      <h1>PROSTIR / Control</h1>
+      <p>Внутрішня панель. Введіть токен з <code style="color:var(--accent)">ADMIN_LEADS_SECRET</code> (змінні середовища сервера).</p>
+      <input type="password" id="token-input" autocomplete="off" placeholder="Admin token" aria-label="Admin token"/>
+      <div id="gate-err" class="err" role="alert"></div>
+      <button type="button" class="btn btn-accent" id="token-save" style="width:100%">Увійти</button>
+    </div>
+  </div>
+
+  <div id="app" class="app">
+    <aside class="sidebar" aria-label="Навігація">
+      <button type="button" class="sb-btn active" data-panel="inbox" title="Inbox" aria-label="Inbox">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 8h16M8 4v16"/></svg>
+      </button>
+      <button type="button" class="sb-btn" data-panel="partners" title="Active partners" aria-label="Active partners">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M4 20v-1a4 4 0 014-4h3a4 4 0 014 4v1M14 20v-1a3 3 0 013-3h3"/></svg>
+      </button>
+      <button type="button" class="sb-btn" data-panel="analytics" title="Analytics" aria-label="Analytics">
+        <svg viewBox="0 0 24 24"><path d="M4 19V5M9 19V9M14 19v-6M19 19V8"/></svg>
+      </button>
+      <button type="button" class="sb-btn" data-panel="settings" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2"/></svg>
+      </button>
+    </aside>
+    <div class="main">
+      <header class="header">
+        <span class="header-title">PROSTIR / Control</span>
+        <div class="header-right">
+          <span id="panel-pill" class="pill pill-live">Live</span>
+          <button type="button" class="btn btn-ghost" id="notify-btn" title="Сповіщення про нові заявки">🔔 Сповіщення</button>
+          <button type="button" class="btn btn-ghost" id="logout-btn">Вийти</button>
+        </div>
+      </header>
+      <main class="content">
+        <div id="panel-inbox" class="panel active">
+          <div class="section-title">Вхідні заявки</div>
+          <div class="toolbar">
+            <span id="lead-count">—</span>
+            <span id="sse-status" style="font-size:0.7rem;color:var(--text-secondary)">Realtime: …</span>
+          </div>
+          <div id="db-warning" class="err hidden"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Заклад</th>
+                  <th>Контакт</th>
+                  <th>Соцмережа / лінк</th>
+                  <th>Статус</th>
+                  <th>Дата</th>
+                </tr>
+              </thead>
+              <tbody id="leads-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="panel-partners" class="panel">
+          <div class="section-title">Активні партнери</div>
+          <p class="placeholder">Модуль у розробці — тут буде список підключених закладів.</p>
+        </div>
+        <div id="panel-analytics" class="panel">
+          <div class="section-title">Аналітика</div>
+          <p class="placeholder">Модуль у розробці — воронка лідів та конверсії.</p>
+        </div>
+        <div id="panel-settings" class="panel">
+          <div class="section-title">Налаштування</div>
+          <p class="placeholder">Токен зберігається лише в цьому браузері (session storage). Натисніть «Вийти», щоб очистити.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="drawer-overlay" class="drawer-overlay" aria-hidden="true"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-labelledby="drawer-title">
+    <div class="drawer-head">
+      <h2 id="drawer-title">—</h2>
+      <button type="button" class="drawer-close" id="drawer-close" aria-label="Закрити">×</button>
+    </div>
+    <div class="drawer-field">
+      <label>Контакт</label>
+      <p id="drawer-contact">—</p>
+    </div>
+    <div class="drawer-field">
+      <label>Соцмережа / меню</label>
+      <p><a id="drawer-social" href="#" target="_blank" rel="noopener">—</a></p>
+    </div>
+    <div class="drawer-field">
+      <label>Нотатки</label>
+      <textarea class="notes" id="drawer-notes" placeholder="Внутрішні нотатки…"></textarea>
+    </div>
+    <div class="drawer-field">
+      <label>Статус</label>
+      <select class="status" id="drawer-status">
+        <option value="NEW">NEW</option>
+        <option value="CONTACTED">CONTACTED</option>
+        <option value="PILOT_READY">PILOT_READY</option>
+        <option value="REJECTED">REJECTED</option>
+      </select>
+    </div>
+    <div class="drawer-actions">
+      <button type="button" class="btn btn-accent" id="drawer-save">Зберегти зміни</button>
+    </div>
+  </aside>
+
+  <footer class="admin-legal-foot">
+    <a href="/legal.html" class="admin-legal-foot__link">Публічна оферта PROSTIR</a>
+  </footer>
+  <style>
+    .admin-legal-foot {
+      padding: 1rem 1.5rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .admin-legal-foot__link {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid rgba(138, 43, 226, 0.35);
+      border-radius: 4px;
+    }
+    .admin-legal-foot__link:hover {
+      color: #fff;
+      border-color: rgba(138, 43, 226, 0.55);
+    }
+  </style>
+
+  <!-- Абсолютний шлях від кореня хоста (Railway / локальний Express) -->
+  <script src="/admin/leads-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+{
+  "users": [
+    {
+      "id": "user-001",
+      "diiaId": "UA-7734521",
+      "name": "Денис Шепітько"
+    }
+  ],
+  "venues": [
+    {
+      "id": "cafe-aura",
+      "name": "Cafe Aura",
+      "address": "Вул. Саксаганського, 8",
+      "floor": "1-й поверх",
+      "zone": "Зал A",
+      "openUntil": "22:30"
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "venueId": "cafe-aura",
+      "seats": 2,
+      "view": "Вікно",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 2,
+      "venueId": "cafe-aura",
+      "seats": 2,
+      "view": "Вікно",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 3,
+      "venueId": "cafe-aura",
+      "seats": 4,
+      "view": "Вікно",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 4,
+      "venueId": "cafe-aura",
+      "seats": 4,
+      "view": "Вікно",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 5,
+      "venueId": "cafe-aura",
+      "seats": 2,
+      "view": "Вікно",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 6,
+      "venueId": "cafe-aura",
+      "seats": 4,
+      "view": "Центр",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 7,
+      "venueId": "cafe-aura",
+      "seats": 4,
+      "view": "Центр",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 8,
+      "venueId": "cafe-aura",
+      "seats": 2,
+      "view": "Бічний",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 9,
+      "venueId": "cafe-aura",
+      "seats": 6,
+      "view": "Центр",
+      "zone": "A",
+      "status": "booked"
+    },
+    {
+      "id": 10,
+      "venueId": "cafe-aura",
+      "seats": 6,
+      "view": "Центр",
+      "zone": "A",
+      "status": "booked"
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1774819935043,
+      "tableId": 6,
+      "userId": "user-001",
+      "time": "20:00",
+      "date": "2026-03-29",
+      "venue": "cafe-aura",
+      "seats": 4,
+      "view": "Центр",
+      "status": "confirmed",
+      "createdAt": "2026-03-29T21:32:15.043Z"
+    },
+    {
+      "id": 1774857042329,
+      "tableId": 8,
+      "userId": "user-001",
+      "time": "18:00",
+      "date": "2026-03-30",
+      "venue": "cafe-aura",
+      "seats": 2,
+      "view": "Бічний",
+      "status": "confirmed",
+      "createdAt": "2026-03-30T07:50:42.329Z"
+    },
+    {
+      "id": 1774857161875,
+      "tableId": 7,
+      "userId": "user-001",
+      "time": "18:00",
+      "date": "2026-03-30",
+      "venue": "cafe-aura",
+      "seats": 4,
+      "view": "Центр",
+      "status": "confirmed",
+      "createdAt": "2026-03-30T07:52:41.875Z"
+    },
+    {
+      "id": 1774858769426,
+      "tableId": 10,
+      "userId": "user-001",
+      "time": "18:00",
+      "date": "2026-03-30",
+      "venue": "cafe-aura",
+      "seats": 6,
+      "view": "Центр",
+      "status": "confirmed",
+      "createdAt": "2026-03-30T08:19:29.426Z"
+    },
+    {
+      "id": 1774858971859,
+      "tableId": 9,
+      "userId": "user-001",
+      "time": "19:00",
+      "date": "2026-03-30",
+      "venue": "cafe-aura",
+      "seats": 6,
+      "view": "Центр",
+      "status": "confirmed",
+      "createdAt": "2026-03-30T08:22:51.859Z"
+    },
+    {
+      "id": 1774863096530,
+      "tableId": 5,
+      "userId": "user-001",
+      "time": "20:00",
+      "date": "2026-03-30",
+      "venue": "cafe-aura",
+      "seats": 2,
+      "view": "Вікно",
+      "status": "confirmed",
+      "createdAt": "2026-03-30T09:31:36.530Z"
+    }
+  ],
+  "desks": [
+    {
+      "id": 1,
+      "venueId": "cowork-hub",
+      "zone": "A",
+      "status": "available",
+      "until": null
+    },
+    {
+      "id": 2,
+      "venueId": "cowork-hub",
+      "zone": "A",
+      "status": "session",
+      "until": "17:30"
+    },
+    {
+      "id": 3,
+      "venueId": "cowork-hub",
+      "zone": "A",
+      "status": "booked",
+      "until": "18:00"
+    },
+    {
+      "id": 4,
+      "venueId": "cowork-hub",
+      "zone": "A",
+      "status": "available",
+      "until": null
+    },
+    {
+      "id": 5,
+      "venueId": "cowork-hub",
+      "zone": "B",
+      "status": "session",
+      "until": "19:00"
+    },
+    {
+      "id": 6,
+      "venueId": "cowork-hub",
+      "zone": "B",
+      "status": "available",
+      "until": null
+    },
+    {
+      "id": 7,
+      "venueId": "cowork-hub",
+      "zone": "B",
+      "status": "booked",
+      "until": "20:00"
+    },
+    {
+      "id": 8,
+      "venueId": "cowork-hub",
+      "zone": "B",
+      "status": "available",
+      "until": null
+    },
+    {
+      "id": 9,
+      "venueId": "cowork-hub",
+      "zone": "C",
+      "status": "available",
+      "until": null
+    },
+    {
+      "id": 10,
+      "venueId": "cowork-hub",
+      "zone": "C",
+      "status": "session",
+      "until": "16:45"
+    },
+    {
+      "id": 11,
+      "venueId": "cowork-hub",
+      "zone": "C",
+      "status": "available",
+      "until": null
+    },
+    {
+      "id": 12,
+      "venueId": "cowork-hub",
+      "zone": "C",
+      "status": "booked",
+      "until": "21:00"
+    }
+  ],
+  "apartments": [
+    {
+      "id": "apt-001",
+      "address": "Вул. Хрещатик, 10",
+      "floor": 5,
+      "area": 68,
+      "rooms": 2,
+      "verified": true,
+      "status": "available"
+    },
+    {
+      "id": "apt-002",
+      "address": "Бул. Лесі Українки, 34",
+      "floor": 8,
+      "area": 92,
+      "rooms": 3,
+      "verified": true,
+      "status": "rented"
+    },
+    {
+      "id": "apt-003",
+      "address": "Вул. Саксаганського, 55",
+      "floor": 2,
+      "area": 45,
+      "rooms": 1,
+      "verified": true,
+      "status": "available"
+    },
+    {
+      "id": "apt-004",
+      "address": "Вул. Золотоворітська, 7",
+      "floor": 6,
+      "area": 120,
+      "rooms": 4,
+      "verified": true,
+      "status": "available"
+    },
+    {
+      "id": "apt-005",
+      "address": "Пров. Шевченка, 3",
+      "floor": 3,
+      "area": 55,
+      "rooms": 2,
+      "verified": false,
+      "status": "rented"
+    }
+  ]
+}

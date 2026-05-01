@@ -1,0 +1,4 @@
+# Speed / reliability: Playwright is only for local app-store export, not Railway build.
+# https://nixpacks.com/docs/configuration/file
+[variables]
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"

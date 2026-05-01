@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  PILOT_READY
+  REJECTED
+}
+
+model Lead {
+  id               String     @id @default(uuid())
+  createdAt        DateTime   @default(now())
+  restaurantName   String
+  instagramHandle  String     @default("")
+  contactPerson    String
+  status           LeadStatus @default(NEW)
+  notes            String     @default("")
+}

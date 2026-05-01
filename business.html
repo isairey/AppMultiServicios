@@ -1,0 +1,3656 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PROSTIR for Business — Керуй своїм закладом у ритмі міста</title>
+  <link rel="stylesheet" href="/AppMultiServicios/app.css"/>
+  <link rel="stylesheet" href="/AppMultiServicios/prostir-receipt.css"/>
+  <style>
+    /* ════════════════════════════════════════════
+       BUSINESS PAGE — base resets
+       ════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body.biz-page {
+      background: #000;
+      color: #fff;
+      --bv: 139,92,246;
+      --violet-rgb: 139,92,246;
+    }
+    body.biz-page header {
+      background: rgba(0,0,0,0.82);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    body.biz-page nav a { color: rgba(255,255,255,0.52); }
+    body.biz-page nav a:hover,
+    body.biz-page nav a.nav-active {
+      color: #fff; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1);
+    }
+    body.biz-page .logo .lp  { color: #fff; }
+    body.biz-page .logo .lrest { color: rgba(255,255,255,0.3); }
+    body.biz-page .diia-btn {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.72);
+    }
+    body.biz-page .hamburger span { background: rgba(255,255,255,0.7); }
+    body.biz-page .mobile-nav {
+      background: rgba(10,10,10,0.97);
+      border-color: rgba(255,255,255,0.07);
+    }
+    body.biz-page .mobile-nav a { color: rgba(255,255,255,0.52); }
+    body.biz-page .mobile-nav a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+    /* ── Architectural grid background shared ── */
+    .biz-grid-bg {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .biz-grid-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(139,92,246,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,92,246,.035) 1px, transparent 1px),
+        linear-gradient(rgba(139,92,246,.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,92,246,.015) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+      mask-image: radial-gradient(ellipse 85% 70% at 50% 50%, black 0%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 50%, black 0%, transparent 100%);
+    }
+    .biz-grid-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, transparent 40%, rgba(139,92,246,.025) 55%, transparent 70%),
+        linear-gradient(-45deg,  transparent 45%, rgba(139,92,246,.02)  60%, transparent 75%),
+        linear-gradient(80deg,   transparent 30%, rgba(109,40,217,.018) 50%, transparent 70%);
+    }
+
+    /* ════════════════════════════════════════════
+       HERO SECTION
+       ════════════════════════════════════════════ */
+    .biz-hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 10rem 2rem 6rem;
+      position: relative; overflow: hidden;
+      background: #000;
+    }
+    .biz-hero-content { position: relative; z-index: 1; }
+    .biz-hero::before {
+      content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 65% 55% at 50% 45%, rgba(139,92,246,0.16) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 35% at 15% 20%, rgba(124,58,237,0.11) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 40% at 85% 15%, rgba(167,139,250,0.09) 0%, transparent 58%),
+        radial-gradient(ellipse 50% 28% at 70% 75%, rgba(109,40,217,0.07) 0%, transparent 62%);
+    }
+    .biz-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.35);
+      margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.8s 0.1s var(--ease-out) forwards;
+    }
+    .biz-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--violet); }
+    .biz-hero h1 {
+      font-size: clamp(1.75rem, 4.8vw, 3.1rem);
+      font-weight: 700; letter-spacing: -0.045em; line-height: 1.1;
+      color: #fff; margin-bottom: 1.5rem; max-width: min(42ch, 100%);
+      opacity: 0; animation: fadeUp 0.9s 0.22s var(--ease-out) forwards;
+    }
+    .biz-hero h1 .accent {
+      background: linear-gradient(100deg,
+        #6B21D6 0%, #8B3FFF 12%, #A855F7 24%, #7C3AED 36%,
+        #6366F1 46%, #3B82F6 56%, #60A5FA 66%, #3B82F6 74%,
+        #7C3AED 84%, #A855F7 94%, #6B21D6 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      animation: accentShimmer 5s linear infinite;
+    }
+    @keyframes accentShimmer {
+      0%   { background-position: 0%   center; }
+      100% { background-position: 200% center; }
+    }
+    .biz-hero p {
+      font-size: clamp(0.95rem, 2vw, 1.15rem); color: rgba(255,255,255,0.48);
+      max-width: 50ch; line-height: 1.72; margin: 0 auto 2.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.38s var(--ease-out) forwards;
+    }
+    .biz-hero-btns {
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.9s 0.52s var(--ease-out) forwards;
+    }
+    .biz-primary-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem; border-radius: 12px;
+      background: var(--violet); color: #fff; border: none;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .biz-primary-btn:hover {
+      background: #7C3AED;
+      box-shadow: 0 0 32px rgba(139,92,246,0.45), 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .biz-outline-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem; border-radius: 12px;
+      background: transparent; color: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.18);
+      font-size: 0.9rem; font-weight: 500; cursor: pointer;
+      transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .biz-outline-btn:hover {
+      border-color: rgba(139,92,246,0.5); color: #fff;
+      background: rgba(139,92,246,0.07);
+    }
+    .biz-hero-stats {
+      display: flex; align-items: center; justify-content: center;
+      gap: 2.5rem; flex-wrap: wrap;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      opacity: 0; animation: fadeUp 0.9s 0.7s var(--ease-out) forwards;
+    }
+    .biz-stat { text-align: center; }
+    .biz-stat-val {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700;
+      letter-spacing: -0.04em; color: #fff; line-height: 1;
+    }
+    .biz-stat-val span { color: var(--violet); }
+    .biz-stat-label {
+      font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 0.4rem;
+    }
+    .biz-stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.08); }
+
+    /* Hero — glass panel + premium contrast */
+    .biz-hero-inner {
+      max-width: min(1040px, 100%);
+      margin: 0 auto;
+      padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 2.75rem);
+      border-radius: 28px;
+      background: linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 45%, rgba(12,12,16,0.55) 100%);
+      border: 1px solid rgba(255,255,255,0.09);
+      box-shadow:
+        0 0 0 1px rgba(139,92,246,0.06) inset,
+        0 32px 80px rgba(0,0,0,0.45),
+        0 0 120px rgba(99,102,241,0.06);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      transform: translateY(var(--biz-hero-float, 0px));
+      will-change: transform;
+    }
+    .biz-hero #biz-hero-sub {
+      color: rgba(255,255,255,0.62);
+      max-width: 48ch;
+      font-size: clamp(1rem, 2.1vw, 1.2rem);
+      line-height: 1.65;
+    }
+    .biz-outline-btn {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.04);
+    }
+    /* Metric cards (hero) */
+    .biz-metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      width: 100%;
+      max-width: 920px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .biz-metric-card {
+      text-align: center;
+      padding: 1.25rem 0.85rem;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: border-color 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+    }
+    .biz-metric-card:hover {
+      border-color: rgba(139,92,246,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35), 0 0 36px rgba(139,92,246,0.12);
+    }
+    .biz-metric-ic {
+      width: 40px; height: 40px; margin: 0 auto 0.65rem;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(145deg, rgba(139,92,246,0.2), rgba(99,102,241,0.08));
+      border: 1px solid rgba(139,92,246,0.25);
+      color: #c4b5fd;
+    }
+    .biz-metric-ic svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .biz-metric-val {
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .biz-metric-val span { color: var(--violet); }
+    .biz-metric-lbl {
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      margin-top: 0.45rem;
+      line-height: 1.35;
+    }
+    @media (max-width: 820px) {
+      .biz-metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 420px) {
+      .biz-metric-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ════════════════════════════════════════════
+       ADMIN SHOWCASE — investor / B2B narrative
+       ════════════════════════════════════════════ */
+    .admin-section {
+      padding: clamp(4.5rem, 12vw, 9rem) 1.5rem clamp(5rem, 10vw, 8rem);
+      background: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(109,40,217,0.14) 0%, transparent 55%), #020202;
+      position: relative; overflow: hidden;
+    }
+    .admin-show-inner {
+      max-width: 1180px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .admin-hero-text {
+      max-width: 46rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    }
+    .admin-hero-text .biz-section-eyebrow {
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.34);
+      display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;
+    }
+    .admin-hero-text .biz-section-eyebrow::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--violet); box-shadow: 0 0 14px rgba(139,92,246,0.65);
+    }
+    .admin-hero-text h2 {
+      font-size: clamp(1.85rem, 4.2vw, 3.15rem); font-weight: 700;
+      letter-spacing: -0.045em; line-height: 1.05; color: #fff; margin-bottom: 1rem;
+    }
+    .admin-hero-text h2 .admin-h2-accent {
+      background: linear-gradient(105deg, #c4b5fd 0%, #8b5cf6 45%, #6366f1 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .admin-hero-text .admin-lead {
+      font-size: clamp(1rem, 1.35vw, 1.12rem); color: rgba(255,255,255,0.5);
+      line-height: 1.68; margin-bottom: 0;
+    }
+    .admin-bento {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2rem, 4vw, 3rem);
+      align-items: stretch;
+    }
+    .admin-copy-col {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr);
+      gap: clamp(1.25rem, 3vw, 2rem);
+      align-items: start;
+      min-width: 0;
+    }
+    .admin-kpi-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+    .admin-feature-item.admin-kpi-feature .afi-text h4 {
+      font-size: clamp(1.12rem, 2.2vw, 1.42rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: #fff;
+      margin-bottom: 0.4rem;
+      line-height: 1.15;
+      font-variant-numeric: tabular-nums;
+    }
+    .admin-feat-grid {
+      display: grid; gap: 0.75rem; flex: 1;
+    }
+    .admin-feature-item {
+      display: grid; grid-template-columns: auto 1fr; gap: 1rem;
+      align-items: start;
+      padding: 1.1rem 1.2rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .admin-feature-item:hover {
+      border-color: rgba(139,92,246,0.28);
+      background: rgba(139,92,246,0.05);
+    }
+    .afi-icon {
+      width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(145deg, rgba(139,92,246,0.22) 0%, rgba(139,92,246,0.06) 100%);
+      border: 1px solid rgba(139,92,246,0.28);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .afi-icon svg { width: 20px; height: 20px; stroke: #c4b5fd; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .afi-text .afi-tag {
+      font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(139,92,246,0.85); margin-bottom: 0.35rem;
+    }
+    .afi-text h4 { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 0.35rem; letter-spacing: -0.02em; }
+    .afi-text p  { font-size: 0.8rem; color: rgba(255,255,255,0.42); line-height: 1.58; }
+
+    /* ── Admin panel mockup (chrome) ── */
+    .admin-mock-wrap {
+      position: relative;
+      min-width: 0;
+      order: -1;
+      width: 100%;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      transform: perspective(1400px) rotateX(1.2deg);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-mock-wrap:hover { transform: perspective(1400px) rotateX(0deg) scale(1.01); }
+    @media (prefers-reduced-motion: reduce) {
+      .admin-mock-wrap, .admin-mock-wrap:hover { transform: none; }
+    }
+    /* Градієнтна обводка лише навколо вікна панелі (не на сайдбар деталей) */
+    .admin-panel::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 23px; z-index: 0; pointer-events: none;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.45), rgba(99,102,241,0.2), rgba(139,92,246,0.15), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      opacity: 0.85;
+    }
+    .admin-dock-row {
+      display: flex; flex-direction: row; align-items: flex-start; gap: 0.75rem;
+      position: relative; z-index: 1;
+    }
+    .admin-dock-row .admin-panel { flex: 1; min-width: 0; }
+    .admin-live-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      flex-shrink: 0;
+      margin-left: auto;
+      padding: 0.3rem 0.65rem 0.3rem 0.5rem;
+      border-radius: 999px;
+      font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.88);
+      background: rgba(12,12,14,0.92);
+      border: 1px solid rgba(52,211,153,0.35);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 0 16px rgba(52,211,153,0.1);
+    }
+    .admin-live-pill i {
+      width: 6px; height: 6px; border-radius: 50%; background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      animation: adminLivePulse 1.8s ease-in-out infinite;
+    }
+    @keyframes adminLivePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.92); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .admin-live-pill i { animation: none; }
+    }
+    .admin-panel {
+      position: relative; z-index: 1; overflow: hidden;
+      background: linear-gradient(180deg, #121214 0%, #0a0a0c 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03) inset,
+        0 32px 100px rgba(0,0,0,0.75),
+        0 0 80px rgba(139,92,246,0.08);
+    }
+    .ap-titlebar {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 0.65rem;
+      padding: 0.75rem 1rem;
+      background: #111113; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .ap-titlebar .ap-title { flex: 1 1 auto; min-width: 0; }
+    .ap-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .ap-dot.red   { background: #FF453A; }
+    .ap-dot.amber { background: #FF9F0A; }
+    .ap-dot.green { background: #32D74B; }
+    .ap-title {
+      font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3); text-transform: uppercase; margin-left: 0.35rem;
+    }
+    .ap-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 1rem;
+    }
+    .ap-tab {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      padding: 0.65rem 1rem; cursor: pointer; border-bottom: 2px solid transparent;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .ap-tab.active { color: var(--violet); border-color: var(--violet); }
+    .ap-body { padding: 1.25rem; }
+
+    /* Floorplan tab */
+    .ap-floor { display: none; }
+    .ap-floor.active { display: block; }
+    .ap-floor-toolbar { margin-bottom: 0.5rem; }
+    .ap-floor-summary {
+      font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.5); line-height: 1.5;
+      padding: 0.5rem 0.65rem; margin-bottom: 0.65rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(99,102,241,0.04) 100%);
+      border: 1px solid rgba(139,92,246,0.18);
+    }
+    .ap-floor-summary strong {
+      color: #e9d5ff; font-weight: 600;
+    }
+    .ap-floor-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0;
+    }
+    .ap-floor-title { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .ap-floor-tag {
+      font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.08em;
+      color: var(--violet); background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.2); border-radius: 999px; padding: 0.2rem 0.6rem;
+      flex-shrink: 0;
+    }
+    .ap-zone-legend {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+      margin: 0.5rem 0 0.35rem;
+    }
+    .ap-zone-pill {
+      font-family: var(--font-mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.45);
+    }
+    .ap-zone--window { border-color: rgba(96,165,250,0.35); color: #93c5fd; background: rgba(59,130,246,0.08); }
+    .ap-zone--main  { border-color: rgba(167,139,250,0.4); color: #ddd6fe; background: rgba(139,92,246,0.1); }
+    .ap-zone--bar   { border-color: rgba(52,211,153,0.35); color: #6ee7b7; background: rgba(52,211,153,0.07); }
+    .ap-fp-table--z-window { box-shadow: inset 3px 0 0 rgba(59,130,246,0.65); }
+    .ap-fp-table--z-main   { box-shadow: inset 3px 0 0 rgba(139,92,246,0.75); }
+    .ap-fp-table--z-bar    { box-shadow: inset 3px 0 0 rgba(52,211,153,0.55); }
+    .ap-floorplan {
+      width: 100%;
+      background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 14px; padding: 0.75rem; position: relative;
+      margin-top: 0.65rem;
+    }
+    .ap-fp-grid-wrap {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -0.15rem;
+      padding: 0 0.15rem 0.35rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(139,92,246,0.45) rgba(255,255,255,0.06);
+    }
+    .ap-fp-grid-wrap::-webkit-scrollbar { height: 5px; }
+    .ap-fp-grid-wrap::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 999px; }
+    .ap-fp-grid-wrap::-webkit-scrollbar-thumb {
+      background: rgba(139,92,246,0.4); border-radius: 999px;
+    }
+    /* Сайдбар сесії — поза вікном admin-panel, у просторі праворуч */
+    .ap-floor-detail--dock {
+      width: 11.75rem; flex-shrink: 0;
+      border-radius: 16px;
+      border: 1px solid rgba(139,92,246,0.32);
+      background: linear-gradient(165deg, rgba(22,18,34,0.97) 0%, rgba(10,9,14,0.99) 100%);
+      padding: 0.65rem 0.7rem 0.75rem;
+      display: flex; flex-direction: column;
+      min-height: 12rem;
+      max-height: min(70vh, 520px);
+      box-shadow:
+        0 20px 56px rgba(0,0,0,0.65),
+        0 0 0 1px rgba(139,92,246,0.1),
+        0 0 48px rgba(139,92,246,0.07);
+    }
+    .ap-floor-detail--dock[hidden] { display: none !important; }
+    .ap-fd-empty {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      font-size: 0.58rem; line-height: 1.45; color: rgba(255,255,255,0.28);
+      padding: 0.35rem;
+    }
+    .ap-fd-body { flex: 1; display: flex; flex-direction: column; gap: 0.45rem; min-height: 0; }
+    .ap-fd-head {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .ap-fd-head-main {
+      font-size: 0.62rem; font-weight: 700; color: #fff; letter-spacing: -0.02em;
+    }
+    .ap-fd-badge {
+      font-family: var(--font-mono); font-size: 0.45rem; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.12rem 0.38rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.45);
+    }
+    .ap-fd-badge.is-busy {
+      color: #c4b5fd; border-color: rgba(139,92,246,0.35); background: rgba(139,92,246,0.1);
+    }
+    .ap-fd-badge.is-free {
+      color: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.08);
+    }
+    .ap-fd-rows { display: flex; flex-direction: column; gap: 0.32rem; overflow-y: auto; flex: 1; }
+    .ap-fd-row { display: flex; flex-direction: column; gap: 0.08rem; }
+    .ap-fd-k {
+      font-family: var(--font-mono); font-size: 0.45rem; letter-spacing: 0.05em;
+      text-transform: uppercase; color: rgba(255,255,255,0.32);
+    }
+    .ap-fd-v {
+      font-size: 0.54rem; line-height: 1.35; color: rgba(255,255,255,0.82); font-weight: 500;
+    }
+    .ap-fd-v.ap-fd-mono { font-family: var(--font-mono); font-size: 0.5rem; color: #c4b5fd; }
+    .ap-fd-highlight {
+      margin-top: 0.15rem; padding: 0.28rem 0.35rem; border-radius: 7px;
+      background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.28);
+      font-size: 0.5rem; font-weight: 600; color: #fde68a; line-height: 1.3;
+    }
+    .ap-fd-safe {
+      margin-top: 0.1rem; padding: 0.28rem 0.35rem; border-radius: 7px;
+      background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25);
+      font-family: var(--font-mono); font-size: 0.48rem; font-weight: 700;
+      color: #34d399; letter-spacing: 0.04em;
+    }
+    @media (max-width: 720px) {
+      .admin-dock-row { flex-direction: column; align-items: stretch; }
+      .ap-floor-detail--dock {
+        width: 100%; max-height: 18rem; min-height: 8rem;
+        order: 2;
+      }
+      .admin-dock-row .admin-panel { order: 1; }
+    }
+    .ap-fp-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(4.85rem, 1fr));
+      gap: 0.4rem;
+      position: relative;
+      min-width: 31.5rem;
+    }
+    .ap-fp-table {
+      min-height: 4.85rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.035);
+      display: flex; align-items: stretch; justify-content: stretch;
+      padding: 0.38rem 0.42rem;
+      cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+    .ap-fp-table:focus-visible {
+      outline: 2px solid rgba(139,92,246,0.65); outline-offset: 2px;
+    }
+    .ap-fp-table:hover { border-color: rgba(139,92,246,0.35); background: rgba(139,92,246,0.07); }
+    .ap-fp-table.booked {
+      background: linear-gradient(160deg, rgba(139,92,246,0.2) 0%, rgba(30,22,48,0.95) 100%);
+      border-color: rgba(139,92,246,0.42);
+    }
+    .ap-fp-table.active-sel {
+      background: linear-gradient(160deg, rgba(139,92,246,0.35) 0%, rgba(45,32,72,0.98) 100%);
+      border-color: #a78bfa;
+      box-shadow: 0 0 0 1px rgba(167,139,250,0.35), 0 6px 24px rgba(139,92,246,0.25);
+    }
+    .ap-fp-table.empty-zone { min-height: 2.5rem; padding: 0; background: transparent; border-style: dashed; border-color: rgba(255,255,255,0.06); cursor: default; }
+    .ap-fp-table.empty-zone:hover { background: transparent; border-color: rgba(255,255,255,0.08); }
+
+    .ap-fp-card {
+      display: flex; flex-direction: column; justify-content: flex-start; gap: 0.22rem;
+      width: 100%; min-width: 0; flex: 1; min-height: 0;
+    }
+    .ap-fp-card .ap-fp-server { margin-top: auto; }
+    .ap-fp-card:has(.ap-fp-pulse) .ap-fp-pulse { margin-top: auto; }
+    .ap-fp-card:has(.ap-fp-pulse) .ap-fp-server { margin-top: 0.18rem; }
+    .ap-fp-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.2rem;
+    }
+    .ap-fp-num {
+      font-family: var(--font-mono); font-size: 0.48rem; font-weight: 700;
+      color: rgba(255,255,255,0.35); letter-spacing: 0.04em;
+    }
+    .booked .ap-fp-num, .active-sel .ap-fp-num { color: rgba(255,255,255,0.55); }
+    .ap-fp-diia {
+      font-family: var(--font-mono); font-size: 0.42rem; font-weight: 700;
+      letter-spacing: 0.02em; color: #6ee7b7;
+      padding: 0.1rem 0.28rem; border-radius: 4px;
+      border: 1px solid rgba(52,211,153,0.35);
+      background: rgba(52,211,153,0.1);
+      line-height: 1; flex-shrink: 0;
+    }
+    .ap-fp-party {
+      font-size: 0.52rem; font-weight: 600; color: rgba(255,255,255,0.92);
+      line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ap-fp-row {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 0.25rem;
+    }
+    .ap-fp-time {
+      font-family: var(--font-mono); font-size: 0.48rem; color: rgba(255,255,255,0.42);
+    }
+    .ap-fp-bill {
+      font-family: var(--font-mono); font-size: 0.52rem; font-weight: 700;
+      color: #c4b5fd; letter-spacing: -0.02em;
+    }
+    .active-sel .ap-fp-bill { color: #fff; text-shadow: 0 0 12px rgba(167,139,250,0.5); }
+    .ap-fp-server {
+      font-size: 0.45rem; color: rgba(255,255,255,0.32); line-height: 1.2;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ap-fp-card--vacant { justify-content: flex-start; gap: 0.28rem; }
+    .fp-vacant-lbl {
+      font-size: 0.56rem; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; color: rgba(255,255,255,0.22);
+    }
+    .ap-fp-next {
+      font-family: var(--font-mono); font-size: 0.46rem; color: rgba(255,255,255,0.34); line-height: 1.2;
+    }
+    .ap-fp-next--muted { color: rgba(255,255,255,0.14); font-style: normal; }
+    .ap-fp-pulse {
+      margin-top: 0.15rem; padding: 0.22rem 0.28rem 0.24rem;
+      border: 1px solid rgba(52,211,153,0.28);
+      border-radius: 6px;
+      background: rgba(52,211,153,0.06);
+      font-family: var(--font-mono); font-size: 0.42rem; font-weight: 700;
+      letter-spacing: 0.05em; color: #34d399;
+      line-height: 1.2;
+      text-align: center;
+      align-self: stretch;
+    }
+    .ap-fp-request {
+      display: flex; align-items: flex-start; gap: 0.3rem;
+      margin-top: 0.18rem;
+      padding: 0.24rem 0.34rem;
+      border-radius: 7px;
+      background: linear-gradient(135deg, rgba(251,191,36,0.14) 0%, rgba(245,158,11,0.06) 100%);
+      border: 1px solid rgba(251,191,36,0.38);
+      box-shadow: 0 0 14px rgba(251,191,36,0.08);
+    }
+    .ap-fp-request-ping {
+      width: 5px; height: 5px; border-radius: 50%; margin-top: 0.14rem; flex-shrink: 0;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251,191,36,0.9);
+      animation: apFpReqPing 1.6s ease-in-out infinite;
+    }
+    @keyframes apFpReqPing {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.85); }
+    }
+    .ap-fp-request-txt {
+      font-size: 0.46rem; font-weight: 600; line-height: 1.3;
+      color: #fde68a;
+      letter-spacing: 0.01em;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ap-fp-request-ping { animation: none; }
+      .ap-fp-pulse { border-top-color: rgba(52,211,153,0.35); }
+    }
+    @media (max-width: 520px) {
+      .ap-fp-grid {
+        grid-template-columns: repeat(6, minmax(4.85rem, 1fr));
+        min-width: 31.5rem;
+      }
+    }
+    .ap-drag-hint {
+      font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.18); text-align: center; margin-top: 0.75rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .ap-fp-grid .ap-fp-table:not(.empty-zone) {
+        animation: bizTableDrift 4.8s ease-in-out infinite;
+      }
+      .ap-fp-grid .ap-fp-table.booked { animation-duration: 5.6s; }
+      .ap-fp-grid .ap-fp-table:nth-child(3n+1) { animation-delay: 0s; }
+      .ap-fp-grid .ap-fp-table:nth-child(3n+2) { animation-delay: -1.1s; }
+      .ap-fp-grid .ap-fp-table:nth-child(3n)   { animation-delay: -2.2s; }
+    }
+    @keyframes bizTableDrift {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ap-fp-grid .ap-fp-table { animation: none !important; }
+    }
+
+    /* Revenue tab */
+    .ap-revenue { display: none; }
+    .ap-revenue.active { display: block; }
+    .ap-rev-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .ap-rev-big { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.04em; color: #fff; line-height: 1; }
+    .ap-rev-sub { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-top: 0.25rem; }
+    .ap-rev-badge {
+      font-family: var(--font-mono); font-size: 0.58rem; padding: 0.25rem 0.65rem;
+      border-radius: 999px; background: rgba(52,211,153,0.12); color: #34d399;
+      border: 1px solid rgba(52,211,153,0.2);
+    }
+    .ap-chart-wrap { position: relative; height: 120px; }
+    .ap-chart-wrap svg { width: 100%; height: 100%; overflow: visible; }
+    .ap-chart-grid line { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
+    .ap-chart-area { fill: url(#revGrad); opacity: 0.6; }
+    .ap-chart-line { stroke: var(--violet); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .ap-chart-dot  { fill: var(--violet); }
+
+    /* ── Draw-in tip animations ── */
+    #rev-tip-ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: revTipRing 1s ease-out infinite;
+    }
+    @keyframes revTipRing {
+      0%   { r: 5;  opacity: 0.55; }
+      100% { r: 14; opacity: 0; }
+    }
+    /* Peak dot fade-in after draw completes */
+    #rev-peak-dot, #rev-peak-ring {
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ap-chart-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; }
+    .ap-chart-label { font-family: var(--font-mono); font-size: 0.48rem; color: rgba(255,255,255,0.25); }
+    .ap-rev-peaks {
+      display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;
+    }
+    .ap-peak-pill {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.06em;
+      padding: 0.22rem 0.6rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.35);
+    }
+    .ap-peak-pill.active { border-color: rgba(139,92,246,0.3); color: var(--violet); background: rgba(139,92,246,0.08); }
+    .ap-peak-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    /* Flow tab */
+    .ap-flow { display: none; }
+    .ap-flow.active { display: block; }
+    .ap-flow-counter {
+      display: flex; align-items: baseline; gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .ap-flow-num {
+      font-size: 3rem; font-weight: 700; letter-spacing: -0.06em;
+      color: #fff; line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .ap-flow-unit { font-family: var(--font-mono); font-size: 0.62rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; }
+    .ap-flow-live {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: var(--font-mono); font-size: 0.55rem; color: #34d399;
+      padding: 0.25rem 0.65rem; border-radius: 999px;
+      border: 1px solid rgba(52,211,153,0.25); background: rgba(52,211,153,0.08);
+      margin-bottom: 1rem;
+    }
+    .ap-flow-live-dot { width: 5px; height: 5px; border-radius: 50%; background: #34d399; animation: blink 1.5s ease-in-out infinite; }
+    .ap-flow-bars {
+      display: flex; align-items: flex-end; gap: 4px; height: 64px; margin-bottom: 0.6rem;
+    }
+    .ap-flow-bar {
+      flex: 1; border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, rgba(139,92,246,0.5) 0%, rgba(139,92,246,0.15) 100%);
+      height: 0; /* JS animates to target */
+      transition: height 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.4s ease;
+    }
+    .ap-flow-bar.peak {
+      background: linear-gradient(180deg, var(--violet) 0%, rgba(139,92,246,0.3) 100%);
+    }
+    .ap-flow-bar.peak.grown {
+      box-shadow: 0 -6px 18px rgba(139,92,246,0.55), 0 -2px 6px rgba(139,92,246,0.35);
+    }
+    /* counter roll */
+    .ap-flow-num { transition: none; }
+    .ap-flow-hours { display: flex; justify-content: space-between; }
+    .ap-flow-hour { font-family: var(--font-mono); font-size: 0.46rem; color: rgba(255,255,255,0.22); }
+
+    @media (max-width: 960px) {
+      .admin-copy-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .ap-titlebar .admin-live-pill { margin-left: 0; width: 100%; justify-content: center; }
+    }
+
+    /* ════════════════════════════════════════════
+       SAFE EXIT VALUE SECTION
+       ════════════════════════════════════════════ */
+    .safe-value-section {
+      padding: 7rem 2rem 8rem;
+      background: #000;
+      position: relative; overflow: hidden;
+    }
+    .sv-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .sv-header { text-align: center; margin-bottom: 4rem; }
+    .sv-header h2 { font-size: clamp(1.8rem,4vw,3rem); font-weight: 700; letter-spacing: -0.04em; color: #fff; margin-bottom: 0.75rem; }
+    .sv-header p { font-size: 1.05rem; color: rgba(255,255,255,0.52); max-width: 52ch; margin: 0 auto; line-height: 1.72; }
+    .sv-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .sv-card {
+      background: #0D0D0F; border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .sv-card:hover { border-color: rgba(139,92,246,0.25); transform: translateY(-4px); }
+    .sv-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,.35), transparent);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .sv-card:hover::before { opacity: 1; }
+    .sv-card-ic {
+      width: 44px; height: 44px; border-radius: 14px; margin-bottom: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(145deg, rgba(139,92,246,0.18), rgba(99,102,241,0.06));
+      border: 1px solid rgba(139,92,246,0.22);
+      color: #c4b5fd;
+    }
+    .sv-card-ic svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .sv-card:nth-child(1) .sv-card-ic { border-color: rgba(52,211,153,0.3); color: #6ee7b7; background: linear-gradient(145deg, rgba(52,211,153,0.15), transparent); }
+    .sv-card:nth-child(3) .sv-card-ic { border-color: rgba(255,255,255,0.12); color: #fff; }
+    .sv-card-num {
+      font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 1rem;
+    }
+    .sv-stat-val { font-size: 2.8rem; font-weight: 700; letter-spacing: -0.05em; line-height: 1; margin-bottom: 0.5rem; }
+    .sv-stat-val.green  { color: #34d399; }
+    .sv-stat-val.violet { color: var(--violet); }
+    .sv-stat-val.white  { color: #fff; }
+    .sv-card-title { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem; }
+    .sv-card-desc  { font-size: 0.84rem; color: rgba(255,255,255,0.38); line-height: 1.65; }
+    /* Human-centric + digital receipt (between metrics & comparison) */
+    .sv-human {
+      max-width: 920px;
+      margin: 3.5rem auto 0;
+      padding: 0 0.5rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(1.75rem, 4.5vw, 3rem);
+    }
+    .sv-human-copy {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .sv-human-eyebrow {
+      margin: 0 0 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(196, 181, 253, 0.8);
+    }
+    .sv-human-title {
+      margin: 0 0 1rem;
+      font-size: clamp(0.92rem, 2.8vw, 1.15rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      line-height: 1.38;
+      color: #fff;
+    }
+    .sv-human-body {
+      margin: 0 auto;
+      max-width: 52ch;
+      font-size: 0.88rem;
+      line-height: 1.68;
+      color: rgba(255, 255, 255, 0.42);
+      text-align: left;
+    }
+    .sv-human #biz-receipt-root {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      min-height: 1px;
+      position: relative;
+      z-index: 2;
+      isolation: isolate;
+    }
+    .sv-divider {
+      margin: 5rem auto; max-width: 860px;
+      border: none; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent);
+    }
+    .sv-compare-intro {
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .sv-compare-intro strong { color: #e9d5ff; font-weight: 600; }
+    .sv-timeline {
+      display: flex; align-items: stretch; justify-content: center;
+      gap: 0.5rem; flex-wrap: wrap;
+      margin-bottom: 2rem; max-width: 720px; margin-left: auto; margin-right: auto;
+    }
+    .sv-tl-step {
+      flex: 1 1 100px;
+      text-align: center;
+      padding: 0.65rem 0.5rem;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .sv-tl-step::after {
+      content: '→'; position: absolute; right: -0.55rem; top: 50%; transform: translateY(-50%);
+      color: rgba(139,92,246,0.45); font-size: 0.75rem; font-weight: 700;
+    }
+    .sv-tl-step:last-child::after { content: none; }
+    .sv-tl-ic {
+      margin-bottom: 0.35rem; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(196,181,253,0.92);
+    }
+    .sv-tl-ic svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
+    .sv-tl-num { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; color: var(--violet); letter-spacing: 0.04em; }
+    .sv-tl-lbl { font-size: 0.62rem; color: rgba(255,255,255,0.35); margin-top: 0.2rem; line-height: 1.3; }
+    @media (max-width: 560px) {
+      .sv-tl-step::after { content: none; }
+    }
+    .sv-comparison {
+      max-width: 920px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 72px 1fr; gap: 1.25rem 1rem; align-items: stretch;
+    }
+    .sv-before, .sv-after {
+      padding: 1.35rem 1.4rem 1.5rem; border-radius: 18px;
+      display: flex; flex-direction: column; min-height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .sv-before {
+      background: linear-gradient(165deg, rgba(255,59,48,0.1) 0%, rgba(18,12,14,0.92) 55%, #0d0d0f 100%);
+      border: 1px solid rgba(255,59,48,0.22);
+      box-shadow: 0 0 0 1px rgba(255,59,48,0.06) inset, 0 20px 48px rgba(0,0,0,0.35);
+    }
+    .sv-after {
+      background: linear-gradient(165deg, rgba(52,211,153,0.1) 0%, rgba(12,18,16,0.92) 55%, #0d0d0f 100%);
+      border: 1px solid rgba(52,211,153,0.24);
+      box-shadow: 0 0 0 1px rgba(52,211,153,0.06) inset, 0 20px 48px rgba(0,0,0,0.35);
+    }
+    .sv-compare-head {
+      display: flex; align-items: flex-start; gap: 0.85rem; margin-bottom: 0.65rem;
+    }
+    .sv-compare-ico {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.25);
+    }
+    .sv-compare-ico svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .sv-before .sv-compare-ico { color: rgba(255,99,88,0.95); border-color: rgba(255,59,48,0.25); }
+    .sv-after .sv-compare-ico  { color: #6ee7b7; border-color: rgba(52,211,153,0.3); }
+    .sv-compare-label {
+      font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.35rem;
+    }
+    .sv-before .sv-compare-label { color: rgba(255,99,88,0.75); }
+    .sv-after .sv-compare-label  { color: rgba(110,231,183,0.85); }
+    .sv-compare-title { font-size: 0.98rem; font-weight: 700; color: #fff; margin-bottom: 0.45rem; letter-spacing: -0.02em; }
+    .sv-compare-desc  { font-size: 0.84rem; color: rgba(255,255,255,0.5); line-height: 1.65; flex: 1; }
+    .sv-compare-visual { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .sv-time-hero {
+      display: flex; align-items: baseline; gap: 0.35rem; margin-bottom: 0.55rem;
+    }
+    .sv-time-big {
+      font-size: clamp(1.55rem, 3.5vw, 1.85rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1;
+    }
+    .sv-before .sv-time-big { color: #ff6b6b; text-shadow: 0 0 28px rgba(255,59,48,0.25); }
+    .sv-after .sv-time-big  { color: #6ee7b7; text-shadow: 0 0 28px rgba(52,211,153,0.2); }
+    .sv-time-suffix {
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+      color: rgba(255,255,255,0.35); letter-spacing: 0.04em;
+    }
+    .sv-bar-label {
+      font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 0.4rem;
+    }
+    .sv-bar-track {
+      height: 9px; border-radius: 999px; background: rgba(255,255,255,0.06);
+      overflow: hidden; position: relative;
+    }
+    .sv-bar-fill {
+      height: 100%; border-radius: 999px; transition: width 1.1s cubic-bezier(0.22,1,0.36,1);
+    }
+    .sv-bar-fill--slow {
+      width: 100%;
+      background: linear-gradient(90deg, rgba(255,59,48,0.35), #ff453a 55%, #ff6b6b);
+      box-shadow: 0 0 16px rgba(255,59,48,0.35);
+    }
+    .sv-bar-fill--fast {
+      width: 11%;
+      min-width: 3.25rem;
+      background: linear-gradient(90deg, #34d399, #6ee7b7);
+      box-shadow: 0 0 14px rgba(52,211,153,0.45);
+    }
+    .sv-mini-flow {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.25rem;
+      margin-top: 0.65rem;
+    }
+    .sv-mini-flow span {
+      flex: 1; text-align: center; font-family: var(--font-mono); font-size: 0.48rem;
+      letter-spacing: 0.04em; color: rgba(255,255,255,0.22);
+      padding: 0.28rem 0.15rem; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);
+    }
+    .sv-before .sv-mini-flow span { border-color: rgba(255,59,48,0.12); color: rgba(255,255,255,0.32); }
+    .sv-after .sv-mini-flow span  { border-color: rgba(52,211,153,0.15); color: rgba(255,255,255,0.38); }
+    .sv-human + .sv-divider {
+      margin-top: 2.75rem;
+      margin-bottom: 3.75rem;
+    }
+    .sv-vs {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, rgba(139,92,246,0.25), rgba(12,12,14,0.95));
+      border: 1px solid rgba(139,92,246,0.35);
+      box-shadow: 0 0 32px rgba(139,92,246,0.15), 0 8px 24px rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 0.62rem; font-weight: 800;
+      color: rgba(196,181,253,0.9); margin: auto 0;
+      align-self: center;
+    }
+    @media (max-width: 720px) {
+      .sv-cards { grid-template-columns: 1fr; }
+      .sv-comparison { grid-template-columns: 1fr; }
+      .sv-vs { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sv-bar-fill { transition: none !important; }
+    }
+
+    /* ════════════════════════════════════════════
+       THREE PILLARS — EFFICIENCY / SECURITY / GROWTH
+       ════════════════════════════════════════════ */
+    .pillars-section {
+      padding: 7rem 2rem 8rem;
+      background: #030303;
+      position: relative; overflow: hidden;
+    }
+    .pillars-wrap { max-width: 1100px; margin: 0 auto; }
+    .pillars-header { text-align: center; margin-bottom: 4.5rem; }
+    .pillars-header h2 { font-size: clamp(1.8rem,4vw,3rem); font-weight: 700; letter-spacing: -0.04em; color: #fff; margin-bottom: 0.75rem; }
+    .pillars-header p { font-size: 1.05rem; color: rgba(255,255,255,0.52); max-width: 48ch; margin: 0 auto; line-height: 1.72; }
+    .pillars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+    .pillar-card {
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.02);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; min-height: 100%;
+      transition: border-color 0.3s var(--ease), background 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .pillar-card:hover {
+      border-color: rgba(139,92,246,0.32);
+      background: linear-gradient(165deg, rgba(139,92,246,0.08) 0%, rgba(255,255,255,0.02) 100%);
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.35), 0 0 48px rgba(139,92,246,0.08);
+    }
+    .pillar-icon {
+      width: 56px; height: 56px; border-radius: 16px; margin-bottom: 1.5rem;
+      border: 1px solid rgba(139,92,246,0.22);
+      background: rgba(139,92,246,0.08);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pillar-icon svg {
+      width: 24px; height: 24px; stroke: var(--violet); fill: none;
+      stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .pillar-num {
+      position: absolute; top: 1.75rem; right: 2rem;
+      font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.12);
+    }
+    .pillar-card h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.65rem; }
+    .pillar-card p  { font-size: 0.88rem; color: rgba(255,255,255,0.48); line-height: 1.7; flex: 1 1 auto; margin: 0; min-height: 0; }
+
+    /* ══════════════════════════════════════════
+       PILLAR ICON ANIMATIONS
+       ══════════════════════════════════════════ */
+
+    /* ── Efficiency: electric bolt zap ── */
+    @keyframes boltIdleGlow {
+      0%,100% { filter: drop-shadow(0 0 3px rgba(139,92,246,0.45)); }
+      45%     { filter: drop-shadow(0 0 2px rgba(139,92,246,0.25)); }
+      50%     { filter: drop-shadow(0 0 11px rgba(190,160,255,0.85)) drop-shadow(0 0 22px rgba(139,92,246,0.4)); }
+      55%     { filter: drop-shadow(0 0 3px rgba(139,92,246,0.45)); }
+    }
+    @keyframes boltIdleBg {
+      0%,100% { background: rgba(139,92,246,0.08); }
+      50%     { background: rgba(139,92,246,0.18); }
+    }
+    @keyframes boltZapHover {
+      0%   { filter: drop-shadow(0 0 3px rgba(139,92,246,0.5)); transform: scale(1) rotate(0deg); }
+      15%  { filter: drop-shadow(0 0 24px rgba(255,255,255,0.9)) drop-shadow(0 0 40px rgba(139,92,246,0.7)); transform: scale(1.2) rotate(-3deg); }
+      30%  { filter: drop-shadow(0 0 8px rgba(139,92,246,0.6)); transform: scale(0.92) rotate(2deg); }
+      50%  { filter: drop-shadow(0 0 14px rgba(200,170,255,0.8)); transform: scale(1.08) rotate(-1deg); }
+      100% { filter: drop-shadow(0 0 4px rgba(139,92,246,0.5)); transform: scale(1) rotate(0deg); }
+    }
+    #pi-efficiency { animation: boltIdleBg 2.6s ease-in-out infinite; }
+    #bolt-svg      { animation: boltIdleGlow 2.6s ease-in-out infinite; transition: filter 0.3s; }
+    [data-pillar="efficiency"]:hover #bolt-svg {
+      animation: boltZapHover 0.55s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    [data-pillar="efficiency"]:hover #pi-efficiency {
+      background: rgba(139,92,246,0.22);
+      box-shadow: 0 0 0 6px rgba(139,92,246,0.10), 0 0 0 14px rgba(139,92,246,0.04);
+    }
+
+    /* ── Security: sonar ping rings ── */
+    .pillar-icon { position: relative; }
+    .shield-ring {
+      position: absolute; inset: 0; border-radius: inherit;
+      border: 1px solid rgba(139,92,246,0.55);
+      transform: scale(1); opacity: 0;
+      pointer-events: none;
+      animation: shieldPing 3s ease-out infinite;
+    }
+    .shield-ring-2 { animation-delay: 1.5s; }
+    @keyframes shieldPing {
+      0%   { transform: scale(1);   opacity: 0.65; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    @keyframes shieldGlowIdle {
+      0%,100% { filter: drop-shadow(0 0 3px rgba(139,92,246,0.4)); }
+      50%     { filter: drop-shadow(0 0 8px rgba(139,92,246,0.75)); }
+    }
+    @keyframes shieldScanLine {
+      0%   { stroke: rgba(139,92,246,0.0); stroke-dashoffset: 20; }
+      10%  { stroke: rgba(190,160,255,0.9); }
+      80%  { stroke: rgba(139,92,246,0.0); stroke-dashoffset: -20; }
+      100% { stroke: rgba(139,92,246,0.0); stroke-dashoffset: -20; }
+    }
+    #shield-svg  { animation: shieldGlowIdle 2.4s ease-in-out infinite; }
+    #shield-scan { stroke-dasharray: 14 2; animation: shieldScanLine 2.4s ease-in-out infinite; }
+    [data-pillar="security"]:hover .shield-ring  { animation-duration: 1s; }
+    [data-pillar="security"]:hover .shield-ring-2 { animation-duration: 1s; animation-delay: 0.5s; }
+    [data-pillar="security"]:hover #shield-svg {
+      animation: shieldGlowIdle 0.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(139,92,246,0.9));
+    }
+    [data-pillar="security"]:hover #shield-path { stroke: #c4b5fd; }
+
+    /* ── Growth: signal trace crawling along the chart ── */
+    @keyframes chartSignal {
+      0%   { stroke-dashoffset: 36; opacity: 0; }
+      8%   { opacity: 1; }
+      85%  { opacity: 1; stroke-dashoffset: -2; }
+      100% { opacity: 0; stroke-dashoffset: -2; }
+    }
+    @keyframes arrowSignal {
+      0%,55% { stroke-dashoffset: 13; opacity: 0; }
+      60%    { opacity: 1; }
+      90%    { stroke-dashoffset: 0; opacity: 1; }
+      100%   { stroke-dashoffset: 0; opacity: 0; }
+    }
+    @keyframes tipPulse {
+      0%,100% { r: 1.8; opacity: 0.7; fill: var(--violet); }
+      50%     { r: 2.8; opacity: 1;   fill: #c4b5fd; filter: drop-shadow(0 0 5px rgba(139,92,246,0.8)); }
+    }
+    @keyframes growthBgIdle {
+      0%,100% { background: rgba(139,92,246,0.08); }
+      70%     { background: rgba(139,92,246,0.16); }
+    }
+    #growth-line  { stroke-dasharray: 10 26; animation: chartSignal 3s cubic-bezier(0.22,1,0.36,1) infinite; }
+    #growth-arrow { stroke-dasharray: 13;    animation: arrowSignal 3s cubic-bezier(0.22,1,0.36,1) infinite; }
+    #growth-tip   { fill: var(--violet);     animation: tipPulse 3s ease-in-out infinite; }
+    #pi-growth    { animation: growthBgIdle 3s ease-in-out infinite; }
+    [data-pillar="growth"]:hover #growth-line  { animation-duration: 1.2s; }
+    [data-pillar="growth"]:hover #growth-arrow { animation-duration: 1.2s; }
+    [data-pillar="growth"]:hover #growth-tip   { animation-duration: 1.2s; }
+    [data-pillar="growth"]:hover #pi-growth {
+      background: rgba(139,92,246,0.2);
+      box-shadow: 0 0 0 5px rgba(139,92,246,0.08), 0 0 0 12px rgba(139,92,246,0.03);
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      #bolt-svg, #shield-svg, #growth-line, #growth-arrow, #growth-tip,
+      .shield-ring, #pi-efficiency, #pi-growth, #pi-security { animation: none !important; }
+    }
+    .pillar-metric {
+      margin-top: auto; padding-top: 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .pillar-metric-val { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.04em; color: var(--violet); }
+    .pillar-metric-label { font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+    @media (max-width: 720px) { .pillars-grid { grid-template-columns: 1fr; } }
+
+    /* ════════════════════════════════════════════
+       PARTNER CTA SECTION
+       ════════════════════════════════════════════ */
+    .partner-cta {
+      padding: 9rem 2rem 10rem;
+      background: #000;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .partner-cta::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 50%, rgba(139,92,246,0.14) 0%, transparent 65%);
+    }
+    .partner-cta-content { position: relative; z-index: 1; }
+    .partner-cta h2 {
+      font-size: clamp(2.2rem,6vw,5rem); font-weight: 700;
+      letter-spacing: -0.045em; line-height: 1.0;
+      color: #fff; margin-bottom: 1.25rem; max-width: 22ch; margin-left: auto; margin-right: auto;
+    }
+    .partner-cta p {
+      font-size: 1.05rem; color: rgba(255,255,255,0.42);
+      max-width: 46ch; margin: 0 auto 3rem; line-height: 1.72;
+    }
+    .partner-cta-btns {
+      display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .biz-cta-primary {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      padding: 1rem 2.5rem; border-radius: 14px;
+      background: var(--violet); color: #fff; border: none;
+      font-size: 1rem; font-weight: 600; cursor: pointer; letter-spacing: -0.01em;
+      position: relative; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(139,92,246,0.35), 0 2px 8px rgba(0,0,0,0.4);
+      transition: background 0.3s var(--ease), box-shadow 0.3s var(--ease), transform 0.3s var(--ease-out);
+    }
+    .biz-cta-primary:hover {
+      background: #7C3AED;
+      box-shadow: 0 12px 48px rgba(139,92,246,0.55), 0 4px 16px rgba(0,0,0,0.5);
+      transform: translateY(-2px);
+    }
+    a.biz-cta-primary { text-decoration: none; color: #fff; }
+    .biz-cta-secondary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 1rem 2.2rem; border-radius: 14px;
+      background: transparent; color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.14);
+      font-size: 1rem; font-weight: 500; cursor: pointer;
+      transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .biz-cta-secondary:hover {
+      border-color: rgba(139,92,246,0.4); color: #fff;
+      background: rgba(139,92,246,0.07);
+    }
+    .partner-fine {
+      margin-top: 2.25rem; font-family: var(--font-mono);
+      font-size: 0.58rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.22);
+    }
+
+    /* ════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════ */
+    .biz-footer {
+      background: #030303; border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 2.5rem 2rem;
+    }
+    .biz-footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .biz-footer-left { display: flex; align-items: center; gap: 0.75rem; }
+    .biz-footer-logo { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.04em; }
+    .biz-footer-logo .lo { color: var(--violet); }
+    .biz-footer-tag {
+      font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.25);
+      padding: 0.18rem 0.6rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 999px;
+    }
+    .biz-footer-links { display: flex; gap: 2rem; }
+    .biz-footer-links a {
+      font-size: 0.78rem; color: rgba(255,255,255,0.32); text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .biz-footer-links a:hover { color: rgba(255,255,255,0.7); }
+    .biz-footer-copy {
+      font-family: var(--font-mono); font-size: 0.55rem;
+      color: rgba(255,255,255,0.2); letter-spacing: 0.06em;
+    }
+    @media (max-width: 620px) {
+      .biz-footer-inner { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    }
+
+    /* ══════════════════════════════════════════
+       SOCIAL PROOF
+       ══════════════════════════════════════════ */
+    .biz-social-section {
+      padding: 6.5rem 2rem 2rem;
+      position: relative;
+      background: #000;
+    }
+    .biz-social-wrap { max-width: 1080px; margin: 0 auto; }
+    .biz-social-head { text-align: center; margin-bottom: 3rem; }
+    .biz-social-head h2 {
+      font-size: clamp(1.65rem, 3.8vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: #fff;
+      margin: 0.75rem 0 0.5rem;
+    }
+    .biz-social-head p { font-size: 1rem; color: rgba(255,255,255,0.48); max-width: 44ch; margin: 0 auto; line-height: 1.65; }
+    .biz-social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    @media (max-width: 720px) { .biz-social-grid { grid-template-columns: 1fr; } }
+    .biz-quote-card {
+      padding: 1.5rem 1.35rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: border-color 0.35s, transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+    }
+    .biz-quote-card:hover {
+      border-color: rgba(139,92,246,0.28);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+    }
+    .biz-quote-text {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.72);
+      margin: 0 0 1.25rem;
+      font-style: normal;
+    }
+    .biz-quote-text::before { content: '"'; color: var(--violet); font-weight: 700; }
+    .biz-quote-text::after  { content: '"'; color: var(--violet); font-weight: 700; }
+    .biz-quote-meta { display: flex; align-items: center; gap: 0.85rem; }
+    .biz-quote-logo {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+    .biz-quote-name { font-size: 0.88rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
+    .biz-quote-role { font-size: 0.72rem; color: rgba(255,255,255,0.38); margin-top: 0.15rem; }
+
+    .biz-logo-strip {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 0.75rem 1.25rem;
+      margin-top: 2.75rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .biz-logo-pill {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.32);
+      border: 1px dashed rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* ══════════════════════════════════════════
+       PRICING SECTION — INTERACTIVE
+       ══════════════════════════════════════════ */
+    .pricing-section { padding: 5rem 0 7rem; position: relative; background: #040408; }
+    .pricing-wrap { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+    .pricing-header { text-align: center; margin-bottom: 3.5rem; }
+    .pricing-header h2 {
+      font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800;
+      letter-spacing: -0.04em; color: #fff; margin: 0.75rem 0 1rem; line-height: 1.1;
+    }
+    .pricing-header p { font-size: 0.96rem; color: rgba(255,255,255,0.42); margin-bottom: 2rem; }
+
+    /* ── Billing toggle ── */
+    .pt-toggle-row {
+      display: inline-flex; align-items: center; gap: 0.85rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px; padding: 0.45rem 1rem;
+      margin-top: 0.25rem;
+    }
+    .pt-label {
+      font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.32); transition: color 0.25s;
+      user-select: none; cursor: pointer;
+    }
+    .pt-label.pt-label-active { color: #fff; }
+    .pt-toggle {
+      width: 42px; height: 24px; border-radius: 999px;
+      background: rgba(139,92,246,0.25); border: 1px solid rgba(139,92,246,0.4);
+      position: relative; cursor: pointer;
+      transition: background 0.3s cubic-bezier(0.22,1,0.36,1);
+      flex-shrink: 0;
+    }
+    .pt-toggle.on { background: #8B5CF6; border-color: #8B5CF6; }
+    .pt-knob {
+      position: absolute; top: 2px; left: 2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+      transition: transform 0.32s cubic-bezier(0.22,1,0.36,1);
+    }
+    .pt-toggle.on .pt-knob { transform: translateX(18px); }
+    .pt-save {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em;
+      color: #22c55e; background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25); border-radius: 999px;
+      padding: 0.18rem 0.55rem;
+      opacity: 0; transform: translateX(-4px);
+      transition: opacity 0.3s, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .pt-save.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── Grid ── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1.25rem; align-items: start;
+    }
+    @media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
+
+    /* ── Card base ── */
+    .pricing-card {
+      padding: 2.25rem 1.75rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px; background: rgba(255,255,255,0.02);
+      display: flex; flex-direction: column; gap: 0;
+      position: relative; overflow: hidden;
+      will-change: transform;
+      /* JS handles transform & box-shadow for spring hover */
+      transition: border-color 0.3s;
+    }
+    /* grain texture on hover */
+    .pricing-card::after {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.08) 0%, transparent 70%);
+      opacity: 0; transition: opacity 0.35s; pointer-events: none;
+    }
+    .pricing-card:hover::after { opacity: 1; }
+
+    /* ── Featured card: animated neon border ── */
+    @property --neon-a {
+      syntax: '<angle>'; initial-value: 0deg; inherits: false;
+    }
+    .pricing-card-featured {
+      background: rgba(139,92,246,0.07);
+      border: none;
+      padding: calc(2.25rem + 1.5px) calc(1.75rem + 1.5px);
+      transform: scale(1.04);
+      z-index: 2;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.45), 0 0 60px rgba(139,92,246,0.12);
+    }
+    .pricing-card-featured::before {
+      content: ''; position: absolute; inset: -1.5px;
+      border-radius: 25.5px; z-index: -1;
+      background: conic-gradient(
+        from var(--neon-a),
+        #8B5CF6 0deg,
+        #c4b5fd 60deg,
+        rgba(255,255,255,0.55) 120deg,
+        #8B5CF6 180deg,
+        #4c1d95 240deg,
+        rgba(255,255,255,0.3) 300deg,
+        #8B5CF6 360deg
+      );
+      animation: neonSpin 4s linear infinite;
+    }
+    @keyframes neonSpin { to { --neon-a: 360deg; } }
+    .pricing-card-featured::after {
+      background: radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.18) 0%, transparent 70%);
+    }
+
+    /* ── Glassmorphism "Most Popular" badge ── */
+    .pricing-card-featured .pc-badges-row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .pc-popular-badge {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      align-self: flex-start;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-top: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px; padding: 0.28rem 0.8rem;
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),
+                  0 4px 16px rgba(139,92,246,0.2);
+    }
+    .pc-annual-chip {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.26rem 0.72rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4ade80;
+      background: linear-gradient(135deg, rgba(34,197,94,0.18), rgba(34,197,94,0.06));
+      border: 1px solid rgba(34,197,94,0.4);
+      box-shadow: 0 0 24px rgba(34,197,94,0.15);
+    }
+    @media (max-width: 860px) {
+      .pricing-card-featured { transform: none; box-shadow: none; }
+    }
+    .pcpb-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #22c55e; flex-shrink: 0;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    .pricing-tier {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.75rem;
+    }
+    .pricing-price {
+      display: flex; align-items: baseline; gap: 0.1rem; margin-bottom: 0.6rem;
+    }
+    .pp-currency { font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.55); margin-right: 0.05rem; }
+    .pp-prefix   { font-size: 0.82rem; color: rgba(255,255,255,0.35); }
+    .pp-val {
+      font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; color: #fff;
+      transition: opacity 0.15s;
+    }
+    .pp-val.counting { opacity: 0.5; }
+    .pp-period { font-size: 0.82rem; color: rgba(255,255,255,0.35); font-family: var(--font-mono); margin-left: 0.2rem; }
+    .pricing-desc { font-size: 0.82rem; color: rgba(255,255,255,0.35); margin-bottom: 1.5rem; line-height: 1.5; }
+
+    /* ── Animated SVG checkmarks ── */
+    .pricing-features {
+      list-style: none; margin: 0 0 1.75rem; padding: 0;
+      display: flex; flex-direction: column; gap: 0.65rem; flex: 1;
+    }
+    .pricing-features li {
+      font-size: 0.84rem; color: rgba(255,255,255,0.65);
+      display: flex; gap: 0.6rem; align-items: center;
+    }
+    .pf-svg { width: 16px; height: 16px; flex-shrink: 0; overflow: visible; }
+    .pf-ring {
+      stroke: rgba(34,197,94,0.35); fill: rgba(34,197,94,0.07);
+      stroke-width: 1; stroke-dasharray: 47.1; stroke-dashoffset: 47.1;
+      transition: stroke-dashoffset 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .pf-tick {
+      stroke: #22c55e; stroke-width: 1.8;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 11; stroke-dashoffset: 11;
+      transition: stroke-dashoffset 0.38s cubic-bezier(0.22,1,0.36,1) 0.25s;
+    }
+    .pf-svg-off { opacity: 0.28; }
+    /* Trigger when card gets .checks-in class */
+    .pricing-card.checks-in .pf-ring { stroke-dashoffset: 0; }
+    .pricing-card.checks-in .pf-tick { stroke-dashoffset: 0; }
+    /* Stagger per feature item */
+    .pricing-features li:nth-child(1) .pf-ring { transition-delay: 0.00s; }
+    .pricing-features li:nth-child(1) .pf-tick  { transition-delay: 0.22s; }
+    .pricing-features li:nth-child(2) .pf-ring { transition-delay: 0.08s; }
+    .pricing-features li:nth-child(2) .pf-tick  { transition-delay: 0.30s; }
+    .pricing-features li:nth-child(3) .pf-ring { transition-delay: 0.16s; }
+    .pricing-features li:nth-child(3) .pf-tick  { transition-delay: 0.38s; }
+    .pricing-features li:nth-child(4) .pf-ring { transition-delay: 0.24s; }
+    .pricing-features li:nth-child(4) .pf-tick  { transition-delay: 0.46s; }
+    .pricing-features li:nth-child(5) .pf-ring { transition-delay: 0.32s; }
+    .pricing-features li:nth-child(5) .pf-tick  { transition-delay: 0.54s; }
+    .pricing-features li:nth-child(6) .pf-ring { transition-delay: 0.40s; }
+    .pricing-features li:nth-child(6) .pf-tick  { transition-delay: 0.62s; }
+    .pf-off { opacity: 0.3; }
+
+    .pricing-btn-primary {
+      width: 100%; padding: 0.9rem 1.25rem;
+      background: #8B5CF6; color: #fff; border: none; border-radius: 14px;
+      font-size: 0.84rem; font-weight: 600; cursor: pointer; font-family: inherit;
+      letter-spacing: -0.01em;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .pricing-btn-primary:hover {
+      background: #7c3aed; transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(139,92,246,0.45);
+    }
+    .pricing-btn-primary:active { transform: scale(0.97); }
+    .pricing-btn-outline {
+      width: 100%; padding: 0.9rem 1.25rem;
+      background: transparent; color: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 14px;
+      font-size: 0.84rem; font-weight: 500; cursor: pointer; font-family: inherit;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .pricing-btn-outline:hover {
+      border-color: rgba(139,92,246,0.45); color: #fff;
+      background: rgba(139,92,246,0.08);
+    }
+    .pricing-btn-outline:active { transform: scale(0.97); }
+    a.pricing-btn-primary,
+    a.pricing-btn-outline {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+    a.pricing-btn-primary,
+    a.pricing-btn-primary:visited { color: #fff; }
+    a.pricing-btn-outline,
+    a.pricing-btn-outline:visited { color: rgba(255,255,255,0.65); }
+    .pricing-fine {
+      text-align: center; margin-top: 2rem;
+      font-family: var(--font-mono); font-size: 0.62rem;
+      letter-spacing: 0.06em; color: rgba(255,255,255,0.18); text-transform: uppercase;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pricing-card-featured::before { animation: none; }
+      .pf-ring, .pf-tick { transition: none; }
+    }
+
+    /* ── Shared section eyebrow ── */
+    .biz-section-eyebrow {
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem;
+    }
+    .biz-section-eyebrow::after {
+      content: ''; flex: 1; max-width: 40px; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Scroll reveal ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="biz-page">
+<div class="grain" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<header id="dock">
+  <a class="logo" href="/AppMultiServicios/" aria-label="PROSTIR home">
+    <span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span>
+  </a>
+  <nav aria-label="Main navigation">
+    <a href="/AppMultiServicios/dine.html" data-i18n="nav.dine" data-magnetic data-mag-r="44" data-mag-s="7">Dine</a>
+    <a href="/AppMultiServicios/working.html" data-i18n="nav.working" data-magnetic data-mag-r="44" data-mag-s="7">Working</a>
+    <a href="/AppMultiServicios/moments.html" data-i18n="nav.moments" data-magnetic data-mag-r="44" data-mag-s="7">Moments</a>
+    <a href="/AppMultiServicios/business.html" class="nav-active" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+  </nav>
+  <div class="header-right">
+    <a href="/AppMultiServicios/download.html" class="header-download" data-i18n="nav.download" data-magnetic data-mag-r="40" data-mag-s="6">Незабаром</a>
+    <a href="/AppMultiServicios/venue.html" class="diia-btn" aria-label="Стати партнером">
+      <span class="diia-logo" aria-hidden="true">B2B</span>
+      <span class="btn-label">Стати партнером</span>
+    </a>
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ua" aria-pressed="true" aria-label="Українська">
+        <span class="lang-flag" aria-hidden="true">🇺🇦</span><span class="lang-code">UA</span>
+      </button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+        <span class="lang-flag" aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span>
+      </button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Мобільне меню">
+  <a href="/AppMultiServicios/download.html" class="header-download" data-i18n="nav.download">Незабаром</a>
+  <a href="/AppMultiServicios/dine.html">Dine</a>
+  <a href="/AppMultiServicios/working.html">Working</a>
+  <a href="/AppMultiServicios/moments.html">Moments</a>
+  <a href="/AppMultiServicios/business.html" class="nav-active">Business</a>
+</div>
+
+<!-- ════════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════════ -->
+<section class="biz-hero" aria-labelledby="biz-h1">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="biz-hero-content">
+    <div class="biz-hero-inner">
+    <p class="biz-eyebrow">
+      <span class="biz-eyebrow-dot" aria-hidden="true"></span>
+      PROSTIR for Business · B2B Platform
+    </p>
+    <h1 id="biz-h1">
+      Збільшуйте виручку на <span class="accent">22–34%</span> і економте <span class="accent">15%</span> часу персоналу
+    </h1>
+    <p id="biz-hero-sub">Єдина операційна платформа: бронювання з Дія, живий план залу, аналітика та Safe Exit — гість платить за секунди, команда залишається з гостями, а не з терміналом.</p>
+    <div class="biz-hero-btns">
+      <a href="/AppMultiServicios/venue.html" class="biz-cta-primary" data-magnetic data-mag-r="60" data-mag-s="14">
+        Стати партнером
+      </a>
+      <button type="button" class="biz-outline-btn" data-magnetic data-mag-r="55" data-mag-s="10" onclick="document.getElementById('admin-section').scrollIntoView({behavior:'smooth'})">
+        Переглянути демо
+      </button>
+    </div>
+    <div class="biz-metric-grid" aria-label="Ключові показники">
+      <div class="biz-metric-card">
+        <div class="biz-metric-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg></div>
+        <div class="biz-metric-val">150<span>+</span></div>
+        <div class="biz-metric-lbl">Партнерів у місті</div>
+      </div>
+      <div class="biz-metric-card">
+        <div class="biz-metric-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="biz-metric-val">15<span>%</span></div>
+        <div class="biz-metric-lbl">Менше часу персоналу</div>
+      </div>
+      <div class="biz-metric-card">
+        <div class="biz-metric-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <div class="biz-metric-val">4.8<span>★</span></div>
+        <div class="biz-metric-lbl">Середня оцінка закладів</div>
+      </div>
+      <div class="biz-metric-card">
+        <div class="biz-metric-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="biz-metric-val"><span>&lt;</span>14с</div>
+        <div class="biz-metric-lbl">End-to-end checkout</div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     ADMIN DASHBOARD SECTION
+     ════════════════════════════════════════════ -->
+<section class="admin-section" id="admin-section" aria-labelledby="admin-h2">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="admin-show-inner">
+    <div class="admin-hero-text reveal" style="animation-delay:0s" role="group" aria-labelledby="admin-h2">
+      <p class="biz-section-eyebrow">01 · Command Center</p>
+      <h2 id="admin-h2">Одна панель — <span class="admin-h2-accent">повний операційний контроль</span></h2>
+      <p class="admin-lead">PROSTIR Admin зводить зал, виручку та потік гостей у єдиному інтерфейсі з миттєвою синхронізацією — те, що хоче бачити власник або інвестор на пітчі: прозорість, швидкість і довіра через Дія.</p>
+    </div>
+
+    <div class="admin-bento">
+      <div class="admin-copy-col reveal" style="animation-delay:.06s">
+        <div class="admin-kpi-row" aria-label="Ключові показники панелі">
+          <div class="admin-feature-item admin-kpi-feature">
+            <div class="afi-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+            </div>
+            <div class="afi-text">
+              <p class="afi-tag" id="ad-k1tag">Синхронізація</p>
+              <h4 id="ad-k1v">&lt;2 с</h4>
+              <p id="ad-k1d">Кожне перетягування столика миттєво оновлює план залу — гість бачить актуальну схему в застосунку без перезавантаження.</p>
+            </div>
+          </div>
+          <div class="admin-feature-item admin-kpi-feature">
+            <div class="afi-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div class="afi-text">
+              <p class="afi-tag" id="ad-k2tag">Дія · Trust</p>
+              <h4 id="ad-k2v">100%</h4>
+              <p id="ad-k2d">Усі активні сесії привʼязані до верифікованої Дія-ідентичності — менше ноу-шоу та анонімних броней.</p>
+            </div>
+          </div>
+          <div class="admin-feature-item admin-kpi-feature">
+            <div class="afi-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div class="afi-text">
+              <p class="afi-tag" id="ad-k3tag">Запуск</p>
+              <h4 id="ad-k3v">48 год</h4>
+              <p id="ad-k3d">Від заявки до першого робочого сценарію в адмінці — з онбордингом і супроводом команди PROSTIR.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-feat-grid">
+          <div class="admin-feature-item">
+            <div class="afi-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+            <div class="afi-text">
+              <p class="afi-tag" id="admin-f1tag">План залу</p>
+              <h4 id="admin-f1t">Живий редактор розстановки</h4>
+              <p id="admin-f1d">Столики, зони й проходи — перетягування без перезавантаження. Зміни одразу видно гостю в застосунку.</p>
+            </div>
+          </div>
+          <div class="admin-feature-item">
+            <div class="afi-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="afi-text">
+              <p class="afi-tag" id="admin-f2tag">Виручка</p>
+              <h4 id="admin-f2t">Прогнозована економіка залу</h4>
+              <p id="admin-f2d">Крива з піками, порівняння з минулим тижнем і підказка «що буде завтра» — для рішень у реальному часі.</p>
+            </div>
+          </div>
+          <div class="admin-feature-item">
+            <div class="afi-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="afi-text">
+              <p class="afi-tag" id="admin-f3tag">Заповненість</p>
+              <h4 id="admin-f3t">Хто в залі зараз</h4>
+              <p id="admin-f3d">Лічильник гостей із підтвердженою Дія-ідентичністю та динаміка по годинах — без «фейкових» броней.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-mock-wrap reveal" style="animation-delay:.14s">
+        <div class="admin-dock-row" id="admin-dock-row">
+        <div class="admin-panel">
+      <div class="ap-titlebar">
+        <span class="ap-dot red"></span>
+        <span class="ap-dot amber"></span>
+        <span class="ap-dot green"></span>
+        <span class="ap-title" id="admin-mock-title">PROSTIR Admin · Cafe Aura</span>
+        <div class="admin-live-pill" aria-hidden="true"><i></i> <span id="admin-live-lbl">LIVE</span></div>
+      </div>
+      <div class="ap-tabs" role="tablist">
+        <div class="ap-tab active" role="tab" data-panel="ap-floor" tabindex="0" id="admin-tab-floor">План залу</div>
+        <div class="ap-tab" role="tab" data-panel="ap-revenue" tabindex="0" id="admin-tab-rev">Виручка</div>
+        <div class="ap-tab" role="tab" data-panel="ap-flow" tabindex="0" id="admin-tab-flow">Потік</div>
+      </div>
+      <div class="ap-body">
+
+        <!-- Floorplan tab -->
+        <div class="ap-floor active" id="ap-floor">
+          <div class="ap-floor-toolbar">
+            <p class="ap-floor-summary" id="admin-floor-summary"><strong>10/14</strong> столів у сесії · <strong>₴ 15 890</strong> у відкритих чеках · сер. чек <strong>₴ 1 620</strong> · <strong>52</strong> гостей у залі (Дія)</p>
+            <div class="ap-floor-header">
+              <span class="ap-floor-title" id="admin-floor-title">Головна зала · 14 столів</span>
+              <span class="ap-floor-tag" id="admin-floor-tag">● Режим редагування</span>
+            </div>
+            <div class="ap-zone-legend" id="admin-zone-legend" aria-hidden="true">
+              <span class="ap-zone-pill ap-zone--window" id="admin-zone-1">Вітрина</span>
+              <span class="ap-zone-pill ap-zone--main" id="admin-zone-2">Зала</span>
+              <span class="ap-zone-pill ap-zone--bar" id="admin-zone-3">Бар</span>
+            </div>
+          </div>
+          <div class="ap-floorplan">
+            <div class="ap-fp-grid-wrap">
+            <div class="ap-fp-grid">
+              <!-- 01 -->
+              <div class="ap-fp-table booked ap-fp-table--z-window" data-tid="01" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">01</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">3 <span class="fp-party-unit">ос</span> · Олена Мельник</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time"><span class="fp-time-num">38</span> <span class="fp-time-unit">хв</span></span><span class="ap-fp-bill">₴ 920</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Марія</div>
+                </div>
+              </div>
+              <!-- 02 -->
+              <div class="ap-fp-table booked ap-fp-table--z-window" data-tid="02" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">02</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">2 <span class="fp-party-unit">ос</span> · Кирило Бондаренко</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time">1:12</span><span class="ap-fp-bill">₴ 1 450</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Марія</div>
+                </div>
+              </div>
+              <!-- 03 vacant -->
+              <div class="ap-fp-table ap-fp-table--z-main" data-tid="03" tabindex="0" role="button">
+                <div class="ap-fp-card ap-fp-card--vacant">
+                  <div class="ap-fp-top"><span class="ap-fp-num">03</span></div>
+                  <span class="fp-vacant-lbl">Вільно</span>
+                  <div class="ap-fp-next"><span class="fp-next-lbl">Далі</span> 18:45 · 2 <span class="fp-party-unit">ос</span></div>
+                </div>
+              </div>
+              <!-- 04 -->
+              <div class="ap-fp-table ap-fp-table--z-main" data-tid="04" tabindex="0" role="button">
+                <div class="ap-fp-card ap-fp-card--vacant">
+                  <div class="ap-fp-top"><span class="ap-fp-num">04</span></div>
+                  <span class="fp-vacant-lbl">Вільно</span>
+                  <div class="ap-fp-next ap-fp-next--muted">—</div>
+                </div>
+              </div>
+              <!-- 05 -->
+              <div class="ap-fp-table booked ap-fp-table--z-main" data-tid="05" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">05</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">4 <span class="fp-party-unit">ос</span> · Команда «PIXEL»</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time"><span class="fp-time-num">24</span> <span class="fp-time-unit">хв</span></span><span class="ap-fp-bill">₴ 640</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Олег</div>
+                </div>
+              </div>
+              <!-- 06 -->
+              <div class="ap-fp-table ap-fp-table--z-main" data-tid="06" tabindex="0" role="button">
+                <div class="ap-fp-card ap-fp-card--vacant">
+                  <div class="ap-fp-top"><span class="ap-fp-num">06</span></div>
+                  <span class="fp-vacant-lbl">Вільно</span>
+                  <div class="ap-fp-next"><span class="fp-next-lbl">Далі</span> 20:15 · 6 <span class="fp-party-unit">ос</span></div>
+                </div>
+              </div>
+              <!-- 07 -->
+              <div class="ap-fp-table booked ap-fp-table--z-bar" data-tid="07" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">07</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">5 <span class="fp-party-unit">ос</span> · ТОВ «Арка»</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time">1:07</span><span class="ap-fp-bill">₴ 3 120</span></div>
+                  <div class="ap-fp-pulse"><span class="fp-safe-txt">Safe Exit</span> · 6 <span class="fp-time-unit">хв</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Марія</div>
+                </div>
+              </div>
+              <!-- 08 -->
+              <div class="ap-fp-table ap-fp-table--z-bar" data-tid="08" tabindex="0" role="button">
+                <div class="ap-fp-card ap-fp-card--vacant">
+                  <div class="ap-fp-top"><span class="ap-fp-num">08</span></div>
+                  <span class="fp-vacant-lbl">Вільно</span>
+                  <div class="ap-fp-next ap-fp-next--muted">—</div>
+                </div>
+              </div>
+              <!-- 09 -->
+              <div class="ap-fp-table booked ap-fp-table--z-main" data-tid="09" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">09</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">2 <span class="fp-party-unit">ос</span> · Юлія &amp; Марко Коваль</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time"><span class="fp-time-num">56</span> <span class="fp-time-unit">хв</span></span><span class="ap-fp-bill">₴ 1 180</span></div>
+                  <div class="ap-fp-request" role="status" aria-live="polite">
+                    <span class="ap-fp-request-ping" aria-hidden="true"></span>
+                    <span class="ap-fp-request-txt" id="admin-floor-guest-req">Гість просить ще біле вино · Negroni для бару</span>
+                  </div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Олег</div>
+                </div>
+              </div>
+              <!-- 10 -->
+              <div class="ap-fp-table ap-fp-table--z-main" data-tid="10" tabindex="0" role="button">
+                <div class="ap-fp-card ap-fp-card--vacant">
+                  <div class="ap-fp-top"><span class="ap-fp-num">10</span></div>
+                  <span class="fp-vacant-lbl">Вільно</span>
+                  <div class="ap-fp-next"><span class="fp-next-lbl">Далі</span> 19:30 · 3 <span class="fp-party-unit">ос</span></div>
+                </div>
+              </div>
+              <div class="ap-fp-table empty-zone" aria-hidden="true"></div>
+              <!-- 11 -->
+              <div class="ap-fp-table booked ap-fp-table--z-bar" data-tid="11" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">11</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">1 <span class="fp-party-unit">ос</span> · Ірина Жук</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time"><span class="fp-time-num">26</span> <span class="fp-time-unit">хв</span></span><span class="ap-fp-bill">₴ 410</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Марія</div>
+                </div>
+              </div>
+              <!-- 12 -->
+              <div class="ap-fp-table booked ap-fp-table--z-bar" data-tid="12" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">12</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">3 <span class="fp-party-unit">ос</span> · Сім'я Верес</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time"><span class="fp-time-num">48</span> <span class="fp-time-unit">хв</span></span><span class="ap-fp-bill">₴ 890</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Олег</div>
+                </div>
+              </div>
+              <!-- 13 -->
+              <div class="ap-fp-table booked ap-fp-table--z-main" data-tid="13" tabindex="0" role="button">
+                <div class="ap-fp-card">
+                  <div class="ap-fp-top"><span class="ap-fp-num">13</span><span class="ap-fp-diia">Дія</span></div>
+                  <div class="ap-fp-party">6 <span class="fp-party-unit">ос</span> · Корпоратив «Хмарні»</div>
+                  <div class="ap-fp-row"><span class="ap-fp-time"><span class="fp-time-num">33</span> <span class="fp-time-unit">хв</span></span><span class="ap-fp-bill">₴ 2 240</span></div>
+                  <div class="ap-fp-server"><span class="fp-server-pref">Офіц.</span> Марія</div>
+                </div>
+              </div>
+              <!-- 14 -->
+              <div class="ap-fp-table ap-fp-table--z-window" data-tid="14" tabindex="0" role="button">
+                <div class="ap-fp-card ap-fp-card--vacant">
+                  <div class="ap-fp-top"><span class="ap-fp-num">14</span></div>
+                  <span class="fp-vacant-lbl">Вільно</span>
+                  <div class="ap-fp-next ap-fp-next--muted">—</div>
+                </div>
+              </div>
+              <div class="ap-fp-table empty-zone" aria-hidden="true"></div>
+              <div class="ap-fp-table empty-zone" aria-hidden="true"></div>
+              <div class="ap-fp-table empty-zone" aria-hidden="true"></div>
+            </div>
+            </div>
+            <div class="ap-drag-hint" aria-hidden="true">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+              <span id="admin-drag-txt">Перетягніть у редакторі · клікніть столик — деталі сесії справа</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue tab -->
+        <div class="ap-revenue" id="ap-revenue">
+          <div class="ap-rev-header">
+            <div>
+              <div class="ap-rev-big">₴ 52,840</div>
+              <div class="ap-rev-sub" id="admin-rev-sub">Сьогодні · оновлено о 19:42</div>
+            </div>
+            <div class="ap-rev-badge" id="admin-rev-badge">↑ +28% до вчора</div>
+          </div>
+          <div class="ap-chart-wrap">
+            <svg id="rev-svg" viewBox="0 0 300 100" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"   stop-color="rgba(139,92,246,0.45)"/>
+                  <stop offset="100%" stop-color="rgba(139,92,246,0)"/>
+                </linearGradient>
+                <!-- Soft glow for the line -->
+                <filter id="lineGlow" x="-10%" y="-40%" width="120%" height="180%">
+                  <feGaussianBlur stdDeviation="1.8" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <!-- Stronger glow for the drawing tip -->
+                <filter id="tipGlow" x="-150%" y="-150%" width="400%" height="400%">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <!-- Subtle grid -->
+              <g class="ap-chart-grid">
+                <line x1="0" y1="25" x2="300" y2="25"/>
+                <line x1="0" y1="50" x2="300" y2="50"/>
+                <line x1="0" y1="75" x2="300" y2="75"/>
+              </g>
+              <!-- Area fill — animated -->
+              <path id="rev-area" class="ap-chart-area"
+                d="M0,100 L30,100 L60,100 L90,100 L120,100 L150,100 L180,100 L210,100 L240,100 L270,100 L300,100 L300,100 L0,100 Z"/>
+              <!-- Line — animated -->
+              <path id="rev-line" class="ap-chart-line" filter="url(#lineGlow)"
+                d="M0,100 L30,100 L60,100 L90,100 L120,100 L150,100 L180,100 L210,100 L240,100 L270,100 L300,100"/>
+              <!-- Pulsing ring around drawing tip -->
+              <circle id="rev-tip-ring" cx="0" cy="100" r="8" fill="none" stroke="rgba(139,92,246,0.35)" stroke-width="1.5" style="opacity:0"/>
+              <!-- Glowing dot at drawing tip -->
+              <circle id="rev-tip" cx="0" cy="100" r="3.5" fill="#8B5CF6" filter="url(#tipGlow)" style="opacity:0"/>
+              <!-- Static peak dot — appears after animation -->
+              <circle id="rev-peak-dot" class="ap-chart-dot" cx="240" cy="20" r="3.5" style="opacity:0"/>
+              <circle id="rev-peak-ring" cx="240" cy="20" r="7" fill="rgba(139,92,246,0.2)" style="opacity:0"/>
+            </svg>
+          </div>
+          <div class="ap-chart-labels">
+            <span class="ap-chart-label">09:00</span>
+            <span class="ap-chart-label">11:00</span>
+            <span class="ap-chart-label">13:00</span>
+            <span class="ap-chart-label">15:00</span>
+            <span class="ap-chart-label">17:00</span>
+            <span class="ap-chart-label">19:00</span>
+          </div>
+          <div class="ap-rev-peaks">
+            <div class="ap-peak-pill active"><span class="ap-peak-dot"></span><span id="ad-p1">Пік: 19:00–20:00</span></div>
+            <div class="ap-peak-pill"><span class="ap-peak-dot"></span><span id="ad-p2">Пік: 13:00–14:00</span></div>
+            <div class="ap-peak-pill"><span class="ap-peak-dot"></span><span id="ad-p3">Спад: 09:00–11:00</span></div>
+          </div>
+        </div>
+
+        <!-- Flow tab -->
+        <div class="ap-flow" id="ap-flow">
+          <div class="ap-flow-live" id="admin-flow-live-wrap">
+            <span class="ap-flow-live-dot"></span>
+            <span id="admin-flow-live">Онлайн · оновлення кожні 5 с</span>
+          </div>
+          <div class="ap-flow-counter">
+            <div class="ap-flow-num" id="biz-flow-num">52</div>
+            <div class="ap-flow-unit" id="admin-flow-unit">гостей у залі</div>
+          </div>
+          <div class="ap-flow-bars" id="biz-flow-bars">
+            <div class="ap-flow-bar" data-h="25%"></div>
+            <div class="ap-flow-bar" data-h="35%"></div>
+            <div class="ap-flow-bar" data-h="45%"></div>
+            <div class="ap-flow-bar" data-h="65%"></div>
+            <div class="ap-flow-bar peak" data-h="88%"></div>
+            <div class="ap-flow-bar peak" data-h="100%"></div>
+            <div class="ap-flow-bar" data-h="80%"></div>
+            <div class="ap-flow-bar" data-h="72%"></div>
+            <div class="ap-flow-bar" data-h="60%"></div>
+            <div class="ap-flow-bar" data-h="42%"></div>
+            <div class="ap-flow-bar" data-h="55%"></div>
+            <div class="ap-flow-bar" data-h="68%"></div>
+          </div>
+          <div class="ap-flow-hours">
+            <span class="ap-flow-hour">09</span>
+            <span class="ap-flow-hour">11</span>
+            <span class="ap-flow-hour">13</span>
+            <span class="ap-flow-hour">15</span>
+            <span class="ap-flow-hour">17</span>
+            <span class="ap-flow-hour">19</span>
+            <span class="ap-flow-hour">21</span>
+            <span class="ap-flow-hour">23</span>
+          </div>
+        </div>
+      </div>
+        </div>
+        <aside class="ap-floor-detail ap-floor-detail--dock" id="ap-floor-detail" role="complementary" aria-label="Деталі столу">
+          <div class="ap-fd-empty" id="ap-fd-empty">Оберіть столик — повна картка сесії зʼявиться справа</div>
+          <div class="ap-fd-body" id="ap-fd-body" hidden>
+            <div class="ap-fd-head">
+              <span class="ap-fd-head-main" id="ap-fd-title">Стіл 01</span>
+              <span class="ap-fd-badge" id="ap-fd-badge"></span>
+            </div>
+            <div class="ap-fd-rows" id="ap-fd-rows"></div>
+          </div>
+        </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SAFE EXIT BUSINESS VALUE
+     ════════════════════════════════════════════ -->
+<section class="safe-value-section" aria-labelledby="sv-h2">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="sv-wrap">
+    <div class="sv-header reveal">
+      <p class="biz-section-eyebrow" style="justify-content:center">02 · Safe Exit Value</p>
+      <h2 id="sv-h2">Як Safe Exit заощаджує час вашого персоналу</h2>
+      <p>Автоматизований checkout — це не просто зручно для гостя. Це 15% повернутого робочого часу офіціанта щодня.</p>
+    </div>
+
+    <div class="sv-cards">
+      <div class="sv-card reveal" style="animation-delay:.05s">
+        <div class="sv-card-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="sv-card-num">01 / SAVINGS</div>
+        <div class="sv-stat-val green">15%</div>
+        <div class="sv-card-title">Менше часу на checkout</div>
+        <div class="sv-card-desc">Офіціант більше не чекає, поки гість вирішить рахунок. Safe Exit автоматично ініціює оплату перед закінченням бронювання.</div>
+      </div>
+      <div class="sv-card reveal" style="animation-delay:.1s">
+        <div class="sv-card-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="sv-card-num">02 / SPEED</div>
+        <div class="sv-stat-val violet">&lt;14с</div>
+        <div class="sv-card-title">End-to-end транзакція</div>
+        <div class="sv-card-desc">Від натискання «Підтвердити» до отримання цифрового чеку — менше 14 секунд. Без PIN, без черги, без паперу.</div>
+      </div>
+      <div class="sv-card reveal" style="animation-delay:.15s">
+        <div class="sv-card-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div>
+        <div class="sv-card-num">03 / TRUST</div>
+        <div class="sv-stat-val white">100%</div>
+        <div class="sv-card-title">Верифіковані гості</div>
+        <div class="sv-card-desc">Кожен гість авторизується через Дія. Жодного анонімного бронювання — лише реальні, підтверджені особи.</div>
+      </div>
+    </div>
+
+    <div class="sv-human reveal" aria-labelledby="biz-hc-title">
+      <div class="sv-human-copy">
+        <p class="sv-human-eyebrow" id="biz-hc-eyebrow">Human-centric service</p>
+        <h3 class="sv-human-title" id="biz-hc-title">
+          <span id="biz-hc-title-l1">ОФІЦІАНТИ ЗАЛИШАЮТЬСЯ.</span><br />
+          <span id="biz-hc-title-l2">РУТИНА — ЙДЕ.</span>
+        </h3>
+        <p class="sv-human-body" id="biz-hc-body">
+          PROSTIR не замінює ваш персонал. Ми прибираємо біганину з терміналом і роздрукованими рахунками: менше походів до POS, менше паперу між столом і баром. Офіціант стає менеджером комфорту гостя, а не кур&apos;єром паперу. Це прискорює обслуговування приблизно на 30% і часто збільшує чайові — бо гість бачить увагу, а не очікування біля каси.
+        </p>
+      </div>
+      <div id="biz-receipt-root" data-venue-name="Cafe Aura"></div>
+    </div>
+
+    <hr class="sv-divider" aria-hidden="true"/>
+
+    <p class="sv-compare-intro reveal" id="sv-compare-intro">
+      Типова зміна: <strong>~12 checkout-ів</strong> × <strong>~5 хв</strong> ручної обробки ≈ <strong>~1 год</strong> «мертвого» часу на офіціанта.
+      Safe Exit зводить підтвердження оплати до <strong>&lt;14 с</strong> — до <strong>~25×</strong> швидше на кожному столі без черги біля POS.
+    </p>
+    <div class="sv-timeline reveal" id="sv-timeline" aria-hidden="true">
+      <div class="sv-tl-step">
+        <div class="sv-tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+        <div class="sv-tl-num" id="sv-tl1-num">01</div>
+        <div class="sv-tl-lbl" id="sv-tl1-lbl">Рахунок і очікування</div>
+      </div>
+      <div class="sv-tl-step">
+        <div class="sv-tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <div class="sv-tl-num" id="sv-tl2-num">02</div>
+        <div class="sv-tl-lbl" id="sv-tl2-lbl">Push за 2 хв до кінця</div>
+      </div>
+      <div class="sv-tl-step">
+        <div class="sv-tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <div class="sv-tl-num" id="sv-tl3-num">03</div>
+        <div class="sv-tl-lbl" id="sv-tl3-lbl">Тап — підтвердження</div>
+      </div>
+      <div class="sv-tl-step">
+        <div class="sv-tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+        <div class="sv-tl-num" id="sv-tl4-num">04</div>
+        <div class="sv-tl-lbl" id="sv-tl4-lbl">Чек у Дія / застосунку</div>
+      </div>
+    </div>
+
+    <div class="sv-comparison reveal">
+      <div class="sv-before">
+        <div class="sv-compare-head">
+          <div class="sv-compare-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M8 17v-5"/><path d="M12 17V8"/><path d="M16 17v-3"/><circle cx="7" cy="7" r="2"/><path d="M9 7h8l3 3v2H9V7z"/></svg>
+          </div>
+          <div style="min-width:0">
+            <div class="sv-compare-label">До PROSTIR</div>
+            <div class="sv-compare-title">Ручний checkout</div>
+          </div>
+        </div>
+        <div class="sv-compare-desc">Офіціант підходить до столика, подає рахунок, чекає рішення гостя, обробляє оплату вручну, закриває зміну в POS-системі — 4–6 хвилин на стіл.</div>
+        <div class="sv-compare-visual" aria-hidden="true">
+          <div class="sv-time-hero"><span class="sv-time-big">4–6</span><span class="sv-time-suffix" id="sv-time-suffix-slow">хв</span></div>
+          <div class="sv-bar-label" id="sv-bar-lbl-slow">Навантаження на персонал</div>
+          <div class="sv-bar-track"><div class="sv-bar-fill sv-bar-fill--slow"></div></div>
+          <div class="sv-mini-flow" id="sv-flow-before">
+            <span id="sv-sb1">Рахунок</span><span id="sv-sb2">Очікування</span><span id="sv-sb3">POS</span><span id="sv-sb4">Закриття</span>
+          </div>
+        </div>
+      </div>
+      <div class="sv-vs" aria-hidden="true">vs</div>
+      <div class="sv-after">
+        <div class="sv-compare-head">
+          <div class="sv-compare-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><path d="M9 6h6"/><path d="M9 10h4"/></svg>
+          </div>
+          <div style="min-width:0">
+            <div class="sv-compare-label">З PROSTIR Safe Exit</div>
+            <div class="sv-compare-title">Автоматичний checkout</div>
+          </div>
+        </div>
+        <div class="sv-compare-desc">Таймер відраховує час бронювання. За 2 хвилини до кінця — push-нотифікація гостю. Оплата підтверджується за 14 секунд. Офіціант навіть не підходить.</div>
+        <div class="sv-compare-visual" aria-hidden="true">
+          <div class="sv-time-hero"><span class="sv-time-big">&lt;14</span><span class="sv-time-suffix" id="sv-time-suffix-fast">с</span></div>
+          <div class="sv-bar-label" id="sv-bar-lbl-fast">Час підтвердження оплати</div>
+          <div class="sv-bar-track"><div class="sv-bar-fill sv-bar-fill--fast"></div></div>
+          <div class="sv-mini-flow" id="sv-flow-after">
+            <span id="sv-sa1">Push</span><span id="sv-sa2">Тап</span><span id="sv-sa3">Оплата</span><span id="sv-sa4">Чек</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     THREE PILLARS
+     ════════════════════════════════════════════ -->
+<section class="pillars-section" aria-labelledby="pillars-h2">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="pillars-wrap">
+    <div class="pillars-header reveal">
+      <p class="biz-section-eyebrow" style="justify-content:center">03 · Infrastructure</p>
+      <h2 id="pillars-h2">Побудовано для масштабу</h2>
+      <p>Три принципи, що стоять за кожним рядком PROSTIR Business — від першого столика до мережі по всій Україні.</p>
+    </div>
+    <div class="pillars-grid">
+
+      <!-- Efficiency -->
+      <div class="pillar-card reveal" data-pillar="efficiency" style="animation-delay:.05s">
+        <span class="pillar-num">01</span>
+        <div class="pillar-icon" id="pi-efficiency">
+          <svg viewBox="0 0 24 24" id="bolt-svg">
+            <path id="bolt-path" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <h3>Efficiency</h3>
+        <p>Автоматизація бронювань, черг та оплат скорочує операційне навантаження на команду на 15–20% щотижня. Менше рутини — більше гостинності.</p>
+        <div class="pillar-metric">
+          <div class="pillar-metric-val">−20%</div>
+          <div class="pillar-metric-label">Операційних витрат</div>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="pillar-card reveal" data-pillar="security" style="animation-delay:.1s">
+        <span class="pillar-num">02</span>
+        <div class="pillar-icon" id="pi-security">
+          <span class="shield-ring" aria-hidden="true"></span>
+          <span class="shield-ring shield-ring-2" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" id="shield-svg">
+            <path id="shield-path" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <line id="shield-scan" x1="5" y1="9" x2="19" y2="9" stroke-linecap="round" stroke-width="1.4" stroke="rgba(139,92,246,0.0)"/>
+          </svg>
+        </div>
+        <h3>Security</h3>
+        <p>Ідентифікація через Дія гарантує, що в закладі лише верифіковані гості. Ніяких chargebacks, ніяких фіктивних бронювань, нульова анонімність.</p>
+        <div class="pillar-metric">
+          <div class="pillar-metric-val">0%</div>
+          <div class="pillar-metric-label">Анонімних транзакцій</div>
+        </div>
+      </div>
+
+      <!-- Growth -->
+      <div class="pillar-card reveal" data-pillar="growth" style="animation-delay:.15s">
+        <span class="pillar-num">03</span>
+        <div class="pillar-icon" id="pi-growth">
+          <svg viewBox="0 0 24 24" id="growth-svg" overflow="visible">
+            <polyline id="growth-line" points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+            <polyline id="growth-arrow" points="17 6 23 6 23 12"/>
+            <circle id="growth-tip" cx="1" cy="18" r="1.8" stroke="none"/>
+          </svg>
+        </div>
+        <h3>Growth</h3>
+        <p>Аналітика трафіку, геофенсинг та Moments-сповіщення перетворюють кожного гостя на потенційного постійного відвідувача. Персоналізований маркетинг без cookies.</p>
+        <div class="pillar-metric">
+          <div class="pillar-metric-val">+34%</div>
+          <div class="pillar-metric-label">Повторних відвідин</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SOCIAL PROOF
+     ════════════════════════════════════════════ -->
+<section class="biz-social-section" id="biz-social" aria-labelledby="biz-social-h2">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="biz-social-wrap">
+    <div class="biz-social-head reveal">
+      <p class="biz-section-eyebrow" style="justify-content:center" id="social-eyebrow">04 · Відгуки</p>
+      <h2 id="biz-social-h2">Що кажуть власники закладів</h2>
+      <p id="biz-social-sub">Реальний досвід локацій, які вже масштабують сервіс із PROSTIR</p>
+    </div>
+    <div class="biz-social-grid">
+      <article class="biz-quote-card reveal" style="animation-delay:.04s">
+        <p class="biz-quote-text" id="soc-q1">Після Safe Exit ми прибрали «чергу біля терміналу» у пік. Середній чек виріс, а зала відчувається спокійнішою — гості не чекають на рахунок.</p>
+        <div class="biz-quote-meta">
+          <div class="biz-quote-logo" aria-hidden="true" id="soc-lg1">AU</div>
+          <div>
+            <div class="biz-quote-name" id="soc-a1">Оксана Литвин</div>
+            <div class="biz-quote-role" id="soc-r1">Співвласниця, Cafe Aura · Київ</div>
+          </div>
+        </div>
+      </article>
+      <article class="biz-quote-card reveal" style="animation-delay:.08s">
+        <p class="biz-quote-text" id="soc-q2">Живий план залу з Дія — це фільтр від фейкових броней. Менше ноу-шоу, менше хаосу на вході. Команда нарешті бачить зал як на долоні.</p>
+        <div class="biz-quote-meta">
+          <div class="biz-quote-logo" aria-hidden="true" id="soc-lg2">NV</div>
+          <div>
+            <div class="biz-quote-name" id="soc-a2">Марко Верес</div>
+            <div class="biz-quote-role" id="soc-r2">Операційний директор, Nóra Wine · Львів</div>
+          </div>
+        </div>
+      </article>
+      <article class="biz-quote-card reveal" style="animation-delay:.12s">
+        <p class="biz-quote-text" id="soc-q3">Інтеграція зайшла за два дні. Аналітика по годинах допомогла зсунути преміум-слот на півгодини — маржа відчутно підтягнулась без додаткового персоналу.</p>
+        <div class="biz-quote-meta">
+          <div class="biz-quote-logo" aria-hidden="true" id="soc-lg3">BR</div>
+          <div>
+            <div class="biz-quote-name" id="soc-a3">Ілля Савченко</div>
+            <div class="biz-quote-role" id="soc-r3">Власник, Brasserie 17 · Одеса</div>
+          </div>
+        </div>
+      </article>
+      <article class="biz-quote-card reveal" style="animation-delay:.16s">
+        <p class="biz-quote-text" id="soc-q4">Ми тестували кілька рішень. PROSTIR — єдиний, де checkout відчувається як у топовому fintech: швидко, чисто, без паперу. Гості це помічають.</p>
+        <div class="biz-quote-meta">
+          <div class="biz-quote-logo" aria-hidden="true" id="soc-lg4">HM</div>
+          <div>
+            <div class="biz-quote-name" id="soc-a4">Андрій Коваленко</div>
+            <div class="biz-quote-role" id="soc-r4">CEO мережі, Hearth Market · 4 локації</div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="biz-logo-strip reveal" role="group" aria-label="Партнерські заклади">
+      <span class="biz-logo-pill" id="soc-strip1">Cafe Aura</span>
+      <span class="biz-logo-pill" id="soc-strip2">Nóra Wine</span>
+      <span class="biz-logo-pill" id="soc-strip3">Brasserie 17</span>
+      <span class="biz-logo-pill" id="soc-strip4">Hearth Market</span>
+      <span class="biz-logo-pill" id="soc-strip5">PIXEL Hub</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     PRICING SECTION
+     ════════════════════════════════════════════ -->
+<section class="pricing-section" id="pricing" aria-labelledby="pricing-h2">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="pricing-wrap">
+
+    <div class="pricing-header reveal">
+      <p class="biz-section-eyebrow" style="justify-content:center" id="pricing-eyebrow">05 · Тарифи</p>
+      <h2 id="pricing-h2">Прозорі тарифи.<br>Нуль прихованих комісій.</h2>
+      <p id="pricing-sub">Починайте безкоштовно — масштабуйтесь разом із закладом.</p>
+
+      <!-- Monthly / Yearly toggle -->
+      <div class="pt-toggle-row reveal" style="animation-delay:.1s">
+        <span class="pt-label pt-label-active" id="pt-monthly-label">Щомісяця</span>
+        <button class="pt-toggle" id="pt-toggle" role="switch" aria-checked="false" aria-label="Перемкнути на щорічну оплату">
+          <span class="pt-knob"></span>
+        </button>
+        <span class="pt-label" id="pt-yearly-label">Щорічно</span>
+        <span class="pt-save" id="pt-save-badge">−20%</span>
+      </div>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="pricing-card reveal" id="pc-starter" style="animation-delay:.05s">
+        <div class="pricing-tier" id="tier1-name">Starter</div>
+        <div class="pricing-price">
+          <span class="pp-val" id="tier1-price" data-monthly="0" data-yearly="0" data-free="true">Безкоштовно</span>
+        </div>
+        <div class="pricing-desc" id="tier1-desc">Для невеликих закладів, що тільки починають</div>
+        <ul class="pricing-features" id="tier1-features">
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t1f1">1 заклад</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t1f2">До 20 столів/desk-ів</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t1f3">Базова аналітика</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t1f4">Diia верифікація</span></li>
+          <li class="pf-off"><svg class="pf-svg pf-svg-off" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="7.5" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><path d="M6.5 11.5l5-5M11.5 11.5l-5-5" stroke="rgba(255,255,255,0.2)" stroke-width="1.4" stroke-linecap="round"/></svg><span id="t1f5">Safe Exit автоплата</span></li>
+          <li class="pf-off"><svg class="pf-svg pf-svg-off" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="7.5" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><path d="M6.5 11.5l5-5M11.5 11.5l-5-5" stroke="rgba(255,255,255,0.2)" stroke-width="1.4" stroke-linecap="round"/></svg><span id="t1f6">API доступ</span></li>
+        </ul>
+        <a href="/AppMultiServicios/venue.html" class="pricing-btn-outline" id="tier1-btn">Почати безкоштовно</a>
+      </div>
+
+      <!-- Growth — FEATURED -->
+      <div class="pricing-card pricing-card-featured reveal" id="pc-growth" style="animation-delay:.1s">
+        <div class="pc-badges-row">
+          <div class="pc-popular-badge" id="pricing-popular-badge">
+            <span class="pcpb-dot" aria-hidden="true"></span>
+            <span id="pcpb-text">Найпопулярніший</span>
+          </div>
+          <span class="pc-annual-chip" id="pc-annual-chip">−20% при річній оплаті</span>
+        </div>
+        <div class="pricing-tier" id="tier2-name">Growth</div>
+        <div class="pricing-price">
+          <span class="pp-currency">₴</span>
+          <span class="pp-val pp-num" id="tier2-price" data-monthly="990" data-yearly="792">990</span>
+          <span class="pp-period" id="tier2-period">/міс</span>
+        </div>
+        <div class="pricing-desc" id="tier2-desc">Для активних закладів з прицілом на зростання</div>
+        <ul class="pricing-features" id="tier2-features">
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t2f1">До 3 закладів</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t2f2">Необмежено столів</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t2f3">Повна аналітика + прогнози</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t2f4">Safe Exit автоплата</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t2f5">Live Floorplan Editor</span></li>
+          <li class="pf-off"><svg class="pf-svg pf-svg-off" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="7.5" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><path d="M6.5 11.5l5-5M11.5 11.5l-5-5" stroke="rgba(255,255,255,0.2)" stroke-width="1.4" stroke-linecap="round"/></svg><span id="t2f6">White-label API</span></li>
+        </ul>
+        <a href="/AppMultiServicios/venue.html" class="pricing-btn-primary" id="tier2-btn">Спробувати 14 днів безкоштовно →</a>
+      </div>
+
+      <!-- Scale -->
+      <div class="pricing-card reveal" id="pc-scale" style="animation-delay:.15s">
+        <div class="pricing-tier" id="tier3-name">Scale</div>
+        <div class="pricing-price">
+          <span class="pp-prefix" id="tier3-prefix">від </span>
+          <span class="pp-currency">₴</span>
+          <span class="pp-val pp-num" id="tier3-price" data-monthly="2990" data-yearly="2392">2990</span>
+          <span class="pp-period" id="tier3-period">/міс</span>
+        </div>
+        <div class="pricing-desc" id="tier3-desc">Для мереж та великих операторів</div>
+        <ul class="pricing-features" id="tier3-features">
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t3f1">Необмежено закладів</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t3f2">White-label рішення</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t3f3">API + вебхуки</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t3f4">Виділений менеджер</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t3f5">Підтримка 24/7 · SLA</span></li>
+          <li><svg class="pf-svg" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle class="pf-ring" cx="9" cy="9" r="7.5"/><path class="pf-tick" d="M6 9l2.5 2.5L12 6"/></svg><span id="t3f6">Кастомна інтеграція POS</span></li>
+        </ul>
+        <a href="/AppMultiServicios/venue.html" class="pricing-btn-outline" id="tier3-btn">Зв'язатися з командою</a>
+      </div>
+
+    </div>
+    <p class="pricing-fine" id="pricing-fine">Усі тарифи включають верифікацію через Дія · Без прихованих транзакційних зборів</p>
+  </div>
+</section>
+
+<section class="partner-cta" id="partner-cta" aria-labelledby="cta-h2">
+  <div class="biz-grid-bg" aria-hidden="true"></div>
+  <div class="partner-cta-content reveal">
+    <p class="biz-section-eyebrow" style="justify-content:center">06 · Partnership</p>
+    <h2 id="cta-h2">Готові стати частиною Urban OS?</h2>
+    <p>Долучайтесь до 150+ закладів, які вже автоматизували бронювання, аналітику та checkout через PROSTIR.</p>
+    <div class="partner-cta-btns">
+      <a href="/AppMultiServicios/venue.html" class="biz-cta-primary" data-magnetic data-mag-r="70" data-mag-s="16">
+        Стати партнером PROSTIR →
+      </a>
+      <button type="button" class="biz-cta-secondary" data-magnetic data-mag-r="60" data-mag-s="10">
+        Завантажити презентацію
+      </button>
+    </div>
+    <p class="partner-fine">Інтеграція займає менше 48 годин · Підтримка 24/7 · Без прихованих комісій</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="biz-footer">
+  <div class="biz-footer-inner">
+    <div class="biz-footer-left">
+      <div class="biz-footer-logo">PR<span class="lo">O</span>STIR</div>
+      <span class="biz-footer-tag">for Business</span>
+    </div>
+    <nav class="biz-footer-links" aria-label="Footer navigation">
+      <a href="/AppMultiServicios/" id="biz-footer-home">Головна</a>
+      <a href="/AppMultiServicios/legal.html" class="footer-offer" id="biz-footer-offer">Публічна оферта</a>
+      <a href="/AppMultiServicios/dine.html">Dine</a>
+      <a href="/AppMultiServicios/working.html">Working</a>
+      <a href="/AppMultiServicios/moments.html">Moments</a>
+      <a href="#" class="faq-link">FAQ</a>
+    </nav>
+    <div class="biz-footer-copy">© 2026 PROSTIR · Urban OS</div>
+  </div>
+</footer>
+
+<script>
+/* ── Header scroll ── */
+(function(){
+  const h = document.getElementById('dock');
+  if(h) window.addEventListener('scroll', () => {
+    h.classList.toggle('scrolled', window.scrollY > 10);
+  }, {passive: true});
+})();
+
+/* ── Mobile nav hamburger ── */
+(function(){
+  const btn = document.getElementById('hamburger');
+  const nav = document.getElementById('mobile-nav');
+  if(btn && nav) btn.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  });
+})();
+
+/* ── Revenue chart draw-in animation ── */
+(function () {
+  'use strict';
+
+  /* ── Data points in SVG coordinate space (viewBox 0 0 300 100) ── */
+  const PTS      = [[0,85],[30,70],[60,72],[90,45],[120,50],[150,28],[180,22],[210,35],[240,20],[270,30],[300,15]];
+  const W        = 300;
+  const FLOOR    = 100;          // flat-baseline y
+  const DURATION = 1350;         // total draw time (ms)
+  const RISE_W   = 55;           // px "rise window" per data point
+
+  /* Approximate cubic-bezier(0.22, 1, 0.36, 1) — fast start, long smooth tail */
+  function ease(t) { return 1 - Math.pow(1 - t, 3.2); }
+
+  /* Interpolated y at x during draw progress  */
+  function yAt(x, frontierX) {
+    /* locate surrounding points */
+    let a = PTS[0], b = PTS[PTS.length - 1];
+    for (let i = 0; i < PTS.length - 1; i++) {
+      if (PTS[i][0] <= x && PTS[i + 1][0] >= x) { a = PTS[i]; b = PTS[i + 1]; break; }
+    }
+    const span   = Math.max(b[0] - a[0], 1);
+    const actualY = a[1] + (b[1] - a[1]) * ((x - a[0]) / span);
+    const riseP  = Math.min(1, Math.max(0, (frontierX - x) / RISE_W));
+    return FLOOR + (actualY - FLOOR) * ease(riseP);
+  }
+
+  function linePath(fx) {
+    return 'M' + PTS.map(([x]) => x + ',' + yAt(x, fx).toFixed(2)).join(' L');
+  }
+  function areaPath(fx) {
+    return linePath(fx) + ` L${W},${FLOOR} L0,${FLOOR} Z`;
+  }
+
+  let raf = null, startT = null;
+
+  function animate(fx, lineEl, areaEl, tipEl, tipRing, ts) {
+    if (!startT) startT = ts;
+    const raw = Math.min((ts - startT) / DURATION, 1);
+    fx       = ease(raw) * (W + RISE_W);           // frontier advances with easing
+
+    lineEl.setAttribute('d', linePath(fx));
+    areaEl.setAttribute('d', areaPath(fx));
+
+    /* tip position: evaluate at clamped frontier */
+    const tipX = Math.min(fx, W);
+    const tipY = yAt(tipX, fx);
+    tipEl.setAttribute('cx',   tipX.toFixed(2));
+    tipEl.setAttribute('cy',   tipY.toFixed(2));
+    tipRing.setAttribute('cx', tipX.toFixed(2));
+    tipRing.setAttribute('cy', tipY.toFixed(2));
+
+    const alive = raw < 0.97;
+    tipEl.style.opacity   = alive ? '1'   : '0';
+    tipRing.style.opacity = alive ? '0.6' : '0';   /* CSS keyframe handles ring expansion */
+
+    if (raw < 1) {
+      raf = requestAnimationFrame(t => animate(fx, lineEl, areaEl, tipEl, tipRing, t));
+    } else {
+      /* Draw complete — set exact final paths, show peak markers */
+      lineEl.setAttribute('d', linePath(W + RISE_W));
+      areaEl.setAttribute('d', areaPath(W + RISE_W));
+      const dot  = document.getElementById('rev-peak-dot');
+      const ring = document.getElementById('rev-peak-ring');
+      if (dot)  dot.style.opacity  = '1';
+      if (ring) ring.style.opacity = '1';
+    }
+  }
+
+  function reset() {
+    const flat = 'M' + PTS.map(([x]) => `${x},${FLOOR}`).join(' L');
+    const lineEl  = document.getElementById('rev-line');
+    const areaEl  = document.getElementById('rev-area');
+    const tipEl   = document.getElementById('rev-tip');
+    const tipRing = document.getElementById('rev-tip-ring');
+    const dot     = document.getElementById('rev-peak-dot');
+    const ring    = document.getElementById('rev-peak-ring');
+    if (!lineEl || !areaEl) return;
+
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    startT = null;
+
+    lineEl.setAttribute('d', flat);
+    areaEl.setAttribute('d', flat + ` L${W},${FLOOR} L0,${FLOOR} Z`);
+    tipEl.setAttribute('cx', '0'); tipEl.setAttribute('cy', String(FLOOR));
+    tipRing.setAttribute('cx', '0'); tipRing.setAttribute('cy', String(FLOOR));
+    tipEl.style.opacity   = '0';
+    tipRing.style.opacity = '0';
+    if (dot)  dot.style.opacity  = '0';
+    if (ring) ring.style.opacity = '0';
+  }
+
+  function start() {
+    reset();
+    const lineEl  = document.getElementById('rev-line');
+    const areaEl  = document.getElementById('rev-area');
+    const tipEl   = document.getElementById('rev-tip');
+    const tipRing = document.getElementById('rev-tip-ring');
+    if (!lineEl) return;
+    raf = requestAnimationFrame(t => animate(0, lineEl, areaEl, tipEl, tipRing, t));
+  }
+
+  /* Re-trigger every time the admin section enters the viewport */
+  const section = document.getElementById('admin-section');
+  if (section) {
+    let wasVisible = false;
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !wasVisible) {
+          wasVisible = true;
+          const rev  = document.getElementById('ap-revenue');
+          const flow = document.getElementById('ap-flow');
+          if (rev  && rev.classList.contains('active'))  setTimeout(start, 120);
+          if (flow && flow.classList.contains('active') && window._bizFlowStart)
+            setTimeout(window._bizFlowStart, 120);
+        } else if (!e.isIntersecting) {
+          wasVisible = false;
+        }
+      });
+    }, { threshold: 0.25 }).observe(section);
+  }
+
+  /* Also trigger when user clicks the Revenue tab */
+  window._bizChartStart = start;
+})();
+
+/* ── Admin panel tab switching ── */
+(function(){
+  const tabs = document.querySelectorAll('.ap-tab');
+  const floorDetailAside = document.getElementById('ap-floor-detail');
+  function syncFloorSidebar(panelId) {
+    if (!floorDetailAside) return;
+    if (panelId === 'ap-floor') floorDetailAside.removeAttribute('hidden');
+    else floorDetailAside.setAttribute('hidden', '');
+  }
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.ap-floor,.ap-revenue,.ap-flow').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(tab.dataset.panel);
+      if(target) target.classList.add('active');
+      syncFloorSidebar(tab.dataset.panel);
+      /* fire chart animation when Revenue tab becomes visible */
+      if (tab.dataset.panel === 'ap-revenue' && typeof window._bizChartStart === 'function') {
+        setTimeout(window._bizChartStart, 60);
+      }
+      /* fire flow animation when Flow tab becomes visible */
+      if (tab.dataset.panel === 'ap-flow' && typeof window._bizFlowStart === 'function') {
+        setTimeout(window._bizFlowStart, 60);
+      }
+    });
+    tab.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tab.click(); }
+    });
+  });
+})();
+
+/* ── Floor plan: table click → session detail panel ── */
+(function () {
+  'use strict';
+
+  const DEFAULT_L = {
+    pick: 'Оберіть столик — повна картка сесії зʼявиться справа',
+    table: 'Стіл',
+    occupied: 'Зайнято',
+    vacant: 'Вільно',
+    guests: 'Гості',
+    seated: 'Посадка',
+    duration: 'У залі',
+    bill: 'Відкритий чек',
+    order: 'Замовлення зараз',
+    server: 'Офіціант',
+    diia: 'Дія',
+    booking: 'Бронь / POS',
+    zone: 'Зона',
+    safeExit: 'Safe Exit через',
+    service: 'Запит з залу',
+    nextBook: 'Наступне бронювання',
+    noBooking: 'Немає запису',
+  };
+
+  const FLOOR_SESSIONS = {
+    '01': { state: 'booked', guests: 'Олена Мельник + 2 гості', seatedAt: '18:04', duration: '38 хв', bill: '₴ 920', order: 'Паста карбонара, 2× Chianti Classico, тірамісу', server: 'Марія Кравченко', diia: 'Підтверджено · держ. верифікація', booking: 'PR-8891', zone: 'Вітрина' },
+    '02': { state: 'booked', guests: 'Кирило Бондаренко + 1 гість', seatedAt: '17:30', duration: '1 год 12 хв', bill: '₴ 1 450', order: 'Стейк medium, салат Цезар, пляшка Merlot', server: 'Марія Кравченко', diia: 'Підтверджено', booking: 'PR-8902', zone: 'Вітрина' },
+    '03': { state: 'vacant', next: '18:45 · 2 ос · резерв «Світло»' },
+    '04': { state: 'vacant', next: null },
+    '05': { state: 'booked', guests: 'Команда «PIXEL» · 4 особи', seatedAt: '18:18', duration: '24 хв', bill: '₴ 640', order: 'Бургери ×4, крафтове пиво, картопля фрі', server: 'Олег Федоренко', diia: 'Підтверджено', booking: 'PR-8910', zone: 'Головна зала' },
+    '06': { state: 'vacant', next: '20:15 · 6 ос · корпоратив' },
+    '07': { state: 'booked', guests: 'ТОВ «Арка» · делегація · 5 осіб', seatedAt: '17:35', duration: '1 год 7 хв', bill: '₴ 3 120', order: 'Бізнес-ланч ×5, американо, вода газ./негаз.', server: 'Марія Кравченко', diia: 'Підтверджено', booking: 'PR-8855', zone: 'Головна зала', safeExit: '6 хв' },
+    '08': { state: 'vacant', next: null },
+    '09': { state: 'booked', guests: 'Юлія та Максим Коваль', seatedAt: '17:46', duration: '56 хв', bill: '₴ 1 180', order: 'Ризото з грибами, лосось гриль, 2× Prosecco', server: 'Олег Федоренко', diia: 'Підтверджено', booking: 'PR-8922', zone: 'Головна зала', request: 'Ще біле вино · Negroni з бару' },
+    '10': { state: 'vacant', next: '19:30 · 3 ос' },
+    '11': { state: 'booked', guests: 'Ірина Жук', seatedAt: '18:16', duration: '26 хв', bill: '₴ 410', order: 'Капучино, круасан, вода 0,5 л', server: 'Марія Кравченко', diia: 'Підтверджено', booking: 'Walk-in', zone: 'Барна зона' },
+    '12': { state: 'booked', guests: 'Сімʼя Верес · 3 особи', seatedAt: '17:54', duration: '48 хв', bill: '₴ 890', order: 'Дитяче меню, піца Марґарита, соки', server: 'Олег Федоренко', diia: 'Підтверджено', booking: 'PR-8888', zone: 'Головна зала' },
+    '13': { state: 'booked', guests: 'Корпоратив «Хмарні» · 6 осіб', seatedAt: '18:09', duration: '33 хв', bill: '₴ 2 240', order: 'Сет суші преміум, віскі-сет, зелений чай', server: 'Марія Кравченко', diia: 'Підтверджено', booking: 'PR-8801', zone: 'Головна зала' },
+    '14': { state: 'vacant', next: null },
+  };
+
+  let selectedTid = null;
+
+  function lab() {
+    return window.__prostirFloorDetailL || DEFAULT_L;
+  }
+
+  function addRow(container, key, val, mono) {
+    if (val == null || val === '') return;
+    const row = document.createElement('div');
+    row.className = 'ap-fd-row';
+    const kEl = document.createElement('span');
+    kEl.className = 'ap-fd-k';
+    kEl.textContent = key;
+    const vEl = document.createElement('span');
+    vEl.className = 'ap-fd-v' + (mono ? ' ap-fd-mono' : '');
+    vEl.textContent = val;
+    row.appendChild(kEl);
+    row.appendChild(vEl);
+    container.appendChild(row);
+  }
+
+  function renderDetail(tid) {
+    const data = FLOOR_SESSIONS[tid];
+    const emptyEl = document.getElementById('ap-fd-empty');
+    const bodyEl = document.getElementById('ap-fd-body');
+    const titleEl = document.getElementById('ap-fd-title');
+    const badgeEl = document.getElementById('ap-fd-badge');
+    const rowsEl = document.getElementById('ap-fd-rows');
+    if (!data || !emptyEl || !bodyEl || !titleEl || !badgeEl || !rowsEl) return;
+
+    const L = lab();
+    emptyEl.hidden = true;
+    bodyEl.hidden = false;
+    titleEl.textContent = `${L.table} ${tid}`;
+    rowsEl.innerHTML = '';
+    badgeEl.className = 'ap-fd-badge';
+
+    if (data.state === 'vacant') {
+      badgeEl.textContent = L.vacant;
+      badgeEl.classList.add('is-free');
+      addRow(rowsEl, L.nextBook, data.next || L.noBooking);
+      return;
+    }
+
+    badgeEl.textContent = L.occupied;
+    badgeEl.classList.add('is-busy');
+    addRow(rowsEl, L.guests, data.guests);
+    addRow(rowsEl, L.seated, data.seatedAt);
+    addRow(rowsEl, L.duration, data.duration);
+    addRow(rowsEl, L.bill, data.bill, true);
+    addRow(rowsEl, L.order, data.order);
+    addRow(rowsEl, L.server, data.server);
+    addRow(rowsEl, L.diia, data.diia);
+    addRow(rowsEl, L.booking, data.booking);
+    addRow(rowsEl, L.zone, data.zone);
+    if (data.safeExit) {
+      const s = document.createElement('div');
+      s.className = 'ap-fd-safe';
+      s.textContent = `${L.safeExit} ${data.safeExit}`;
+      rowsEl.appendChild(s);
+    }
+    if (data.request) {
+      const r = document.createElement('div');
+      r.className = 'ap-fd-highlight';
+      r.textContent = `${L.service}: ${data.request}`;
+      rowsEl.appendChild(r);
+    }
+  }
+
+  function showPicker() {
+    const emptyEl = document.getElementById('ap-fd-empty');
+    const bodyEl = document.getElementById('ap-fd-body');
+    if (emptyEl) {
+      emptyEl.hidden = false;
+      emptyEl.textContent = lab().pick;
+    }
+    if (bodyEl) bodyEl.hidden = true;
+    document.querySelectorAll('#ap-floor .ap-fp-table[data-tid]').forEach((el) => el.classList.remove('active-sel'));
+    selectedTid = null;
+  }
+
+  function selectTable(tid) {
+    if (!FLOOR_SESSIONS[tid]) return;
+    selectedTid = tid;
+    document.querySelectorAll('#ap-floor .ap-fp-table[data-tid]').forEach((el) => {
+      el.classList.toggle('active-sel', el.getAttribute('data-tid') === tid);
+    });
+    renderDetail(tid);
+  }
+
+  window._bizFloorDetailRefresh = function () {
+    if (selectedTid) renderDetail(selectedTid);
+    else {
+      const emptyEl = document.getElementById('ap-fd-empty');
+      if (emptyEl) {
+        emptyEl.hidden = false;
+        emptyEl.textContent = lab().pick;
+      }
+      const bodyEl = document.getElementById('ap-fd-body');
+      if (bodyEl) bodyEl.hidden = true;
+    }
+  };
+
+  function bind() {
+    const root = document.getElementById('ap-floor');
+    if (!root) return;
+    root.querySelectorAll('.ap-fp-table[data-tid]').forEach((el) => {
+      const tid = el.getAttribute('data-tid');
+      if (!tid) return;
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        selectTable(tid);
+      });
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectTable(tid);
+        }
+      });
+    });
+  }
+
+  bind();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !selectedTid) return;
+    const floor = document.getElementById('ap-floor');
+    if (!floor || !floor.classList.contains('active')) return;
+    showPicker();
+  });
+})();
+
+/* ── Flow bar + counter draw-in animation ── */
+(function () {
+  'use strict';
+
+  const TARGET_COUNT = 52;
+  const BAR_STAGGER  = 55;   // ms between each bar rising
+  const COUNT_DUR    = 820;  // ms for counter roll
+  const APPLE        = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+  /* ease-out spring approximation */
+  function ease(t) { return 1 - Math.pow(1 - t, 3.2); }
+
+  /* Reset all bars to height 0, remove glow */
+  function resetBars() {
+    const bars = document.querySelectorAll('#biz-flow-bars .ap-flow-bar');
+    bars.forEach(b => {
+      b.style.transitionDelay = '0ms';
+      b.style.height = '0';
+      b.classList.remove('grown');
+    });
+  }
+
+  /* Animate bars left-to-right with staggered delay */
+  function animateBars() {
+    const bars = document.querySelectorAll('#biz-flow-bars .ap-flow-bar');
+    bars.forEach((b, i) => {
+      const delay = i * BAR_STAGGER;
+      b.style.transitionDelay = delay + 'ms';
+      /* small timeout to let CSS pick up height:0 before we change it */
+      setTimeout(() => {
+        b.style.height = b.dataset.h || '50%';
+        if (b.classList.contains('peak')) {
+          /* add glow after bar finishes growing */
+          setTimeout(() => b.classList.add('grown'), delay + 800);
+        }
+      }, 16); /* one frame after reset */
+    });
+  }
+
+  /* Roll counter from 0 → target */
+  function animateCounter(target) {
+    const el = document.getElementById('biz-flow-num');
+    if (!el) return;
+    el.textContent = '0';
+    let startT = null;
+    function tick(ts) {
+      if (!startT) startT = ts;
+      const p = Math.min((ts - startT) / COUNT_DUR, 1);
+      el.textContent = Math.round(ease(p) * target);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* Full flow animation: reset → animate */
+  function startFlow() {
+    resetBars();
+    /* wait one paint for CSS height:0 to apply, then grow */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        animateBars();
+        animateCounter(TARGET_COUNT);
+      });
+    });
+  }
+
+  window._bizFlowStart = startFlow;
+
+  /* Live counter drift (after animation completes) */
+  let base = TARGET_COUNT;
+  setInterval(() => {
+    const el = document.getElementById('biz-flow-num');
+    if (!el) return;
+    const delta = Math.floor(Math.random() * 5) - 2;
+    base = Math.max(12, Math.min(68, base + delta));
+    el.textContent = base;
+  }, 3200);
+})();
+
+/* ── Scroll reveal ── */
+(function(){
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  /* also catch any already in view */
+  document.querySelectorAll('.reveal.in').forEach(el => io.unobserve(el));
+})();
+
+/* ── Hero glass panel: subtle parallax on scroll ── */
+(function () {
+  const inner = document.querySelector('.biz-hero-inner');
+  if (!inner) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = Math.min(window.scrollY, 480);
+      inner.style.setProperty('--biz-hero-float', (-y * 0.045).toFixed(2) + 'px');
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════
+     PRICING INTERACTIONS
+     ══════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── 1. Monthly / Yearly toggle with count-up ── */
+  const toggle  = document.getElementById('pt-toggle');
+  const saveBadge = document.getElementById('pt-save-badge');
+  const moLabel = document.getElementById('pt-monthly-label');
+  const yrLabel = document.getElementById('pt-yearly-label');
+  let   isYearly = false;
+
+  function ease(t) { return 1 - Math.pow(1 - t, 3); } /* cubic ease-out */
+
+  function countUp(el, from, to, duration) {
+    if (from === to) return;
+    el.classList.add('counting');
+    const start = performance.now();
+    function frame(now) {
+      const p = Math.min((now - start) / duration, 1);
+      el.textContent = Math.round(from + (to - from) * ease(p));
+      if (p < 1) requestAnimationFrame(frame);
+      else { el.textContent = to; el.classList.remove('counting'); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function updatePrices(yearly) {
+    document.querySelectorAll('.pp-num').forEach(el => {
+      const mo = parseInt(el.dataset.monthly, 10);
+      const yr = parseInt(el.dataset.yearly, 10);
+      const from = yearly ? mo : yr;
+      const to   = yearly ? yr : mo;
+      countUp(el, from, to, 580);
+    });
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      isYearly = !isYearly;
+      toggle.classList.toggle('on', isYearly);
+      toggle.setAttribute('aria-checked', isYearly);
+      moLabel.classList.toggle('pt-label-active', !isYearly);
+      yrLabel.classList.toggle('pt-label-active',  isYearly);
+      saveBadge.classList.toggle('visible', isYearly);
+      updatePrices(isYearly);
+    });
+    moLabel.addEventListener('click', () => { if(isYearly) toggle.click(); });
+    yrLabel.addEventListener('click', () => { if(!isYearly) toggle.click(); });
+  }
+
+  /* ── 2. Magnetic spring hover on pricing cards ── */
+  if (!window.matchMedia('(hover: none)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+
+    const K = 160, D = 18; /* spring constants */
+    function makeSpring() { return { pos: 0, vel: 0, target: 0 }; }
+    function stepSpring(s, dt) {
+      const F = -K * (s.pos - s.target) - D * s.vel;
+      s.vel += F * dt; s.pos += s.vel * dt;
+    }
+    function atRest(s) { return Math.abs(s.pos - s.target) < 0.01 && Math.abs(s.vel) < 0.01; }
+
+    const cards = [];
+    let lastT = 0;
+
+    document.querySelectorAll('.pricing-card').forEach(card => {
+      const sx = makeSpring(), sy = makeSpring(), ss = makeSpring();
+      ss.pos = 1; ss.target = 1;
+      cards.push({ el: card, sx, sy, ss, active: false });
+
+      card.addEventListener('mouseenter', () => {
+        cards.find(c => c.el === card).active = true;
+        cards.find(c => c.el === card).ss.target = 1.025;
+      });
+      card.addEventListener('mouseleave', () => {
+        const c = cards.find(x => x.el === card);
+        c.active = false;
+        c.sx.target = c.sy.target = 0;
+        c.ss.target = 1;
+      });
+      card.addEventListener('mousemove', e => {
+        const c = cards.find(x => x.el === card);
+        const r = card.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width  * 0.5)) / r.width  * 14;
+        const dy = (e.clientY - (r.top  + r.height * 0.5)) / r.height * 10;
+        c.sx.target = dx; c.sy.target = dy;
+      });
+    });
+
+    let rafRunning = false;
+    function loop(now) {
+      const dt = Math.min((now - (lastT || now)) / 1000, 0.05);
+      lastT = now;
+      let any = false;
+      cards.forEach(c => {
+        stepSpring(c.sx, dt); stepSpring(c.sy, dt); stepSpring(c.ss, dt);
+        const x = c.sx.pos, y = c.sy.pos, sc = c.ss.pos;
+        c.el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px) scale(${sc.toFixed(4)})`;
+        /* glow */
+        const glow = c.active ? 0.22 : Math.max(0, (Math.abs(x) + Math.abs(y)) / 14 * 0.1);
+        if (glow > 0.005) {
+          const spread = 18 + glow * 40;
+          c.el.style.boxShadow = `0 ${(8 + glow * 28).toFixed(0)}px ${spread.toFixed(0)}px rgba(139,92,246,${glow.toFixed(3)}), 0 0 0 1px rgba(139,92,246,${(glow * 0.5).toFixed(3)})`;
+        } else if (!c.active && atRest(c.sx) && atRest(c.sy) && atRest(c.ss)) {
+          c.el.style.boxShadow = '';
+          c.el.style.transform = '';
+        }
+        if (c.active || !atRest(c.sx) || !atRest(c.sy) || !atRest(c.ss)) any = true;
+      });
+      if (any) requestAnimationFrame(loop);
+      else rafRunning = false;
+    }
+
+    cards.forEach(c => {
+      c.el.addEventListener('mouseenter', () => { if (!rafRunning) { rafRunning = true; requestAnimationFrame(loop); } });
+    });
+  }
+
+  /* ── 3. Checkmark draw-in via IntersectionObserver ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('checks-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  document.querySelectorAll('.pricing-card').forEach(card => io.observe(card));
+
+})();
+</script>
+
+<!-- Language switcher + full translations -->
+<script>
+(function(){
+  const switcher = document.getElementById('lang-switch');
+  if(!switcher) return;
+
+  const T = {
+    ua: {
+      nav: { dine:'Dine', working:'Working', moments:'Moments', business:'Business', download:'Незабаром' },
+      headerBtn: 'Стати партнером',
+      hero: {
+        eyebrow: 'PROSTIR for Business · B2B Platform',
+        h1: 'Збільшуйте виручку на <span class="accent">22–34%</span> і економте <span class="accent">15%</span> часу персоналу',
+        sub: 'Єдина операційна платформа: бронювання з Дія, живий план залу, аналітика та Safe Exit — гість платить за секунди, команда лишається з гостями, а не з терміналом.',
+        cta1: 'Стати партнером',
+        cta2: 'Переглянути демо',
+        stat1: 'Партнерів у місті',
+        stat2: 'Менше часу персоналу',
+        stat3: 'Середня оцінка закладів',
+        stat4: 'End-to-end checkout',
+      },
+      admin: {
+        eyebrow: '01 · Операційний центр',
+        h2: 'Одна панель — <span class="admin-h2-accent">повний операційний контроль</span>',
+        lead: 'PROSTIR Admin зводить зал, виручку та потік гостей в одному інтерфейсі з миттєвою синхронізацією — саме те, що очікують власник і інвестор: прозорість, швидкість і довіра через Дія.',
+        k1tag: 'Синхронізація',
+        k1v: '<2 с',
+        k1d: 'Кожне перетягування столика миттєво оновлює план залу — гість бачить актуальну схему в застосунку без перезавантаження.',
+        k2tag: 'Дія · Trust',
+        k2v: '100%',
+        k2d: 'Усі активні сесії привʼязані до верифікованої Дія-ідентичності — менше ноу-шоу та анонімних броней.',
+        k3tag: 'Запуск',
+        k3v: '48 год',
+        k3d: 'Від заявки до першого робочого сценарію в адмінці — з онбордингом і супроводом команди PROSTIR.',
+        f1tag: 'План залу', f1t: 'Живий редактор розстановки',
+        f1d: 'Столики, зони й проходи — перетягування без перезавантаження. Зміни одразу видно гостю в застосунку.',
+        f2tag: 'Виручка', f2t: 'Прогнозована економіка залу',
+        f2d: 'Крива з піками, порівняння з минулим тижнем і підказка на завтра — для рішень у реальному часі.',
+        f3tag: 'Заповненість', f3t: 'Хто в залі зараз',
+        f3d: 'Лічильник гостей із підтвердженою Дія-ідентичністю та динаміка по годинах — без «фейкових» броней.',
+        liveLbl: 'LIVE',
+        mockTitle: 'PROSTIR Admin · Cafe Aura',
+        tabFloor: 'План залу', tabRev: 'Виручка', tabFlow: 'Потік',
+        floorTitle: 'Головна зала · 14 столів', floorTag: '● Режим редагування',
+        revSub: 'Сьогодні · оновлено о 19:42', revBadge: '↑ +28% до вчора',
+        p1: 'Пік: 19:00–20:00', p2: 'Пік: 13:00–14:00', p3: 'Спад: 09:00–11:00',
+        flowLive: 'Онлайн · оновлення кожні 5 с', flowUnit: 'гостей у залі',
+        floorSummary: '10/14 столів у сесії · ₴ 15 890 у відкритих чеках · сер. чек ₴ 1 620 · 52 гостей у залі (Дія)',
+        zoneWindow: 'Вітрина', zoneMain: 'Зала', zoneBar: 'Бар',
+        floorVacant: 'Вільно',
+        floorPartyUnit: 'ос',
+        floorTimeUnit: 'хв',
+        floorServerPref: 'Офіц.',
+        floorNextLbl: 'Далі',
+        floorDiiaShort: 'Дія',
+        floorGuestReq: 'Гість просить ще біле вино · Negroni для бару',
+        detailPick: 'Оберіть столик — повна картка сесії зʼявиться справа',
+        detailTable: 'Стіл',
+        detailOccupied: 'Зайнято',
+        detailVacant: 'Вільно',
+        detailGuests: 'Гості',
+        detailSeated: 'Посадка',
+        detailDuration: 'У залі',
+        detailBill: 'Відкритий чек',
+        detailOrder: 'Замовлення зараз',
+        detailServer: 'Офіціант',
+        detailDiia: 'Дія',
+        detailBooking: 'Бронь / POS',
+        detailZone: 'Зона',
+        detailSafeExit: 'Safe Exit через',
+        detailService: 'Запит з залу',
+        detailNextBook: 'Наступне бронювання',
+        detailNoBooking: 'Немає запису',
+        dragTxt: 'Перетягніть у редакторі · клікніть столик — деталі сесії справа',
+        floorSafeExit: 'Safe Exit',
+      },
+      safe: {
+        eyebrow: '02 · Safe Exit Value',
+        h2: 'Як Safe Exit заощаджує час вашого персоналу',
+        sub: 'Автоматизований checkout — це не просто зручно для гостя. Це 15% повернутого робочого часу офіціанта щодня.',
+        c1t: 'Менше часу на checkout',
+        c1d: 'Офіціант більше не чекає, поки гість вирішить рахунок. Safe Exit автоматично ініціює оплату перед закінченням бронювання.',
+        c2t: 'End-to-end транзакція',
+        c2d: 'Від натискання «Підтвердити» до отримання цифрового чеку — менше 14 секунд. Без PIN, без черги, без паперу.',
+        c3t: 'Верифіковані гості',
+        c3d: 'Кожен гість авторизується через Дія. Жодного анонімного бронювання — лише реальні, підтверджені особи.',
+        bl1: 'До PROSTIR', bt1: 'Ручний checkout',
+        bd1: 'Офіціант підходить до столика, подає рахунок, чекає рішення гостя, обробляє оплату вручну, закриває зміну в POS-системі — 4–6 хвилин на стіл.',
+        bl2: 'З PROSTIR Safe Exit', bt2: 'Автоматичний checkout',
+        bd2: 'Таймер відраховує час бронювання. За 2 хвилини до кінця — push-нотифікація гостю. Оплата підтверджується за 14 секунд. Офіціант навіть не підходить.',
+        timeSuffixSlow: 'хв',
+        timeSuffixFast: 'с',
+        barSlow: 'Навантаження на персонал',
+        barFast: 'Час підтвердження оплати',
+        sb1: 'Рахунок', sb2: 'Очікування', sb3: 'POS', sb4: 'Закриття',
+        sa1: 'Push', sa2: 'Тап', sa3: 'Оплата', sa4: 'Чек',
+        compareIntro: 'Типова зміна: <strong>~12 checkout-ів</strong> × <strong>~5 хв</strong> ручної обробки ≈ <strong>~1 год</strong> «мертвого» часу на офіціанта. Safe Exit зводить підтвердження оплати до <strong>&lt;14 с</strong> — до <strong>~25×</strong> швидше на кожному столі без черги біля POS.',
+        tl1: 'Рахунок і очікування', tl2: 'Push за 2 хв до кінця', tl3: 'Тап — підтвердження', tl4: 'Чек у Дія / застосунку',
+      },
+      social: {
+        eyebrow: '04 · Відгуки',
+        h2: 'Що кажуть власники закладів',
+        sub: 'Реальний досвід локацій, які вже масштабують сервіс із PROSTIR',
+        q1: 'Після Safe Exit ми прибрали «чергу біля терміналу» у пік. Середній чек виріс, а зала відчувається спокійнішою — гості не чекають на рахунок.',
+        a1: 'Оксана Литвин', r1: 'Співвласниця, Cafe Aura · Київ', lg1: 'AU',
+        q2: 'Живий план залу з Дія — це фільтр від фейкових броней. Менше ноу-шоу, менше хаосу на вході. Команда нарешті бачить зал як на долоні.',
+        a2: 'Марко Верес', r2: 'Операційний директор, Nóra Wine · Львів', lg2: 'NV',
+        q3: 'Інтеграція зайшла за два дні. Аналітика по годинах допомогла зсунути преміум-слот на півгодини — маржа відчутно підтягнулась без додаткового персоналу.',
+        a3: 'Ілля Савченко', r3: 'Власник, Brasserie 17 · Одеса', lg3: 'BR',
+        q4: 'Ми тестували кілька рішень. PROSTIR — єдиний, де checkout відчувається як у топовому fintech: швидко, чисто, без паперу. Гості це помічають.',
+        a4: 'Андрій Коваленко', r4: 'CEO мережі, Hearth Market · 4 локації', lg4: 'HM',
+        strip1: 'Cafe Aura', strip2: 'Nóra Wine', strip3: 'Brasserie 17', strip4: 'Hearth Market', strip5: 'PIXEL Hub',
+        logosAria: 'Партнерські заклади',
+      },
+      humanCentric: {
+        eyebrow: 'Human-centric service',
+        title1: 'ОФІЦІАНТИ ЗАЛИШАЮТЬСЯ.',
+        title2: 'РУТИНА — ЙДЕ.',
+        body: 'PROSTIR не замінює ваш персонал. Ми прибираємо біганину з терміналом і роздрукованими рахунками: менше походів до POS, менше паперу між столом і баром. Офіціант стає менеджером комфорту гостя, а не кур\'єром паперу. Це прискорює обслуговування приблизно на 30% і часто збільшує чайові — бо гість бачить увагу, а не очікування біля каси.',
+      },
+      pillars: {
+        eyebrow: '03 · Infrastructure',
+        h2: 'Побудовано для масштабу',
+        sub: 'Три принципи, що стоять за кожним рядком PROSTIR Business — від першого столика до мережі по всій Україні.',
+        p1: 'Автоматизація бронювань, черг та оплат скорочує операційне навантаження на команду на 15–20% щотижня. Менше рутини — більше гостинності.',
+        m1: 'Операційних витрат',
+        p2: 'Ідентифікація через Дія гарантує, що в закладі лише верифіковані гості. Ніяких chargebacks, ніяких фіктивних бронювань, нульова анонімність.',
+        m2: 'Анонімних транзакцій',
+        p3: 'Аналітика трафіку, геофенсинг та Moments-сповіщення перетворюють кожного гостя на потенційного постійного відвідувача. Персоналізований маркетинг без cookies.',
+        m3: 'Повторних відвідин',
+      },
+      cta: {
+        eyebrow: '06 · Partnership',
+        h2: 'Готові стати частиною Urban OS?',
+        sub: 'Долучайтесь до 150+ закладів, які вже автоматизували бронювання, аналітику та checkout через PROSTIR.',
+        btn1: 'Стати партнером PROSTIR →',
+        btn2: 'Завантажити презентацію',
+        fine: 'Інтеграція займає менше 48 годин · Підтримка 24/7 · Без прихованих комісій',
+      },
+      footer: { home:'Головна', offer:'Публічна оферта' },
+    },
+    en: {
+      nav: { dine:'Dine', working:'Working', moments:'Moments', business:'Business', download:'Coming soon' },
+      headerBtn: 'Become a partner',
+      hero: {
+        eyebrow: 'PROSTIR for Business · B2B Platform',
+        h1: 'Grow revenue by <span class="accent">22–34%</span> and save <span class="accent">15%</span> of staff time',
+        sub: 'One operating system: Diia bookings, live floor plan, analytics, and Safe Exit — guests pay in seconds; your team stays with guests, not the terminal.',
+        cta1: 'Become a partner',
+        cta2: 'View demo',
+        stat1: 'Partner venues',
+        stat2: 'Less staff time',
+        stat3: 'Average venue rating',
+        stat4: 'End-to-end checkout',
+      },
+      admin: {
+        eyebrow: '01 · Command Center',
+        h2: 'One console — <span class="admin-h2-accent">full operational control</span>',
+        lead: 'PROSTIR Admin unifies the floor, revenue, and guest flow in one interface with instant sync — what owners and investors want to see: transparency, speed, and trust through Diia.',
+        k1tag: 'Sync',
+        k1v: '<2s',
+        k1d: 'Every table drag updates the live floor map instantly — guests see the current layout in the app without a refresh.',
+        k2tag: 'Diia · Trust',
+        k2v: '100%',
+        k2d: 'Active covers map to verified Diia identities — fewer no-shows and zero anonymous bookings.',
+        k3tag: 'Go-live',
+        k3v: '48h',
+        k3d: 'From signup to your first production workflow in Admin — with PROSTIR onboarding alongside.',
+        f1tag: 'Floor', f1t: 'Live layout editor',
+        f1d: 'Tables, zones, and aisles — drag and drop with no reload. Changes surface to guests in the app immediately.',
+        f2tag: 'Revenue', f2t: 'Forecast-ready P&L view',
+        f2d: 'Curve with peak bands, week-over-week delta, and a forward-looking signal for tomorrow\'s staffing and prep.',
+        f3tag: 'Occupancy', f3t: 'Who is on-premise now',
+        f3d: 'Live headcount tied to verified Diia identities and hourly momentum — no ghost bookings.',
+        liveLbl: 'LIVE',
+        mockTitle: 'PROSTIR Admin · Cafe Aura',
+        tabFloor: 'Floorplan', tabRev: 'Revenue', tabFlow: 'Flow',
+        floorTitle: 'Main hall · 14 tables', floorTag: '● Edit mode',
+        revSub: 'Today · updated 19:42', revBadge: '↑ +28% vs yesterday',
+        p1: 'Peak: 19:00–20:00', p2: 'Peak: 13:00–14:00', p3: 'Trough: 09:00–11:00',
+        flowLive: 'Live · refresh every 5s', flowUnit: 'guests on floor',
+        floorSummary: '10/14 tables seated · ₴ 15,890 open checks · avg ₴ 1,620 · 52 guests on floor (Diia)',
+        zoneWindow: 'Window', zoneMain: 'Floor', zoneBar: 'Bar',
+        floorVacant: 'Open',
+        floorPartyUnit: 'pax',
+        floorTimeUnit: 'm',
+        floorServerPref: 'Srv.',
+        floorNextLbl: 'Next',
+        floorDiiaShort: 'Diia',
+        floorGuestReq: 'Guest requests more white wine · Negroni from the bar',
+        detailPick: 'Select a table — full session details appear on the right',
+        detailTable: 'Table',
+        detailOccupied: 'Seated',
+        detailVacant: 'Open',
+        detailGuests: 'Guests',
+        detailSeated: 'Seated at',
+        detailDuration: 'On floor',
+        detailBill: 'Open check',
+        detailOrder: 'Current order',
+        detailServer: 'Server',
+        detailDiia: 'Diia',
+        detailBooking: 'Booking / POS',
+        detailZone: 'Zone',
+        detailSafeExit: 'Safe Exit in',
+        detailService: 'Guest request',
+        detailNextBook: 'Next reservation',
+        detailNoBooking: 'No upcoming hold',
+        dragTxt: 'Drag in editor · click a table for full session details',
+        floorSafeExit: 'Safe Exit',
+      },
+      safe: {
+        eyebrow: '02 · Safe Exit Value',
+        h2: 'How Safe Exit saves your staff time',
+        sub: 'Automated checkout isn\'t just convenient for guests. It\'s 15% of a server\'s working time returned every day.',
+        c1t: 'Less time on checkout',
+        c1d: 'Staff no longer wait for guests to settle the bill. Safe Exit automatically initiates payment before the booking ends.',
+        c2t: 'End-to-end transaction',
+        c2d: 'From tapping "Confirm" to receiving a digital receipt — under 14 seconds. No PIN, no queue, no paper.',
+        c3t: 'Verified guests',
+        c3d: 'Every guest authenticates via Diia. Zero anonymous bookings — only real, verified identities.',
+        bl1: 'Before PROSTIR', bt1: 'Manual checkout',
+        bd1: 'Staff walk to the table, bring the bill, wait for the guest\'s decision, process payment manually, close the shift in the POS — 4–6 minutes per table.',
+        bl2: 'With PROSTIR Safe Exit', bt2: 'Automated checkout',
+        bd2: 'A timer counts down the booking duration. 2 minutes before the end — a push notification to the guest. Payment confirmed in 14 seconds. Staff never need to approach.',
+        timeSuffixSlow: 'min',
+        timeSuffixFast: 's',
+        barSlow: 'Staff time at the table',
+        barFast: 'Guest payment confirm',
+        sb1: 'Bill', sb2: 'Wait', sb3: 'POS', sb4: 'Close',
+        sa1: 'Push', sa2: 'Tap', sa3: 'Pay', sa4: 'Receipt',
+        compareIntro: 'A typical shift: <strong>~12 checkouts</strong> × <strong>~5 min</strong> of manual handling ≈ <strong>~1 hr</strong> of dead time per server. Safe Exit compresses payment confirmation to <strong>&lt;14 s</strong> — up to <strong>~25×</strong> faster per table with no POS queue.',
+        tl1: 'Bill and wait', tl2: 'Push 2 min before end', tl3: 'Tap to confirm', tl4: 'Receipt in Diia / app',
+      },
+      social: {
+        eyebrow: '04 · Social proof',
+        h2: 'What venue owners say',
+        sub: 'Real operators scaling service with PROSTIR',
+        q1: 'After Safe Exit we killed the “line at the terminal” at peak. Average check went up and the room feels calmer — guests are not waiting for the bill.',
+        a1: 'Oksana Lytvyn', r1: 'Co-owner, Cafe Aura · Kyiv', lg1: 'AU',
+        q2: 'A live floor plan with Diia filters fake bookings. Fewer no-shows, less chaos at the door. The team finally sees the room at a glance.',
+        a2: 'Marko Veres', r2: 'COO, Nóra Wine · Lviv', lg2: 'NV',
+        q3: 'Integration took two days. Hourly analytics helped shift our premium slot by 30 minutes — margin moved up without extra headcount.',
+        a3: 'Illia Savchenko', r3: 'Owner, Brasserie 17 · Odesa', lg3: 'BR',
+        q4: 'We tested several stacks. PROSTIR is the only one where checkout feels like top-tier fintech: fast, clean, paperless. Guests notice.',
+        a4: 'Andrii Kovalenko', r4: 'CEO, Hearth Market · 4 locations', lg4: 'HM',
+        strip1: 'Cafe Aura', strip2: 'Nóra Wine', strip3: 'Brasserie 17', strip4: 'Hearth Market', strip5: 'PIXEL Hub',
+        logosAria: 'Partner venues',
+      },
+      humanCentric: {
+        eyebrow: 'Human-centric service',
+        title1: 'SERVERS STAY.',
+        title2: 'THE BUSYWORK GOES.',
+        body: 'PROSTIR does not replace your team. We remove the terminal sprint and printed bills: fewer trips to the POS, less paper between the floor and the bar. Servers become guest comfort managers, not paper couriers. Service typically speeds up by about 30%, and tips often rise — because guests see attention, not a queue at the till.',
+      },
+      pillars: {
+        eyebrow: '03 · Infrastructure',
+        h2: 'Built for scale',
+        sub: 'Three principles behind every line of PROSTIR Business — from the first table to a network across Ukraine.',
+        p1: 'Automating bookings, queues and payments reduces operational load on the team by 15–20% each week. Less routine — more hospitality.',
+        m1: 'Operational costs',
+        p2: 'Diia identification ensures only verified guests are in the venue. No chargebacks, no ghost bookings, zero anonymity.',
+        m2: 'Anonymous transactions',
+        p3: 'Traffic analytics, geofencing and Moments notifications turn every guest into a potential regular. Personalised marketing without cookies.',
+        m3: 'Repeat visits',
+      },
+      cta: {
+        eyebrow: '06 · Partnership',
+        h2: 'Ready to join the Urban OS?',
+        sub: 'Join 150+ venues that have already automated bookings, analytics, and checkout via PROSTIR.',
+        btn1: 'Become a PROSTIR partner →',
+        btn2: 'Download presentation',
+        fine: 'Integration takes less than 48 hours · 24/7 support · No hidden fees',
+      },
+      footer: { home:'Home', offer:'Public offer' },
+    }
+  };
+
+  function apply(lang){
+    const t = T[lang];
+
+    /* nav */
+    document.querySelectorAll('[data-i18n="nav.dine"]').forEach(el=>el.textContent=t.nav.dine);
+    document.querySelectorAll('[data-i18n="nav.working"]').forEach(el=>el.textContent=t.nav.working);
+    document.querySelectorAll('[data-i18n="nav.moments"]').forEach(el=>el.textContent=t.nav.moments);
+    document.querySelectorAll('[data-i18n="nav.download"]').forEach(el=>el.textContent=t.nav.download);
+    const headerBtn = document.querySelector('#dock .diia-btn .btn-label'); if(headerBtn) headerBtn.textContent=t.headerBtn;
+
+    /* hero */
+    const heroEyebrow = document.querySelector('.biz-eyebrow');
+    if(heroEyebrow){ const dot=heroEyebrow.querySelector('.biz-eyebrow-dot'); heroEyebrow.innerHTML=''; if(dot) heroEyebrow.appendChild(dot); heroEyebrow.appendChild(document.createTextNode(' '+t.hero.eyebrow)); }
+    const bizH1 = document.getElementById('biz-h1'); if(bizH1) bizH1.innerHTML=t.hero.h1;
+    const heroSub = document.getElementById('biz-hero-sub'); if(heroSub) heroSub.textContent=t.hero.sub;
+    const heroCta1 = document.querySelector('.biz-hero-btns .biz-cta-primary'); if(heroCta1){ const inner=heroCta1.querySelector('.mag-inner'); if(inner) inner.textContent=t.hero.cta1; else heroCta1.textContent=t.hero.cta1; }
+    const heroCta2 = document.querySelector('.biz-hero-btns .biz-outline-btn'); if(heroCta2){ const inner=heroCta2.querySelector('.mag-inner'); if(inner) inner.textContent=t.hero.cta2; else heroCta2.textContent=t.hero.cta2; }
+    const metricLbs = document.querySelectorAll('.biz-metric-lbl');
+    if(metricLbs[0]) metricLbs[0].textContent=t.hero.stat1;
+    if(metricLbs[1]) metricLbs[1].textContent=t.hero.stat2;
+    if(metricLbs[2]) metricLbs[2].textContent=t.hero.stat3;
+    if(metricLbs[3]) metricLbs[3].textContent=t.hero.stat4;
+
+    /* admin showcase */
+    const admEyebrow = document.querySelector('.admin-section .admin-hero-text .biz-section-eyebrow');
+    if (admEyebrow) admEyebrow.textContent = t.admin.eyebrow;
+    const admH2 = document.getElementById('admin-h2');
+    if (admH2) admH2.innerHTML = t.admin.h2;
+    const admLead = document.querySelector('.admin-section .admin-lead');
+    if (admLead) admLead.textContent = t.admin.lead;
+    const admSet = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    admSet('ad-k1tag', t.admin.k1tag);
+    admSet('ad-k1v', t.admin.k1v);
+    admSet('ad-k1d', t.admin.k1d);
+    admSet('ad-k2tag', t.admin.k2tag);
+    admSet('ad-k2v', t.admin.k2v);
+    admSet('ad-k2d', t.admin.k2d);
+    admSet('ad-k3tag', t.admin.k3tag);
+    admSet('ad-k3v', t.admin.k3v);
+    admSet('ad-k3d', t.admin.k3d);
+    admSet('admin-f1tag', t.admin.f1tag); admSet('admin-f1t', t.admin.f1t); admSet('admin-f1d', t.admin.f1d);
+    admSet('admin-f2tag', t.admin.f2tag); admSet('admin-f2t', t.admin.f2t); admSet('admin-f2d', t.admin.f2d);
+    admSet('admin-f3tag', t.admin.f3tag); admSet('admin-f3t', t.admin.f3t); admSet('admin-f3d', t.admin.f3d);
+    admSet('admin-live-lbl', t.admin.liveLbl);
+    admSet('admin-mock-title', t.admin.mockTitle);
+    admSet('admin-tab-floor', t.admin.tabFloor); admSet('admin-tab-rev', t.admin.tabRev); admSet('admin-tab-flow', t.admin.tabFlow);
+    admSet('admin-floor-title', t.admin.floorTitle); admSet('admin-floor-tag', t.admin.floorTag);
+    admSet('admin-drag-txt', t.admin.dragTxt);
+    admSet('admin-rev-sub', t.admin.revSub); admSet('admin-rev-badge', t.admin.revBadge);
+    admSet('ad-p1', t.admin.p1); admSet('ad-p2', t.admin.p2); admSet('ad-p3', t.admin.p3);
+    admSet('admin-flow-live', t.admin.flowLive); admSet('admin-flow-unit', t.admin.flowUnit);
+    admSet('admin-floor-summary', t.admin.floorSummary);
+    admSet('admin-zone-1', t.admin.zoneWindow);
+    admSet('admin-zone-2', t.admin.zoneMain);
+    admSet('admin-zone-3', t.admin.zoneBar);
+    admSet('admin-floor-guest-req', t.admin.floorGuestReq);
+    const apFloor = document.getElementById('ap-floor');
+    if (apFloor) {
+      apFloor.querySelectorAll('.fp-vacant-lbl').forEach((el) => { el.textContent = t.admin.floorVacant; });
+      apFloor.querySelectorAll('.fp-party-unit').forEach((el) => { el.textContent = t.admin.floorPartyUnit; });
+      apFloor.querySelectorAll('.fp-time-unit').forEach((el) => { el.textContent = t.admin.floorTimeUnit; });
+      apFloor.querySelectorAll('.fp-server-pref').forEach((el) => { el.textContent = t.admin.floorServerPref; });
+      apFloor.querySelectorAll('.fp-next-lbl').forEach((el) => { el.textContent = t.admin.floorNextLbl; });
+      apFloor.querySelectorAll('.ap-fp-diia').forEach((el) => { el.textContent = t.admin.floorDiiaShort; });
+      apFloor.querySelectorAll('.fp-safe-txt').forEach((el) => { el.textContent = t.admin.floorSafeExit; });
+    }
+
+    window.__prostirFloorDetailL = {
+      pick: t.admin.detailPick,
+      table: t.admin.detailTable,
+      occupied: t.admin.detailOccupied,
+      vacant: t.admin.detailVacant,
+      guests: t.admin.detailGuests,
+      seated: t.admin.detailSeated,
+      duration: t.admin.detailDuration,
+      bill: t.admin.detailBill,
+      order: t.admin.detailOrder,
+      server: t.admin.detailServer,
+      diia: t.admin.detailDiia,
+      booking: t.admin.detailBooking,
+      zone: t.admin.detailZone,
+      safeExit: t.admin.detailSafeExit,
+      service: t.admin.detailService,
+      nextBook: t.admin.detailNextBook,
+      noBooking: t.admin.detailNoBooking,
+    };
+    if (typeof window._bizFloorDetailRefresh === 'function') window._bizFloorDetailRefresh();
+
+    /* safe exit value */
+    const svEyebrow = document.querySelector('.sv-header .biz-section-eyebrow'); if(svEyebrow) svEyebrow.textContent=t.safe.eyebrow;
+    const svH2 = document.getElementById('sv-h2'); if(svH2) svH2.textContent=t.safe.h2;
+    const svSub = document.querySelector('.sv-header > p'); if(svSub) svSub.textContent=t.safe.sub;
+    const svCardTitles = document.querySelectorAll('.sv-card-title');
+    if(svCardTitles[0]) svCardTitles[0].textContent=t.safe.c1t;
+    if(svCardTitles[1]) svCardTitles[1].textContent=t.safe.c2t;
+    if(svCardTitles[2]) svCardTitles[2].textContent=t.safe.c3t;
+    const svCardDescs = document.querySelectorAll('.sv-card-desc');
+    if(svCardDescs[0]) svCardDescs[0].textContent=t.safe.c1d;
+    if(svCardDescs[1]) svCardDescs[1].textContent=t.safe.c2d;
+    if(svCardDescs[2]) svCardDescs[2].textContent=t.safe.c3d;
+    const svLabels = document.querySelectorAll('.sv-compare-label');
+    if(svLabels[0]) svLabels[0].textContent=t.safe.bl1;
+    if(svLabels[1]) svLabels[1].textContent=t.safe.bl2;
+    const svTitles = document.querySelectorAll('.sv-compare-title');
+    if(svTitles[0]) svTitles[0].textContent=t.safe.bt1;
+    if(svTitles[1]) svTitles[1].textContent=t.safe.bt2;
+    const svDescs = document.querySelectorAll('.sv-compare-desc');
+    if(svDescs[0]) svDescs[0].textContent=t.safe.bd1;
+    if(svDescs[1]) svDescs[1].textContent=t.safe.bd2;
+    admSet('sv-time-suffix-slow', t.safe.timeSuffixSlow);
+    admSet('sv-time-suffix-fast', t.safe.timeSuffixFast);
+    admSet('sv-bar-lbl-slow', t.safe.barSlow);
+    admSet('sv-bar-lbl-fast', t.safe.barFast);
+    admSet('sv-sb1', t.safe.sb1); admSet('sv-sb2', t.safe.sb2); admSet('sv-sb3', t.safe.sb3); admSet('sv-sb4', t.safe.sb4);
+    admSet('sv-sa1', t.safe.sa1); admSet('sv-sa2', t.safe.sa2); admSet('sv-sa3', t.safe.sa3); admSet('sv-sa4', t.safe.sa4);
+    const svIntro = document.getElementById('sv-compare-intro');
+    if (svIntro && t.safe.compareIntro) svIntro.innerHTML = t.safe.compareIntro;
+    admSet('sv-tl1-lbl', t.safe.tl1); admSet('sv-tl2-lbl', t.safe.tl2); admSet('sv-tl3-lbl', t.safe.tl3); admSet('sv-tl4-lbl', t.safe.tl4);
+
+    /* human-centric */
+    admSet('biz-hc-eyebrow', t.humanCentric.eyebrow);
+    admSet('biz-hc-title-l1', t.humanCentric.title1);
+    admSet('biz-hc-title-l2', t.humanCentric.title2);
+    admSet('biz-hc-body', t.humanCentric.body);
+
+    /* social proof */
+    const soc = t.social;
+    if (soc) {
+      admSet('social-eyebrow', soc.eyebrow);
+      admSet('biz-social-h2', soc.h2);
+      admSet('biz-social-sub', soc.sub);
+      admSet('soc-q1', soc.q1); admSet('soc-a1', soc.a1); admSet('soc-r1', soc.r1); admSet('soc-lg1', soc.lg1);
+      admSet('soc-q2', soc.q2); admSet('soc-a2', soc.a2); admSet('soc-r2', soc.r2); admSet('soc-lg2', soc.lg2);
+      admSet('soc-q3', soc.q3); admSet('soc-a3', soc.a3); admSet('soc-r3', soc.r3); admSet('soc-lg3', soc.lg3);
+      admSet('soc-q4', soc.q4); admSet('soc-a4', soc.a4); admSet('soc-r4', soc.r4); admSet('soc-lg4', soc.lg4);
+      admSet('soc-strip1', soc.strip1); admSet('soc-strip2', soc.strip2); admSet('soc-strip3', soc.strip3);
+      admSet('soc-strip4', soc.strip4); admSet('soc-strip5', soc.strip5);
+      const logoStrip = document.querySelector('.biz-logo-strip');
+      if (logoStrip && soc.logosAria) logoStrip.setAttribute('aria-label', soc.logosAria);
+    }
+
+    /* pillars */
+    const pillarsEyebrow = document.querySelector('.pillars-header .biz-section-eyebrow'); if(pillarsEyebrow) pillarsEyebrow.textContent=t.pillars.eyebrow;
+    const pillarsH2 = document.getElementById('pillars-h2'); if(pillarsH2) pillarsH2.textContent=t.pillars.h2;
+    const pillarsSub = document.querySelector('.pillars-header > p'); if(pillarsSub) pillarsSub.textContent=t.pillars.sub;
+    const pillarPs = document.querySelectorAll('.pillar-card > p');
+    if(pillarPs[0]) pillarPs[0].textContent=t.pillars.p1;
+    if(pillarPs[1]) pillarPs[1].textContent=t.pillars.p2;
+    if(pillarPs[2]) pillarPs[2].textContent=t.pillars.p3;
+    const pillarMetrics = document.querySelectorAll('.pillar-metric-label');
+    if(pillarMetrics[0]) pillarMetrics[0].textContent=t.pillars.m1;
+    if(pillarMetrics[1]) pillarMetrics[1].textContent=t.pillars.m2;
+    if(pillarMetrics[2]) pillarMetrics[2].textContent=t.pillars.m3;
+
+    /* partner CTA */
+    const ctaEyebrow = document.querySelector('.partner-cta .biz-section-eyebrow'); if(ctaEyebrow) ctaEyebrow.textContent=t.cta.eyebrow;
+    const ctaH2 = document.getElementById('cta-h2'); if(ctaH2) ctaH2.textContent=t.cta.h2;
+    const ctaSub = document.querySelector('.partner-cta-content > p:not(.partner-fine)'); if(ctaSub) ctaSub.textContent=t.cta.sub;
+    const ctaBtn1 = document.querySelector('.partner-cta-btns .biz-cta-primary'); if(ctaBtn1){ const inner=ctaBtn1.querySelector('.mag-inner'); if(inner) inner.textContent=t.cta.btn1; else ctaBtn1.textContent=t.cta.btn1; }
+    const ctaBtn2 = document.querySelector('.partner-cta-btns .biz-cta-secondary'); if(ctaBtn2){ const inner=ctaBtn2.querySelector('.mag-inner'); if(inner) inner.textContent=t.cta.btn2; else ctaBtn2.textContent=t.cta.btn2; }
+    const fine = document.querySelector('.partner-fine'); if(fine) fine.textContent=t.cta.fine;
+
+    /* pricing toggle labels */
+    const ptMo = document.getElementById('pt-monthly-label'); if(ptMo) ptMo.textContent = lang==='en'?'Monthly':'Щомісяця';
+    const ptYr = document.getElementById('pt-yearly-label');  if(ptYr) ptYr.textContent = lang==='en'?'Yearly':'Щорічно';
+    const pcpb = document.getElementById('pcpb-text');         if(pcpb) pcpb.textContent = lang==='en'?'Most Popular':'Найпопулярніший';
+
+    /* pricing section copy */
+    const prEy = document.getElementById('pricing-eyebrow'); if(prEy) prEy.textContent = lang==='en'?'05 · Pricing':'05 · Тарифи';
+    const pcChip = document.getElementById('pc-annual-chip');
+    if (pcChip) pcChip.textContent = lang === 'en' ? '−20% with annual billing' : '−20% при річній оплаті';
+    const prH2 = document.getElementById('pricing-h2');       if(prH2) prH2.innerHTML = lang==='en'?'Transparent pricing.<br>Zero hidden fees.':'Прозорі тарифи.<br>Нуль прихованих комісій.';
+    const prSb = document.getElementById('pricing-sub');       if(prSb) prSb.textContent = lang==='en'?'Start free — scale with your venue.':'Починайте безкоштовно — масштабуйтесь разом із закладом.';
+    const prFn = document.getElementById('pricing-fine');      if(prFn) prFn.textContent = lang==='en'?'All plans include Diia verification · No hidden transaction fees':'Усі тарифи включають верифікацію через Дія · Без прихованих транзакційних зборів';
+
+    /* tier names, desc, buttons */
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    if(lang==='en'){
+      set('tier1-desc','For small venues just getting started');
+      set('tier2-desc','For active venues with a focus on growth');
+      set('tier3-desc','For networks and large operators');
+      set('tier1-btn','Start for free');
+      const t2b=document.getElementById('tier2-btn'); if(t2b){const i=t2b.querySelector('.mag-inner');(i||t2b).textContent='Try free for 14 days →';}
+      set('tier3-btn','Contact the team');
+      set('t1f1','1 venue');set('t1f2','Up to 20 tables/desks');set('t1f3','Basic analytics');set('t1f4','Diia verification');set('t1f5','Safe Exit auto-payment');set('t1f6','API access');
+      set('t2f1','Up to 3 venues');set('t2f2','Unlimited tables');set('t2f3','Full analytics + forecasts');set('t2f4','Safe Exit auto-payment');set('t2f5','Live Floorplan Editor');set('t2f6','White-label API');
+      set('t3f1','Unlimited venues');set('t3f2','White-label solution');set('t3f3','API + webhooks');set('t3f4','Dedicated manager');set('t3f5','24/7 support · SLA');set('t3f6','Custom POS integration');
+    } else {
+      set('tier1-desc','Для невеликих закладів, що тільки починають');
+      set('tier2-desc','Для активних закладів з прицілом на зростання');
+      set('tier3-desc','Для мереж та великих операторів');
+      set('tier1-btn','Почати безкоштовно');
+      const t2b=document.getElementById('tier2-btn'); if(t2b){const i=t2b.querySelector('.mag-inner');(i||t2b).textContent='Спробувати 14 днів безкоштовно →';}
+      set('tier3-btn','Зв\'язатися з командою');
+      set('t1f1','1 заклад');set('t1f2','До 20 столів/desk-ів');set('t1f3','Базова аналітика');set('t1f4','Diia верифікація');set('t1f5','Safe Exit автоплата');set('t1f6','API доступ');
+      set('t2f1','До 3 закладів');set('t2f2','Необмежено столів');set('t2f3','Повна аналітика + прогнози');set('t2f4','Safe Exit автоплата');set('t2f5','Live Floorplan Editor');set('t2f6','White-label API');
+      set('t3f1','Необмежено закладів');set('t3f2','White-label рішення');set('t3f3','API + вебхуки');set('t3f4','Виділений менеджер');set('t3f5','Підтримка 24/7 · SLA');set('t3f6','Кастомна інтеграція POS');
+    }
+
+    /* footer */
+    const footerHome = document.querySelector('.biz-footer-links a[href="/AppMultiServicios/"]'); if(footerHome) footerHome.textContent=t.footer.home;
+    const footerOfferBiz = document.getElementById('biz-footer-offer'); if(footerOfferBiz) footerOfferBiz.textContent=t.footer.offer;
+
+    /* lang-switch active state */
+    switcher.querySelectorAll('.lang-btn').forEach(b=>{
+      b.setAttribute('aria-pressed', b.dataset.lang===lang ? 'true' : 'false');
+    });
+
+    window.dispatchEvent(new Event('prostir-lang-change'));
+  }
+
+  const saved = localStorage.getItem('prostir_lang') || 'ua';
+  apply(saved === 'en' ? 'en' : 'ua');
+
+  switcher.querySelectorAll('.lang-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const lang = b.dataset.lang === 'en' ? 'en' : 'ua';
+      localStorage.setItem('prostir_lang', lang);
+      apply(lang);
+    });
+  });
+})();
+</script>
+
+<!-- Magnetic Button Effect -->
+<script>
+(function(){if(window.matchMedia("(hover: none)").matches)return;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const K=150,D=15;function spring(){return{pos:0,vel:0,target:0};}function stepSpring(s,dt){const F=-K*(s.pos-s.target)-D*s.vel;s.vel+=F*dt;s.pos+=s.vel*dt;}function atRest(s){return Math.abs(s.pos-s.target)<0.015&&Math.abs(s.vel)<0.015;}let mx=-9999,my=-9999;document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;},{passive:true});const buttons=[];let lastT=0;function loop(now){const dt=Math.min((now-(lastT||now))/1000,0.05);lastT=now;for(const b of buttons){const r=b.el.getBoundingClientRect();const cx=r.left+r.width*.5,cy=r.top+r.height*.5;const dx=mx-cx,dy=my-cy;const dist=Math.hypot(dx,dy);if(dist<b.radius){const pull=(1-dist/b.radius);b.sx.target=(dx/b.radius)*b.maxShift*pull;b.sy.target=(dy/b.radius)*b.maxShift*pull;b.near=true;}else{b.sx.target=b.sy.target=0;b.near=false;}stepSpring(b.sx,dt);stepSpring(b.sy,dt);const x=b.sx.pos,y=b.sy.pos;b.el.style.transform="translate("+x.toFixed(2)+"px,"+y.toFixed(2)+"px)";if(b.inner){b.inner.style.transform="translate("+(x*b.innerR).toFixed(2)+"px,"+(y*b.innerR).toFixed(2)+"px)";}const g=b.near?Math.max(0,(b.radius-dist)/b.radius):0;const gq=Math.round(g*32)/32;if(gq!==b._gq){b._gq=gq;if(gq>0.01){const s1=(18+gq*32).toFixed(0);const a1=(0.10+gq*0.40).toFixed(2);b.el.style.boxShadow="0 0 "+s1+"px rgba(139,92,246,"+a1+"),0 0 "+(gq*72).toFixed(0)+"px rgba(139,92,246,"+(gq*0.12).toFixed(2)+")";}else if(atRest(b.sx)&&atRest(b.sy)){b.el.style.boxShadow="";b.el.style.transform="";if(b.inner)b.inner.style.transform="";}}}requestAnimationFrame(loop);}function initButton(el){if(el._magInit)return;el._magInit=true;const radius=parseInt(el.dataset.magR,10)||70;const maxShift=parseInt(el.dataset.magS,10)||18;const innerR=parseFloat(el.dataset.magI)||0.45;let inner=el.querySelector(":scope > .mag-inner");if(!inner){inner=document.createElement("span");inner.className="mag-inner";while(el.firstChild)inner.appendChild(el.firstChild);el.appendChild(inner);}buttons.push({el,inner,radius,maxShift,innerR,sx:spring(),sy:spring(),near:false,_gq:-1});}function init(){document.querySelectorAll(".biz-cta-primary,.biz-outline-btn,.biz-primary-btn,.biz-cta-secondary,[data-magnetic]").forEach(initButton);if(buttons.length)requestAnimationFrame(loop);}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{requestAnimationFrame(init);}})();
+</script>
+<script src="/AppMultiServicios/business-human-receipt.bundle.js" defer></script>
+<script src="/AppMultiServicios/diia-auth.bundle.js" defer></script>
+<script src="/AppMultiServicios/shell-enhancements.js" defer></script>
+<script src="/AppMultiServicios/delight.js" defer></script>
+<script src="/AppMultiServicios/faq.js" defer></script>
+<script src="/AppMultiServicios/legal.js" defer></script>
+</body>
+</html>

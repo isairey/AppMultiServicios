@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PROSTIR — для закладів</title>
+  <link rel="stylesheet" href="/AppMultiServicios/app.css" />
+  <style>
+    :root {
+      --vn-violet: #8b5cf6;
+      --vn-violet-dim: rgba(139, 92, 246, 0.45);
+      --vn-bg: #0a0b0f;
+      --vn-card: #111116;
+      --vn-space-2: 8px;
+      --vn-space-3: 12px;
+      --vn-space-4: 16px;
+      --vn-space-6: 24px;
+    }
+    body.vn-page {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--vn-bg);
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Calm studio background — neutral slate, one soft brand wash (no warm / no busy decor) */
+    .vn-scene {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: var(--vn-bg);
+    }
+    .vn-scene-fill {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0f1016 0%, #0a0b0f 42%, #0c0d11 100%);
+    }
+    .vn-scene-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 45% at 88% 8%, rgba(99, 102, 241, 0.11), transparent 55%),
+        radial-gradient(ellipse 55% 40% at 12% 92%, rgba(139, 92, 246, 0.07), transparent 52%);
+    }
+    #venue-root {
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+    .vn-root {
+      position: relative;
+      min-height: 100vh;
+      padding: clamp(var(--vn-space-6), 6vw, calc(var(--vn-space-6) * 2))
+        clamp(var(--vn-space-4), 4vw, calc(var(--vn-space-6) + var(--vn-space-4)))
+        calc(var(--vn-space-6) + var(--vn-space-4));
+      max-width: 520px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .vn-noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.018;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+    .vn-grid {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, black, transparent 82%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, black, transparent 82%);
+    }
+    /* Explicit hero layout — do not use <header> here: global app.css styles all header as fixed nav */
+    .vn-hero {
+      position: relative;
+      z-index: 1;
+      margin-bottom: var(--vn-space-6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .vn-kicker {
+      margin: 0 0 var(--vn-space-3);
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--vn-violet);
+    }
+    .vn-title {
+      margin: 0 0 var(--vn-space-4);
+      max-width: 22ch;
+      font-size: clamp(1.35rem, 4.5vw, 1.85rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: #fafafa;
+    }
+    .vn-sub {
+      margin: 0;
+      max-width: 38ch;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.45);
+    }
+    .vn-trust {
+      list-style: none;
+      margin: var(--vn-space-6) 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--vn-space-2);
+      max-width: 34ch;
+    }
+    .vn-trust-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.4);
+      text-align: left;
+    }
+    .vn-trust-dot {
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      margin-top: 0.35em;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.85);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.45);
+    }
+    .vn-form-lead {
+      margin: 0 0 var(--vn-space-4);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.42);
+    }
+    .vn-form-foot {
+      margin: 0.85rem 0 0;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.38);
+      text-align: center;
+    }
+    .vn-form-micro {
+      margin: 0.65rem 0 0;
+      font-size: 0.68rem;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.28);
+      text-align: center;
+    }
+    .vn-inline-link {
+      color: #a78bfa;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(167, 139, 250, 0.35);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .vn-inline-link:hover {
+      color: #c4b5fd;
+      border-bottom-color: rgba(196, 181, 253, 0.5);
+    }
+    .vn-card {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(165deg, rgba(20, 21, 26, 0.88) 0%, rgba(14, 15, 18, 0.92) 100%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      backdrop-filter: blur(12px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      padding: clamp(1.35rem, 4vw, 1.75rem);
+      box-shadow:
+        0 0 0 1px rgba(139, 92, 246, 0.06) inset,
+        0 24px 64px rgba(0, 0, 0, 0.5);
+    }
+    .vn-field {
+      margin-bottom: var(--vn-space-4);
+    }
+    .vn-field label {
+      display: block;
+      margin-bottom: var(--vn-space-2);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.38);
+    }
+    .vn-field input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: var(--vn-space-3) var(--vn-space-4);
+      font-size: 0.95rem;
+      color: #f4f4f5;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .vn-field input::placeholder {
+      color: rgba(255, 255, 255, 0.22);
+    }
+    .vn-field input:focus {
+      border-color: var(--vn-violet-dim);
+      box-shadow:
+        0 0 0 2px rgba(139, 92, 246, 0.28),
+        0 0 24px rgba(139, 92, 246, 0.18);
+    }
+    .vn-error {
+      margin: 0 0 1rem;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      color: #fecaca;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      border-radius: 10px;
+    }
+    .vn-submit {
+      width: 100%;
+      margin-top: 0.25rem;
+      padding: 0.85rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #0a0a0c;
+      background: linear-gradient(135deg, #a78bfa 0%, var(--vn-violet) 100%);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.35);
+      transition: transform 0.15s, filter 0.15s, opacity 0.15s;
+    }
+    .vn-submit:hover:not(:disabled) {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+    .vn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+    .vn-thanks {
+      text-align: center;
+      padding: clamp(2rem, 6vw, 2.75rem) 1.5rem;
+      overflow: hidden;
+    }
+    .vn-thanks-glow {
+      position: absolute;
+      width: 140%;
+      height: 60%;
+      left: 50%;
+      top: -20%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.2), transparent 70%);
+      pointer-events: none;
+    }
+    .vn-thanks-title {
+      position: relative;
+      margin: 0 0 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .vn-thanks-text {
+      position: relative;
+      margin: 0 0 0.65rem;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .vn-thanks-hint {
+      position: relative;
+      margin: 0 0 1.35rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.38);
+    }
+    .vn-thanks-links {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .vn-back {
+      position: relative;
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--vn-violet);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.35);
+    }
+    .vn-back:hover {
+      color: #c4b5fd;
+    }
+    .vn-back--ghost {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.35);
+    }
+    .vn-back--ghost:hover {
+      color: rgba(255, 255, 255, 0.55);
+      border-bottom-color: rgba(255, 255, 255, 0.22);
+    }
+    .vn-foot {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .vn-foot .footer-offer {
+      font-size: 0.56rem;
+    }
+    @media (max-width: 480px) {
+      .vn-root {
+        padding: var(--vn-space-6) var(--vn-space-3) var(--vn-space-6);
+      }
+      .vn-hero {
+        margin-bottom: var(--vn-space-4);
+      }
+      .vn-card {
+        padding: var(--vn-space-4);
+        border-radius: 16px;
+      }
+      .vn-submit {
+        padding: var(--vn-space-3) var(--vn-space-4);
+      }
+    }
+    @media (prefers-reduced-transparency: reduce) {
+      .vn-card {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background: linear-gradient(165deg, #141418 0%, #0e0e12 100%);
+      }
+    }
+  </style>
+</head>
+<body class="vn-page">
+  <div class="vn-scene" aria-hidden="true">
+    <div class="vn-scene-fill"></div>
+    <div class="vn-scene-glow"></div>
+  </div>
+  <div id="venue-root"></div>
+  <footer class="vn-foot">
+    <a href="/AppMultiServicios/legal.html" class="footer-offer">Публічна оферта</a>
+  </footer>
+  <script src="/AppMultiServicios/venue-register.bundle.js"></script>
+</body>
+</html>

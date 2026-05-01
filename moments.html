@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moments — Ghost Mode · PROSTIR</title>
+  <link rel="stylesheet" href="/AppMultiServicios/app.css"/>
+  <link rel="stylesheet" href="/AppMultiServicios/prostir-zigzag.css"/>
+  <style>
+    .page-content { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem 6rem; width: 100%; box-sizing: border-box; }
+    @media (max-width: 720px) { .page-content { padding: 0 1.5rem 4rem; } }
+    .module-explain { margin: 0 0 1.3rem; border: 1px solid var(--grey-line); border-radius: 18px; background: var(--bg); box-shadow: var(--card-shadow); padding: 1.2rem; max-width: 100%; box-sizing: border-box; overflow-x: clip; }
+    .me-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.03em; color: var(--jet); margin-bottom: 0.35rem; }
+    .me-desc { font-size: 0.84rem; color: var(--grey-soft); line-height: 1.65; max-width: 72ch; margin-bottom: 0.85rem; }
+    .me-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0.65rem; }
+    .me-item { border: 1px solid var(--grey-line); border-radius: 13px; padding: 0.8rem 0.85rem; background: var(--grey-fill); }
+    .me-k { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-muted); margin-bottom: 0.32rem; display: flex; align-items: center; gap: 0.35rem; }
+    .me-v { font-size: 0.78rem; color: var(--grey-soft); line-height: 1.55; }
+    .demo-sep { margin: 0.25rem 0 1rem; display: flex; align-items: center; gap: 0.7rem; }
+    .demo-sep-line { height: 1px; flex: 1; background: linear-gradient(90deg,rgba(139,92,246,0),rgba(139,92,246,0.35),rgba(139,92,246,0)); }
+    .demo-sep-pill { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid rgba(139,92,246,0.25); color: var(--violet); border-radius: 999px; padding: 0.26rem 0.7rem; background: rgba(139,92,246,0.06); white-space: nowrap; }
+    @media (max-width: 780px){ .me-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 780px){ .me-grid--4 { grid-template-columns: 1fr; } }
+
+    /* Extra moments styles */
+    .moments-card {
+      background: rgba(7,7,7,0.88);
+      border: 1px solid rgba(139,92,246,0.28);
+      box-shadow: 0 24px 90px rgba(0,0,0,0.42), 0 0 0 1px rgba(139,92,246,0.08);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      transform: translateZ(0);
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .moments-card:hover {
+      border-color: rgba(139,92,246,0.42);
+      box-shadow: 0 34px 110px rgba(0,0,0,0.48), 0 0 0 1px rgba(139,92,246,0.16);
+    }
+    .moments-title {
+      position: relative;
+    }
+    .moments-title::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -10px;
+      width: 92px; height: 2px;
+      background: linear-gradient(90deg, rgba(139,92,246,0.0), rgba(139,92,246,0.85), rgba(139,92,246,0.0));
+      opacity: 0.9;
+      filter: drop-shadow(0 0 14px rgba(139,92,246,0.45));
+    }
+    .ghost-icon { opacity: 0.78; filter: drop-shadow(0 0 18px rgba(139,92,246,0.35)); }
+
+    /* Premium toast (top-right) */
+    .moments-toast {
+      position: fixed;
+      top: 86px; right: 20px;
+      z-index: 1100;
+      width: min(430px, calc(100vw - 40px));
+      background: rgba(12,12,14,0.86);
+      border: 1px solid rgba(139,92,246,0.28);
+      border-radius: 20px;
+      padding: 0.95rem 1rem 0.9rem;
+      color: rgba(255,255,255,0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 22px 80px rgba(0,0,0,0.55);
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    }
+    .moments-toast.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .moments-toast-row {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+    }
+    .moments-toast-accent {
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      background: rgba(139,92,246,0.14);
+      border: 1px solid rgba(139,92,246,0.25);
+      box-shadow: 0 0 26px rgba(139,92,246,0.22);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .moments-toast-accent::after{
+      content:'';
+      position:absolute; inset:-8px;
+      border-radius: 18px;
+      border: 1px solid rgba(139,92,246,0.22);
+      opacity: 0.55;
+      animation: toastPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes toastPulse {
+      0%,100% { transform: scale(0.98); opacity: 0.35; }
+      50%      { transform: scale(1.06); opacity: 0.75; }
+    }
+    .moments-toast-title {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.2rem;
+    }
+    .moments-toast-sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.5;
+    }
+    .moments-toast-close {
+      margin-left: auto;
+      width: 30px; height: 30px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .moments-toast-close:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(139,92,246,0.25);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .moments-toast-actions{
+      display:flex;
+      gap:0.7rem;
+      margin-top:0.95rem;
+    }
+    .moments-toast-accept{
+      flex:1;
+      min-height:44px;
+      border:none;
+      border-radius:14px;
+      background: rgba(139,92,246,0.14);
+      color: rgba(255,255,255,0.95);
+      border: 1px solid rgba(139,92,246,0.45);
+      cursor:pointer;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      transition: all 0.25s var(--ease);
+      box-shadow: 0 10px 40px rgba(139,92,246,0.12);
+    }
+    .moments-toast-accept:hover{
+      transform: translateY(-1px);
+      background: rgba(139,92,246,0.22);
+      box-shadow: 0 14px 54px rgba(139,92,246,0.16);
+    }
+    .moments-toast-decline{
+      flex:1;
+      min-height:44px;
+      border-radius:14px;
+      cursor:pointer;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.75);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      transition: all 0.25s var(--ease);
+    }
+    .moments-toast-decline:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.92);
+    }
+
+    .moments-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3.5rem; }
+    .moments-feat-card {
+      border: 1px solid var(--grey-line); border-radius: 18px; padding: 1.75rem 1.6rem; background: var(--bg); box-shadow: var(--card-shadow);
+      transition: border-color 0.28s var(--ease), transform 0.28s var(--ease-out);
+      display: flex; flex-direction: column; min-height: 100%;
+    }
+    .moments-feat-card:hover { border-color: var(--violet); transform: translateY(-3px); }
+    .mfc-icon { font-size: 1.75rem; margin-bottom: 0.85rem; opacity: 0.8; flex-shrink: 0; }
+    .mfc-title { font-size: 1rem; font-weight: 700; color: var(--jet); margin-bottom: 0.4rem; letter-spacing: -0.02em; flex-shrink: 0; }
+    .mfc-desc  { font-size: 0.82rem; color: var(--grey-soft); line-height: 1.6; flex: 1 1 auto; margin: 0; min-height: 0; }
+    @media (max-width: 900px) { .moments-features { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 680px) { .moments-features { grid-template-columns: 1fr; } }
+
+    .me-grid--4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+    .moments-scenarios {
+      margin-top: 2.75rem;
+      padding: 1.5rem 1.35rem;
+      border: 1px solid var(--grey-line);
+      border-radius: 20px;
+      background: var(--bg);
+      box-shadow: var(--card-shadow);
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-x: clip;
+    }
+    .moments-scenarios-h {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--jet);
+      margin: 0 0 0.35rem;
+    }
+    .moments-scenarios-lead {
+      font-size: 0.8rem;
+      color: var(--grey-soft);
+      line-height: 1.6;
+      max-width: 70ch;
+      margin: 0 0 1.25rem;
+    }
+    .mom-sc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 900px) { .mom-sc-grid { grid-template-columns: 1fr; } }
+    .moments-scenarios--zigzag .mom-zig-stack { margin-top: 0.5rem; }
+    .moments-scenarios--zigzag .mom-zig-row { align-items: center; }
+    .moments-scenarios--zigzag .mom-zig-copy { padding-right: clamp(0, 2vw, 0.5rem); }
+    .moments-scenarios--zigzag .mom-zig-art--illu { margin-left: auto; margin-right: auto; }
+    .mom-sc-card {
+      border: 1px solid var(--grey-line);
+      border-radius: 16px;
+      padding: 1.1rem 1rem 1rem;
+      background: var(--grey-fill);
+      transition: border-color 0.25s var(--ease);
+    }
+    .mom-sc-card:hover { border-color: rgba(139, 92, 246, 0.35); }
+    .mom-sc-meta {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.45rem;
+    }
+    .mom-sc-title { font-size: 0.88rem; font-weight: 700; color: var(--jet); margin: 0 0 0.4rem; letter-spacing: -0.02em; }
+    .mom-sc-body { font-size: 0.78rem; color: var(--grey-soft); line-height: 1.58; margin: 0 0 0.55rem; }
+    .mom-sc-foot {
+      font-size: 0.68rem;
+      color: var(--grey-muted);
+      font-style: italic;
+      line-height: 1.45;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--grey-line);
+    }
+
+    .moments-compare {
+      margin-top: 2.5rem;
+      border: 1px solid var(--grey-line);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg);
+      box-shadow: var(--card-shadow);
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .moments-compare-h {
+      padding: 1rem 1.25rem;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--jet);
+      border-bottom: 1px solid var(--grey-line);
+      background: var(--grey-fill);
+    }
+    .mom-cmp-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    @media (max-width: 720px) { .mom-cmp-row { grid-template-columns: 1fr; } }
+    .mom-cmp-col {
+      padding: 1.1rem 1.2rem;
+      border-right: 1px solid var(--grey-line);
+    }
+    .mom-cmp-row .mom-cmp-col:last-child { border-right: none; }
+    @media (max-width: 720px) {
+      .mom-cmp-col { border-right: none; border-bottom: 1px solid var(--grey-line); }
+      .mom-cmp-row .mom-cmp-col:last-child { border-bottom: none; }
+    }
+    .mom-cmp-label {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey-muted);
+      margin-bottom: 0.5rem;
+    }
+    .mom-cmp-list { margin: 0; padding-left: 1.1rem; font-size: 0.78rem; color: var(--grey-soft); line-height: 1.65; }
+    .mom-cmp-list li { margin-bottom: 0.35rem; }
+
+    .moments-toast-hint {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.42);
+      margin-top: 0.35rem;
+      line-height: 1.45;
+    }
+    body.theme-noir .moments-scenarios,
+    body.theme-noir .moments-compare { background: #0d0d0f; border-color: rgba(255,255,255,0.08); }
+    body.theme-noir .mom-sc-card { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    body.theme-noir .moments-scenarios-h,
+    body.theme-noir .mom-sc-title,
+    body.theme-noir .moments-compare-h { color: #fff; }
+    body.theme-noir .moments-scenarios--zigzag .mom-sc-body { color: rgba(255,255,255,0.58); }
+    body.theme-noir .moments-scenarios--zigzag .mom-sc-foot { color: rgba(255,255,255,0.38); border-top-color: rgba(255,255,255,0.1); }
+    body.theme-noir .module-explain .me-title { color: #fff; }
+    body.theme-noir .module-explain .me-desc { color: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body class="moments-page">
+<div class="grain" aria-hidden="true"></div>
+
+<header id="dock">
+  <a class="logo" href="/AppMultiServicios/" aria-label="PROSTIR home"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+  <nav aria-label="Main navigation">
+    <a href="/AppMultiServicios/dine.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="dine">Dine</a>
+    <a href="/AppMultiServicios/working.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="working">Working</a>
+    <a href="/AppMultiServicios/moments.html" class="nav-active" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="moments">Moments</a>
+    <a href="/AppMultiServicios/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+  </nav>
+  <div class="header-right">
+    <a href="/AppMultiServicios/download.html" class="header-download" data-magnetic data-mag-r="40" data-mag-s="6">Незабаром</a>
+    <a href="#" class="diia-btn" aria-label="Вхід через Дію"><span class="diia-logo" aria-hidden="true">Дія</span><span class="btn-label">Вхід через Дію</span></a>
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ua" aria-pressed="true" aria-label="Українська">
+        <span class="lang-flag" aria-hidden="true">🇺🇦</span><span class="lang-code">UA</span>
+      </button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+        <span class="lang-flag" aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span>
+      </button>
+    </div>
+    <a href="/AppMultiServicios/profile.html" class="user-avatar" id="user-avatar" title="Профіль" aria-label="Профіль">
+      <div class="moments-ring" aria-hidden="true"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="/AppMultiServicios/download.html" class="header-download">Незабаром</a>
+  <a href="/AppMultiServicios/dine.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="dine">Dine</a>
+  <a href="/AppMultiServicios/working.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="working">Working</a>
+  <a href="/AppMultiServicios/moments.html" class="nav-active" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="moments">Moments</a>
+  <a href="/AppMultiServicios/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+</div>
+
+<div class="page-hero">
+  <p class="page-hero-eyebrow" id="hero-eyebrow">04 &nbsp;·&nbsp; Moments</p>
+  <h1 class="page-hero-h1" id="hero-title">Будь тут.<br><span class="accent" id="hero-accent">Або ні.</span></h1>
+  <p class="page-hero-p" id="hero-desc">Ghost Mode за замовчуванням: ти в закладі як «невидимка» для інших гостей. Увімкнув Open — з’являєшся лише для тих, хто теж у мережі PROSTIR поруч, з верифікацією Дія та зрозумілими межами приватності.</p>
+  <div class="page-hero-divider"></div>
+</div>
+
+<div class="page-content">
+  <section class="module-explain module-explain--zigzag reveal">
+    <div class="me-title" id="mom-exp-title">Як працює Moments у PROSTIR</div>
+    <div class="me-desc" id="mom-exp-desc">Moments — це про реальні місця: кав’ярня після роботи, коворкінг у тихій зоні, бар біля сцени. Ти сам вирішуєш, коли бути «в тіні», а коли дати сигнал «тут можна підійти» — без стрічки, лайків і вічного онлайн-профілю.</div>
+    <div class="mom-zig-stack">
+      <div class="mom-zig-row">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>01</span><span id="mom-exp-s1t">Ghost by default</span></div>
+          <p class="mom-zig-body" id="mom-exp-s1d">У Ghost інші гості PROSTIR не бачать твій аватар, вік, інтереси й «хто поруч». Заклад бачить лише те, що потрібно для сервісу (бронь, замовлення) — не соціальний шар.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--hero" aria-hidden="true">
+          <span class="mom-zig-hero-emoji" aria-hidden="true">👻</span>
+        </div>
+      </div>
+      <div class="mom-zig-row mom-zig-row--reverse">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>02</span><span id="mom-exp-s2t">Intent-based signal</span></div>
+          <p class="mom-zig-body" id="mom-exp-s2d">Open Mode — короткий намір: «готовий до знайомства в цьому залі». Сигнал живе обмежений час (наприклад, сесія візиту) і зникає, коли ти вимикаєш режим або виходиш із геозони.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--hero" aria-hidden="true">
+          <div class="mom-zig-hero-open">
+            <span class="mom-zig-ho-dot" aria-hidden="true"></span>
+            <span class="mom-zig-ho-label">Open</span>
+          </div>
+        </div>
+      </div>
+      <div class="mom-zig-row">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>03</span><span id="mom-exp-s3t">Verified contact</span></div>
+          <p class="mom-zig-body" id="mom-exp-s3d">Запит на знайомство приходить як push: ти бачиш лише те, що людина дозволила (віковий діапазон, 2–3 теги, відстань). Після «Прийняти» відкривається обмежений чат або перехід у профіль — з міткою Diia Verified.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--hero mom-zig-art--verify" aria-hidden="true">
+          <span class="mom-zig-phone" aria-hidden="true">📱</span>
+          <span class="mom-zig-badge" aria-hidden="true">✓</span>
+        </div>
+      </div>
+      <div class="mom-zig-row mom-zig-row--reverse">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>04</span><span id="mom-exp-s4t">Venue-safe boundaries</span></div>
+          <p class="mom-zig-body" id="mom-exp-s4d">Заклад не читає переписки. Можна повідомити модерацію про некоректну поведінку; агресивні акаунти втрачають доступ до Open Mode. Твій комфорт важливіший за «залучення».</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--illu" aria-hidden="true">
+          <svg viewBox="0 0 200 168" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="36" y="40" width="128" height="100" rx="16" stroke="currentColor" stroke-opacity="0.5" stroke-width="2.4"/>
+            <path d="M52 56h96M52 72h72M52 88h88" stroke="currentColor" stroke-opacity="0.22" stroke-width="2" stroke-linecap="round"/>
+            <path d="M100 52V36" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+            <path d="M88 36h24" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+            <rect x="72" y="98" width="56" height="30" rx="8" stroke="currentColor" stroke-opacity="0.4" stroke-width="2.2" fill="currentColor" fill-opacity="0.08"/>
+            <circle cx="100" cy="76" r="26" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" fill="currentColor" fill-opacity="0.06"/>
+            <path d="M91 76l7 7 16-18" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moments-scenarios moments-scenarios--zigzag reveal" aria-labelledby="mom-sc-h">
+    <h2 class="moments-scenarios-h" id="mom-sc-h">Реальні сценарії</h2>
+    <p class="moments-scenarios-lead" id="mom-sc-lead">Три типові ситуації в Києві — як виглядає потік від «просто посидіти» до живого контакту.</p>
+    <div class="mom-zig-stack">
+      <div class="mom-zig-row">
+        <div class="mom-zig-copy">
+          <div class="mom-sc-meta" id="mom-sc1-meta">Cafe Aura · Поділ · 19:30</div>
+          <h3 class="mom-sc-title" id="mom-sc1-title">Кава перед концертом</h3>
+          <p class="mom-sc-body" id="mom-sc1-body">Ти забронював столик через Dine, увійшов через Дію. У Ghost ніхто не знає, що ти тут. Вмикаєш Open — людина за сусіднім столом бачить сигнал «поруч» і надсилає короткий запит: спільний тег «живий джаз».</p>
+          <p class="mom-sc-foot" id="mom-sc1-foot">Тривалість Open: ~45 хв або до виходу з зони закладу.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--illu" aria-hidden="true">
+          <svg viewBox="0 0 200 168" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="100" cy="122" rx="52" ry="12" stroke="currentColor" stroke-opacity="0.4" stroke-width="2"/>
+            <path d="M76 122V92c0-5 4-9 9-9h30c5 0 9 4 9 9v30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M88 86h24" stroke="currentColor" stroke-opacity="0.45" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="78" cy="70" r="14" stroke="currentColor" stroke-width="2.2" fill="currentColor" fill-opacity="0.1"/>
+            <path d="M78 84v18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="122" cy="70" r="14" stroke="currentColor" stroke-width="2.2" fill="currentColor" fill-opacity="0.06"/>
+            <path d="M122 84v18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M96 70h8" stroke="currentColor" stroke-opacity="0.28" stroke-width="2" stroke-linecap="round"/>
+            <rect x="118" y="38" width="48" height="34" rx="10" stroke="currentColor" stroke-opacity="0.5" stroke-width="2.2" fill="currentColor" fill-opacity="0.1"/>
+            <circle cx="142" cy="55" r="9" fill="rgba(52,211,153,0.2)" stroke="#34d399" stroke-width="2.2"/>
+            <path d="M137 55l4 4 8-10" stroke="#ecfdf5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="mom-zig-row mom-zig-row--reverse">
+        <div class="mom-zig-copy">
+          <div class="mom-sc-meta" id="mom-sc2-meta">Coworking N · Шевченківський · 14:00</div>
+          <h3 class="mom-sc-title" id="mom-sc2-title">Тиха зона, спільний стек</h3>
+          <p class="mom-sc-body" id="mom-sc2-body">Працюєш у фокус-зоні. Open у коворкінгу показує лише зону (не точне місце столу), плюс обрані теги — наприклад, TypeScript, дизайн-системи. Запит: «обмін досвідом 15 хвилин».</p>
+          <p class="mom-sc-foot" id="mom-sc2-foot">Можна обмежити: тільки верифіковані + вік 25–40.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--illu" aria-hidden="true">
+          <svg viewBox="0 0 200 168" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="38" y="38" width="124" height="88" rx="12" stroke="currentColor" stroke-opacity="0.5" stroke-width="2.4"/>
+            <rect x="48" y="50" width="104" height="60" rx="6" stroke="currentColor" stroke-opacity="0.3" stroke-width="2"/>
+            <path d="M58 66h84M58 80h60M58 94h76" stroke="currentColor" stroke-opacity="0.28" stroke-width="2" stroke-linecap="round"/>
+            <rect x="62" y="58" width="28" height="18" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.45" stroke-width="2"/>
+            <path d="M130 118H70" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <rect x="74" y="124" width="52" height="6" rx="3" fill="currentColor" fill-opacity="0.16"/>
+            <path d="M142 52l16-12v28l-16 10V52z" stroke="currentColor" stroke-opacity="0.45" stroke-width="2.2" stroke-linejoin="round" fill="currentColor" fill-opacity="0.08"/>
+            <path d="M150 46v18M144 55h12" stroke="currentColor" stroke-opacity="0.4" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="mom-zig-row">
+        <div class="mom-zig-copy">
+          <div class="mom-sc-meta" id="mom-sc3-meta">Винний бар · центр · 21:15</div>
+          <h3 class="mom-sc-title" id="mom-sc3-title">Вечір без «знайомства в очі»</h3>
+          <p class="mom-sc-body" id="mom-sc3-body">Не хочеш підходити першим. Увімкнув Open, додав тег «натуральні вина». Інший гість бачить лише відстань і спільність тегів — надсилає запит. Ти приймаєш або тихо відхиляєш; Ghost знову повна невидимість.</p>
+          <p class="mom-sc-foot" id="mom-sc3-foot">Жодних імен до моменту взаємної згоди.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--illu" aria-hidden="true">
+          <svg viewBox="0 0 200 168" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="100" cy="126" rx="42" ry="11" stroke="currentColor" stroke-opacity="0.38" stroke-width="2"/>
+            <path d="M100 40l12 62H88l12-62z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" fill="currentColor" fill-opacity="0.1"/>
+            <path d="M100 100v24" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <ellipse cx="100" cy="126" rx="24" ry="6" stroke="currentColor" stroke-opacity="0.4" stroke-width="2"/>
+            <circle cx="100" cy="48" r="8" fill="currentColor" fill-opacity="0.35" stroke="currentColor" stroke-opacity="0.5" stroke-width="2"/>
+            <path d="M118 44c10 5 16 18 14 30-2 8-8 14-16 16" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+            <path d="M126 56h14M134 48v18" stroke="currentColor" stroke-opacity="0.32" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="moments-compare reveal" aria-labelledby="mom-cmp-h">
+    <div class="moments-compare-h" id="mom-cmp-h">Що видно в залі: Ghost vs Open</div>
+    <div class="mom-cmp-row">
+      <div class="mom-cmp-col">
+        <div class="mom-cmp-label" id="mom-cmp-ghost-l">Ghost Mode</div>
+        <ul class="mom-cmp-list" id="mom-cmp-ghost-ul">
+          <li>Інші гості PROSTIR: не бачать тебе в списку «поруч».</li>
+          <li>Аватар, вік, інтереси: приховані.</li>
+          <li>Заклад: операційні дані (стіл, замовлення), без соц-шару.</li>
+          <li>Сповіщення знайомств: не надходять.</li>
+        </ul>
+      </div>
+      <div class="mom-cmp-col">
+        <div class="mom-cmp-label" id="mom-cmp-open-l">Open Mode</div>
+        <ul class="mom-cmp-list" id="mom-cmp-open-ul">
+          <li>Бачать лише ті, хто теж у Open у цьому закладі/зоні.</li>
+          <li>Показ: наближена відстань, 2–3 теги, віковий діапазон (якщо дозволив).</li>
+          <li>Ім’я та фото: після прийнятого запиту.</li>
+          <li>Сесія керована тобою: вимкнув — зник з радару одразу.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="demo-sep reveal">
+    <div class="demo-sep-line"></div>
+    <div class="demo-sep-pill" id="mom-demo-label">Demo mode · Test now</div>
+    <div class="demo-sep-line"></div>
+  </div>
+
+  <div class="moments-wrap reveal">
+    <div class="moments-card">
+      <div class="ghost-icon" role="img" aria-label="Ghost" aria-hidden="false">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 20v-9a4 4 0 0 1 8 0v9" />
+          <path d="M9.5 14.5c.6.6 1.5.6 2.1 0" />
+          <path d="M12 16c.8.8 2 .8 2.8 0" />
+          <path d="M6.5 20c0-1.5 1-2.5 2.5-2.5" />
+          <path d="M17.5 20c0-1.5-1-2.5-2.5-2.5" />
+          <path d="M10 8.5h0" />
+          <path d="M14 8.5h0" />
+        </svg>
+      </div>
+      <div class="moments-title" id="moments-main-title">Ghost Mode</div>
+      <div class="moments-desc" id="moments-main-desc">Ти невидимий для гостей PROSTIR у цьому закладі. Увімкни Open — тебе побачать лише ті, хто теж у Open тут і зараз; заклад не використовує це для реклами чи розсилок.</div>
+      <div class="moments-toggle-wrap">
+        <span class="moments-toggle-label" id="toggle-label-off">Ghost</span>
+        <label class="toggle-switch" for="moments-toggle" aria-label="Перемкнути Ghost / Open Mode">
+          <input type="checkbox" id="moments-toggle">
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+        <span class="moments-toggle-label" id="toggle-label-on">Open</span>
+      </div>
+      <div class="moments-active-desc" id="moments-active-desc">
+        ◉ &nbsp;Open Mode активний &nbsp;·&nbsp; Ти відкритий для з'єднань
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="moments-toast" id="moments-toast" role="status" aria-live="polite">
+    <div class="moments-toast-row">
+      <div class="moments-toast-accent" aria-hidden="true">✦</div>
+      <div style="min-width:0">
+        <div class="moments-toast-title" id="moments-toast-title">Хтось поруч хоче познайомитись</div>
+        <div class="moments-toast-sub" id="moments-toast-sub">зі столика №7 · основний зал</div>
+        <div class="moments-toast-hint" id="moments-toast-hint">Спільний тег: жива музика · запит дійсний ~3 хв</div>
+      </div>
+      <button class="moments-toast-close" id="moments-toast-close" aria-label="Закрити сповіщення">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M1 1l12 12M13 1L1 13"/>
+        </svg>
+      </button>
+    </div>
+    <div class="moments-toast-actions">
+      <button class="moments-toast-accept" id="moments-toast-accept" type="button">Прийняти</button>
+      <button class="moments-toast-decline" id="moments-toast-decline" type="button">Не цікаво</button>
+    </div>
+  </div>
+
+  <style>
+    @keyframes connectedIn {
+      from { opacity:0; transform: translateY(16px) scale(0.97); }
+      to   { opacity:1; transform: translateY(0)    scale(1);    }
+    }
+    .connected-card {
+      max-width: 480px;
+      margin: 1.5rem auto 0;
+      padding: 1.5rem;
+      border-radius: 24px;
+      background: rgba(139,92,246,0.06);
+      border: 1px solid rgba(139,92,246,0.22);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.5s ease, max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.25s, opacity 0.25s;
+    }
+    .connected-card.connected-card--chat {
+      max-width: 520px;
+      box-shadow:
+        0 24px 72px rgba(0,0,0,0.28),
+        0 0 0 1px rgba(139,92,246,0.12),
+        0 0 48px rgba(139,92,246,0.1);
+    }
+    body.theme-noir .connected-card { background: rgba(139,92,246,0.1) !important; border-color: rgba(139,92,246,0.25) !important; }
+    .cc-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+    .cc-bar-left {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8B5CF6;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .cc-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+      animation: blink 1.6s ease-in-out infinite;
+    }
+    .cc-icon-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.06);
+      color: #9CA3AF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    body.theme-noir .cc-icon-btn { background: rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.4) !important; }
+    .cc-panels-morph {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+    }
+    .cc-panel-profile,
+    .cc-panel-chat {
+      grid-area: 1 / 1;
+      transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
+    }
+    .cc-panel-chat {
+      opacity: 0;
+      transform: scale(0.94) translateY(14px);
+      pointer-events: none;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .connected-card--chat .cc-panel-profile {
+      opacity: 0;
+      transform: scale(0.97) translateY(-10px);
+      pointer-events: none;
+    }
+    .connected-card--chat .cc-panel-chat {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+    .cc-chat-toolbar {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(139,92,246,0.15);
+    }
+    .cc-chat-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(139,92,246,0.22);
+      background: rgba(139,92,246,0.06);
+      color: #8B5CF6;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .cc-chat-back:hover { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.35); }
+    .cc-chat-head-text { min-width: 0; }
+    body.theme-noir #cc-name { color: #fff !important; }
+    body.theme-noir #cc-meta { color: rgba(255,255,255,0.3) !important; }
+    #cc-msg-btn:hover { background: #7c3aed !important; }
+    #cc-profile-btn:hover { border-color: rgba(139,92,246,0.45) !important; }
+
+    /* Chat bubbles inside connected card */
+    .moments-chat-beta {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(196,181,253,0.9);
+      padding: 0.2rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid rgba(139,92,246,0.35);
+      background: rgba(139,92,246,0.12);
+      margin-bottom: 0.45rem;
+    }
+    .moments-chat-head-title { font-size: 0.98rem; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+    .moments-chat-head-sub { font-family: var(--font-mono); font-size: 0.62rem; color: rgba(255,255,255,0.38); margin-top: 0.2rem; letter-spacing: 0.04em; }
+    .moments-chat-list {
+      flex: 1; min-height: 140px; max-height: min(38vh, 280px); overflow-y: auto; overflow-x: hidden;
+      padding: 0.65rem 0.15rem 0.4rem 0;
+      margin: 0 -0.25rem;
+      display: flex; flex-direction: column; gap: 0.65rem;
+      scroll-behavior: smooth;
+    }
+    .moments-chat-bubble {
+      max-width: 92%; padding: 0.55rem 0.75rem; border-radius: 14px;
+      font-size: 0.82rem; line-height: 1.45; color: rgba(255,255,255,0.9);
+      animation: chatBubbleIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes chatBubbleIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .moments-chat-bubble--them {
+      align-self: flex-start;
+      background: rgba(139,92,246,0.14);
+      border: 1px solid rgba(139,92,246,0.28);
+      border-bottom-left-radius: 4px;
+    }
+    .moments-chat-bubble--you {
+      align-self: flex-end;
+      background: rgba(52,211,153,0.1);
+      border: 1px solid rgba(52,211,153,0.22);
+      border-bottom-right-radius: 4px;
+    }
+    .moments-chat-bubble-k {
+      font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 0.25rem;
+    }
+    .moments-chat-typing {
+      max-width: 92%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      animation: chatBubbleIn 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .moments-chat-typing--them { align-self: flex-start; }
+    .moments-chat-typing--you { align-self: flex-end; align-items: flex-end; }
+    .moments-chat-typing-inner {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      padding: 0.5rem 0.72rem;
+      border-radius: 14px;
+      min-width: 4.5rem;
+    }
+    .moments-chat-typing--them .moments-chat-typing-inner {
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.22);
+      border-bottom-left-radius: 4px;
+    }
+    .moments-chat-typing--you .moments-chat-typing-inner {
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-bottom-right-radius: 4px;
+    }
+    .moments-chat-typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.15rem 0;
+    }
+    .moments-chat-typing-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.35;
+      animation: ccTypingDot 1.15s ease-in-out infinite;
+    }
+    .moments-chat-typing-dots span:nth-child(2) { animation-delay: 0.16s; }
+    .moments-chat-typing-dots span:nth-child(3) { animation-delay: 0.32s; }
+    .moments-chat-typing--them .moments-chat-typing-dots { color: rgba(196,181,253,0.95); }
+    .moments-chat-typing--you .moments-chat-typing-dots { color: rgba(52,211,153,0.95); }
+    @keyframes ccTypingDot {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+      30% { transform: translateY(-5px); opacity: 1; }
+    }
+    .moments-chat-demo {
+      margin: 0; padding: 0.5rem 0.25rem 0;
+      font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.28); text-align: center; border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    body:not(.theme-noir) .cc-chat-toolbar { border-bottom-color: var(--grey-line); }
+    body:not(.theme-noir) .moments-chat-beta { color: var(--violet); border-color: rgba(139,92,246,0.25); background: rgba(139,92,246,0.08); }
+    body:not(.theme-noir) .moments-chat-head-title { color: var(--jet); }
+    body:not(.theme-noir) .moments-chat-head-sub { color: var(--grey-muted); }
+    body:not(.theme-noir) .moments-chat-bubble { color: var(--jet); }
+    body:not(.theme-noir) .moments-chat-bubble-k { color: var(--grey-muted); }
+    body:not(.theme-noir) .moments-chat-bubble--them { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.2); }
+    body:not(.theme-noir) .moments-chat-bubble--you { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.18); }
+    body:not(.theme-noir) .moments-chat-demo { color: var(--grey-muted); border-top-color: var(--grey-line); }
+    body:not(.theme-noir) .moments-chat-typing--them .moments-chat-typing-inner {
+      background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.18);
+    }
+    body:not(.theme-noir) .moments-chat-typing--you .moments-chat-typing-inner {
+      background: rgba(52,211,153,0.06); border-color: rgba(52,211,153,0.16);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cc-panel-profile,
+      .cc-panel-chat { transition: none !important; }
+      .moments-chat-list { scroll-behavior: auto; }
+      .moments-chat-typing-dots span { animation: none !important; opacity: 0.5; }
+    }
+  </style>
+  <!-- Connected card: profile ↔ chat morph (after Accept / Message) -->
+  <div id="connected-card" class="connected-card" style="display:none" aria-live="polite">
+    <div class="cc-bar">
+      <div class="cc-bar-left">
+        <span class="cc-dot" aria-hidden="true"></span>
+        <span id="cc-status">Зʼєднано</span>
+      </div>
+      <button type="button" id="cc-close" class="cc-icon-btn" aria-label="Закрити">
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
+      </button>
+    </div>
+    <div class="cc-panels-morph">
+      <div id="cc-panel-profile" class="cc-panel-profile">
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#6D28D9);display:flex;align-items:center;justify-content:center;font-size:1.35rem;font-weight:800;color:#fff;flex-shrink:0;position:relative">
+            А
+            <span style="position:absolute;bottom:0;right:0;width:16px;height:16px;border-radius:50%;background:#22c55e;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.45rem;color:#fff;font-weight:800">✓</span>
+          </div>
+          <div>
+            <div id="cc-name" style="font-size:1rem;font-weight:700;letter-spacing:-0.03em;color:var(--jet)">Андрій · 26</div>
+            <div id="cc-meta" style="font-family:var(--font-mono);font-size:0.62rem;color:var(--grey-muted);margin-top:0.15rem">Стіл №7 · ~4 м · Diia Verified · в Open 12 хв</div>
+            <div id="cc-venue" style="font-size:0.72rem;color:var(--grey-soft);margin-top:0.35rem;line-height:1.45">Cafe Aura · основний зал · сьогодні 19:42</div>
+            <div id="cc-bio" style="font-size:0.78rem;color:var(--grey-soft);margin-top:0.5rem;line-height:1.5;font-style:italic;border-left:2px solid rgba(139,92,246,0.35);padding-left:0.65rem">«Шукаю компанію перед джазом у Порто. Не проти обговорити вінил і подорожі.»</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.1rem" id="cc-tags">
+          <span style="font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:999px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);color:#7c3aed">☕ Specialty coffee</span>
+          <span style="font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:999px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);color:#7c3aed">🎵 Живий джаз</span>
+          <span style="font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:999px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);color:#7c3aed">🎧 Вінил</span>
+          <span style="font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:999px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);color:#7c3aed">🚲 Місто пішки</span>
+        </div>
+        <div style="display:flex;gap:0.6rem">
+          <button type="button" id="cc-msg-btn" style="flex:1;padding:0.65rem;border-radius:13px;background:#8B5CF6;border:none;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer;transition:background 0.2s">
+            <span id="cc-msg-label">Написати</span> ✉
+          </button>
+          <button type="button" id="cc-profile-btn" style="flex:1;padding:0.65rem;border-radius:13px;background:transparent;border:1px solid rgba(139,92,246,0.22);color:#8B5CF6;font-size:0.82rem;font-weight:500;cursor:pointer;transition:border-color 0.2s">
+            <span id="cc-view-label">Профіль</span> →
+          </button>
+        </div>
+      </div>
+      <div id="cc-panel-chat" class="cc-panel-chat" aria-hidden="true">
+        <div class="cc-chat-toolbar">
+          <button type="button" class="cc-chat-back" id="cc-chat-back" aria-label="Назад до профілю">←</button>
+          <div class="cc-chat-head-text">
+            <span class="moments-chat-beta" id="cc-chat-beta">Beta · демо</span>
+            <div class="moments-chat-head-title" id="cc-chat-title">Андрій · демо-чат</div>
+            <div class="moments-chat-head-sub" id="cc-chat-sub">Cafe Aura · основний зал</div>
+          </div>
+        </div>
+        <div class="moments-chat-list" id="cc-chat-list"></div>
+        <p class="moments-chat-demo" id="cc-chat-demo">Демо: переписка після взаємного «Прийняти».</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature cards -->
+  <div class="moments-features">
+    <div class="moments-feat-card reveal">
+      <div class="mfc-icon">🎭</div>
+      <div class="mfc-title">Повна анонімність</div>
+      <div class="mfc-desc">У Ghost Mode ніхто — ані інші користувачі, ані заклад — не бачить твій профіль або активність.</div>
+    </div>
+    <div class="moments-feat-card reveal reveal-delay">
+      <div class="mfc-icon">⚡</div>
+      <div class="mfc-title">Моментальний контакт</div>
+      <div class="mfc-desc">Один клік — і людина поруч отримує сповіщення. Без реєстрації, без пошуку. Просто будьте в одному місці.</div>
+    </div>
+    <div class="moments-feat-card reveal reveal-delay2">
+      <div class="mfc-icon">🔐</div>
+      <div class="mfc-title">Особистість верифікована</div>
+      <div class="mfc-desc">Кожен, хто доступний в Open Mode, верифікований через Дію. Ніяких ботів або фейків.</div>
+    </div>
+    <div class="moments-feat-card reveal">
+      <div class="mfc-icon">⏱️</div>
+      <div class="mfc-title">Сесія, а не вічний профіль</div>
+      <div class="mfc-desc">Open прив’язаний до візиту: вийшов із зони або вимкнув перемикач — і ти знову «off the map» для знайомств, без довгих слідів у стрічці.</div>
+    </div>
+    <div class="moments-feat-card reveal reveal-delay">
+      <div class="mfc-icon">🛡️</div>
+      <div class="mfc-title">Модерація та блок</div>
+      <div class="mfc-desc">Один тап — скарга або блок. Повторні порушення ведуть до обмеження Open Mode. Переписки не продаються рекламодавцям.</div>
+    </div>
+    <div class="moments-feat-card reveal reveal-delay2">
+      <div class="mfc-icon">📍</div>
+      <div class="mfc-title">Геозона закладу</div>
+      <div class="mfc-desc">Сигнал «поруч» працює лише всередині партнерського простору PROSTIR (точність залежить від BLE/UWB у майбутніх версіях — зараз демо на рівні залу).</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="/AppMultiServicios/"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+    <span class="footer-copy">© 2026 PROSTIR · Urban OS · Kyiv &nbsp;·&nbsp; <span style="color:rgba(139,92,246,0.7);font-size:0.6rem;">✓ verified by Дія</span></span>
+    <a href="/AppMultiServicios/legal.html" class="footer-offer">Публічна оферта</a>
+    <nav class="footer-links"><a href="#">Умови</a><a href="#">Конфіденційність</a><a href="#">Контакти</a><a href="#" class="faq-link">FAQ</a><a href="/AppMultiServicios/profile.html">Профіль</a></nav>
+  </div>
+</footer>
+
+<button id="theme-toggle-fab" class="theme-fab hidden" type="button" aria-label="Змінити тему">
+  <span id="theme-toggle-icon" aria-hidden="true">◐</span>
+  <span id="theme-toggle-label">Theme</span>
+</button>
+
+<script>
+function $(id){ return document.getElementById(id); }
+
+// Theme: follow device by default, allow one-click override
+(function(){
+  const fab = $('theme-toggle-fab');
+  const icon = $('theme-toggle-icon');
+  const label = $('theme-toggle-label');
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('prostir_theme_choice');
+  function apply(theme){
+    document.body.classList.toggle('theme-noir', theme === 'dark');
+    if(icon) icon.textContent = theme === 'dark' ? '☾' : '☀';
+    if(label) label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  }
+  apply(saved || (mq.matches ? 'dark' : 'light'));
+  if(fab){
+    fab.classList.remove('hidden');
+    if(saved) fab.classList.add('ghosted');
+  }
+  mq.addEventListener('change', e => { if(!localStorage.getItem('prostir_theme_choice')) apply(e.matches ? 'dark' : 'light'); });
+  fab && fab.addEventListener('click', ()=>{
+    const next = document.body.classList.contains('theme-noir') ? 'light' : 'dark';
+    localStorage.setItem('prostir_theme_choice', next);
+    apply(next);
+    fab.classList.add('ghosted');
+  });
+})();
+const dock = $('dock');
+window.addEventListener('scroll', () => { dock.classList.toggle('scrolled', window.scrollY > 8); document.documentElement.style.setProperty('--parallax-y', (-window.scrollY*0.04).toFixed(2)+'px'); }, { passive: true });
+const btn = $('hamburger'), drawer = $('mobile-nav');
+btn && btn.addEventListener('click', () => {
+  const open = drawer.classList.toggle('open'); btn.setAttribute('aria-expanded', open);
+  const s = btn.querySelectorAll('span');
+  if(open){s[0].style.transform='translateY(6.5px) rotate(45deg)';s[1].style.opacity='0';s[2].style.transform='translateY(-6.5px) rotate(-45deg)';}
+  else{s.forEach(x=>{x.style.transform='';x.style.opacity='';}); }
+});
+const io = new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Moments toggle
+const toggle=$('moments-toggle'), avatar=$('user-avatar'), desc=$('moments-active-desc');
+const toast=$('moments-toast'), toastClose=$('moments-toast-close'), toastSub=$('moments-toast-sub');
+const toastAccept=$('moments-toast-accept'), toastDecline=$('moments-toast-decline');
+let toastTimer = null;
+
+function showToast(tableNo){
+  if(!toast) return;
+  if(toastTimer) clearTimeout(toastTimer);
+  const lang = localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua';
+  const pack = window.__prostirMomentsT && window.__prostirMomentsT[lang] && window.__prostirMomentsT[lang].moments;
+  const tail = lang === 'en' ? ' · main hall' : ' · основний зал';
+  toastSub.textContent = (lang === 'en' ? `from table #${tableNo}` : `зі столика №${tableNo}`) + tail;
+  const th = document.getElementById('moments-toast-hint');
+  if (th && pack && pack.toastHint) th.textContent = pack.toastHint;
+  toast.classList.add('open');
+  toastTimer = setTimeout(()=>{ toast.classList.remove('open'); }, 5200);
+}
+
+function hideToast(){
+  if(!toast) return;
+  if(toastTimer) clearTimeout(toastTimer);
+  toast.classList.remove('open');
+}
+
+toggle && toggle.addEventListener('change',()=>{
+  const on=toggle.checked;
+  if(desc) desc.classList.toggle('visible',on);
+  if(avatar) avatar.classList.toggle('open-to-chat',on);
+  if(on){
+    // Example: someone wants to connect from table 7.
+    showToast(7);
+  } else {
+    hideToast();
+  }
+});
+
+toastClose && toastClose.addEventListener('click', hideToast);
+const connectedCardEl = $('connected-card');
+let momentsChatTimers = [];
+let ccTypingEl = null;
+function momentsChatClearTimers(){ momentsChatTimers.forEach(id => clearTimeout(id)); momentsChatTimers = []; }
+function removeTypingIndicator(){
+  if(ccTypingEl && ccTypingEl.parentNode) ccTypingEl.parentNode.removeChild(ccTypingEl);
+  ccTypingEl = null;
+}
+function appendTypingIndicator(role, pack){
+  removeTypingIndicator();
+  const list = $('cc-chat-list');
+  if(!list || !pack) return;
+  const row = document.createElement('div');
+  row.className = 'moments-chat-typing moments-chat-typing--' + (role === 'you' ? 'you' : 'them');
+  row.setAttribute('role', 'status');
+  if(pack.chatTypingAria) row.setAttribute('aria-label', pack.chatTypingAria);
+  row.innerHTML =
+    '<div class="moments-chat-typing-inner">' +
+    '<div class="moments-chat-bubble-k"></div>' +
+    '<div class="moments-chat-typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>' +
+    '</div>';
+  row.querySelector('.moments-chat-bubble-k').textContent = role === 'you' ? pack.chatLblYou : pack.chatLblThem;
+  list.appendChild(row);
+  ccTypingEl = row;
+  requestAnimationFrame(() => {
+    list.scrollTo({ top: list.scrollHeight, behavior: momentsChatPrefersReducedMotion() ? 'auto' : 'smooth' });
+  });
+}
+function momentsChatPrefersReducedMotion(){
+  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+function scrollConnectedCardIntoView(){
+  const el = connectedCardEl;
+  if(!el || el.style.display === 'none') return;
+  const instant = momentsChatPrefersReducedMotion();
+  try {
+    el.scrollIntoView({ behavior: instant ? 'auto' : 'smooth', block: 'center', inline: 'nearest' });
+  } catch (_) {
+    el.scrollIntoView(instant);
+  }
+}
+function resetCcMessageButton(){
+  const el = $('cc-msg-btn');
+  const lbl = $('cc-msg-label');
+  if(!el || !lbl) return;
+  el.disabled = false;
+  el.style.background = '';
+  const lang = localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua';
+  lbl.textContent = lang === 'en' ? 'Message' : 'Написати';
+}
+function collapseConnectedChat(){
+  if(!connectedCardEl) return;
+  connectedCardEl.classList.remove('connected-card--chat');
+  momentsChatClearTimers();
+  removeTypingIndicator();
+  const list = $('cc-chat-list');
+  if(list) list.innerHTML = '';
+  const chatPanel = $('cc-panel-chat');
+  if(chatPanel) chatPanel.setAttribute('aria-hidden','true');
+  resetCcMessageButton();
+}
+function appendChatBubble(role, label, text){
+  const list = $('cc-chat-list');
+  if(!list) return;
+  const div = document.createElement('div');
+  div.className = 'moments-chat-bubble ' + (role === 'you' ? 'moments-chat-bubble--you' : 'moments-chat-bubble--them');
+  div.innerHTML = '<div class="moments-chat-bubble-k"></div><div class="moments-chat-bubble-t"></div>';
+  div.querySelector('.moments-chat-bubble-k').textContent = label;
+  div.querySelector('.moments-chat-bubble-t').textContent = text;
+  list.appendChild(div);
+  requestAnimationFrame(() => {
+    list.scrollTo({ top: list.scrollHeight, behavior: momentsChatPrefersReducedMotion() ? 'auto' : 'smooth' });
+  });
+}
+function morphConnectedCardToChat(){
+  if(!connectedCardEl) return;
+  momentsChatClearTimers();
+  const list = $('cc-chat-list');
+  if(list) list.innerHTML = '';
+  const lang = localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua';
+  const pack = window.__prostirMomentsT && window.__prostirMomentsT[lang] && window.__prostirMomentsT[lang].moments;
+  if(!pack) return;
+  connectedCardEl.classList.add('connected-card--chat');
+  const chatPanel = $('cc-panel-chat');
+  if(chatPanel) chatPanel.setAttribute('aria-hidden','false');
+  const beta = $('cc-chat-beta');
+  const title = $('cc-chat-title');
+  const sub = $('cc-chat-sub');
+  const demo = $('cc-chat-demo');
+  const back = $('cc-chat-back');
+  if(beta && pack.chatBeta) beta.textContent = pack.chatBeta;
+  if(title) title.textContent = pack.chatTitle;
+  if(sub) sub.textContent = pack.chatSub;
+  if(demo) demo.textContent = pack.chatDemo;
+  if(back && pack.chatBackAria) back.setAttribute('aria-label', pack.chatBackAria);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scrollConnectedCardIntoView();
+      momentsChatTimers.push(setTimeout(scrollConnectedCardIntoView, 480));
+    });
+  });
+  const rm = momentsChatPrefersReducedMotion();
+  const t1 = rm ? 850 : 1180;
+  const t2Typing = rm ? 1180 : 1520;
+  const t2 = rm ? 1620 : 2280;
+  const t3Typing = rm ? 1980 : 2580;
+  const t3 = rm ? 2480 : 3380;
+  const tEndTyping = rm ? 2880 : 3880;
+  const tEndClear = rm ? 3680 : 5200;
+  momentsChatTimers.push(setTimeout(() => appendTypingIndicator('them', pack), 120));
+  momentsChatTimers.push(setTimeout(() => { removeTypingIndicator(); appendChatBubble('them', pack.chatLblThem, pack.chatM1); }, t1));
+  momentsChatTimers.push(setTimeout(() => appendTypingIndicator('you', pack), t2Typing));
+  momentsChatTimers.push(setTimeout(() => { removeTypingIndicator(); appendChatBubble('you', pack.chatLblYou, pack.chatM2); }, t2));
+  momentsChatTimers.push(setTimeout(() => appendTypingIndicator('them', pack), t3Typing));
+  momentsChatTimers.push(setTimeout(() => { removeTypingIndicator(); appendChatBubble('them', pack.chatLblThem, pack.chatM3); }, t3));
+  momentsChatTimers.push(setTimeout(() => appendTypingIndicator('them', pack), tEndTyping));
+  momentsChatTimers.push(setTimeout(removeTypingIndicator, tEndClear));
+}
+$('cc-chat-back') && $('cc-chat-back').addEventListener('click', collapseConnectedChat);
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && connectedCardEl && connectedCardEl.classList.contains('connected-card--chat')) collapseConnectedChat();
+});
+toastAccept && toastAccept.addEventListener('click', () => {
+  hideToast();
+  showConnected();
+});
+toastDecline && toastDecline.addEventListener('click', () => {
+  hideToast();
+  if(toggle){
+    toggle.checked = false;
+    toggle.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+});
+
+function showConnected(){
+  const card = document.getElementById('connected-card');
+  if(!card) return;
+  card.classList.remove('connected-card--chat');
+  momentsChatClearTimers();
+  removeTypingIndicator();
+  const chatList = $('cc-chat-list');
+  if(chatList) chatList.innerHTML = '';
+  const chatPanel = $('cc-panel-chat');
+  if(chatPanel) chatPanel.setAttribute('aria-hidden','true');
+  resetCcMessageButton();
+  const lang = localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua';
+  const m = window.__prostirMomentsT && window.__prostirMomentsT[lang] && window.__prostirMomentsT[lang].moments;
+  const ccClose = $('cc-close');
+  if(ccClose && m && m.ccCloseAria) ccClose.setAttribute('aria-label', m.ccCloseAria);
+  document.getElementById('cc-status').textContent  = lang === 'en' ? 'Connected' : 'Зʼєднано';
+  document.getElementById('cc-name').textContent    = lang === 'en' ? 'Andriy · 26' : 'Андрій · 26';
+  if (m) {
+    document.getElementById('cc-meta').textContent = m.ccMeta;
+    const v = document.getElementById('cc-venue'); if (v) v.textContent = m.ccVenue;
+    const b = document.getElementById('cc-bio'); if (b) b.textContent = m.ccBio;
+    const tw = document.getElementById('cc-tags');
+    if (tw && Array.isArray(m.ccTags)) {
+      tw.innerHTML = m.ccTags.map((tag) =>
+        '<span style="font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:999px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);color:#7c3aed">' + tag + '</span>'
+      ).join('');
+    }
+  }
+  document.getElementById('cc-msg-label').textContent   = lang === 'en' ? 'Message' : 'Написати';
+  document.getElementById('cc-view-label').textContent  = lang === 'en' ? 'Profile' : 'Профіль';
+  card.style.display = 'block';
+  card.style.animation = 'none';
+  card.offsetHeight; /* reflow */
+  card.style.animation = 'connectedIn 0.55s cubic-bezier(0.22,1,0.36,1) forwards';
+  requestAnimationFrame(() => { requestAnimationFrame(scrollConnectedCardIntoView); });
+}
+
+document.getElementById('cc-close') && document.getElementById('cc-close').addEventListener('click', ()=>{
+  const c = document.getElementById('connected-card');
+  if(!c) return;
+  collapseConnectedChat();
+  c.style.opacity='0'; c.style.transform='scale(0.96)'; setTimeout(()=>{
+    c.style.display='none'; c.style.opacity=''; c.style.transform='';
+  }, 280);
+});
+document.getElementById('cc-msg-btn') && document.getElementById('cc-msg-btn').addEventListener('click', ()=>{
+  morphConnectedCardToChat();
+  const lang = localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua';
+  const el = document.getElementById('cc-msg-btn');
+  const lbl = document.getElementById('cc-msg-label');
+  if(lbl) lbl.textContent = lang === 'en' ? '✓ Sent ✉' : '✓ Надіслано ✉';
+  el.style.background = '#22c55e';
+  el.disabled = true;
+});
+document.getElementById('cc-profile-btn') && document.getElementById('cc-profile-btn').addEventListener('click', ()=>{ window.location.href='/AppMultiServicios/AppMultiServicios/profile.html'; });
+
+// Language switcher (UA / EN)
+(function(){
+  const switcher = document.getElementById('lang-switch');
+  if(!switcher) return;
+
+  const t = {
+    ua: {
+      nav: { dine: 'Dine', working: 'Working', moments: 'Moments' },
+      hero: {
+        eyebrow: '04 &nbsp;·&nbsp; Moments',
+        title: 'Будь тут.<br><span class="accent">Або ні.</span>',
+        desc: 'Ghost Mode за замовчуванням: ти в закладі як «невидимка» для інших гостей. Увімкнув Open — з’являєшся лише для тих, хто теж у мережі PROSTIR поруч, з верифікацією Дія та зрозумілими межами приватності.'
+      },
+      moments: {
+        mainTitle: 'Ghost Mode',
+        mainDesc: 'Ти невидимий для гостей PROSTIR у цьому закладі. Увімкни Open — тебе побачать лише ті, хто теж у Open тут і зараз; заклад не використовує це для реклами чи розсилок.',
+        toggleOff: 'Ghost',
+        toggleOn: 'Open',
+        activeDesc: '◉ Open Mode активний &nbsp;·&nbsp; Ти відкритий для з\'єднань',
+        toastTitle: 'Хтось поруч хоче познайомитись',
+        toastHint: 'Спільний тег: жива музика · запит дійсний ~3 хв',
+        toastAccept: 'Прийняти',
+        toastDecline: 'Не цікаво',
+        feat1t:'Повна анонімність', feat1d:'У Ghost Mode інші гості не бачать твій соціальний слід; заклад оперує лише бронюванням і сервісом — не «хто з ким сидить».',
+        feat2t:'Моментальний контакт', feat2d:'Один дозволений запит — push на твій телефон. Без пошуку в стрічці: ти вже фізично в одному просторі.',
+        feat3t:'Особистість верифікована', feat3d:'Open доступний лише після Дія. Це знімає більшість фейків і дає передбачувані правила гри в залі.',
+        feat4t:'Сесія, а не вічний профіль', feat4d:'Open прив’язаний до візиту: вийшов або вимкнув — знову повна приватність, без довгих цифрових слідів.',
+        feat5t:'Модерація та блок', feat5d:'Скарга, блок, ліміти на повторні зловживання. Контент переписок не продається третім сторонам.',
+        feat6t:'Геозона закладу', feat6d:'Сигнал «поруч» у демо — рівень залу; у продукті точність зросте з маяками та партнерською інфраструктурою.',
+        expTitle:'Як працює Moments у PROSTIR',
+        expDesc:'Moments — це про реальні місця: кав’ярня після роботи, коворкінг у тихій зоні, бар біля сцени. Ти сам вирішуєш, коли бути «в тіні», а коли дати сигнал «тут можна підійти».',
+        expS1t:'Ghost by default', expS1d:'У Ghost інші гості PROSTIR не бачать твій аватар, вік, інтереси й «хто поруч». Заклад бачить лише те, що потрібно для сервісу (бронь, замовлення) — не соціальний шар.',
+        expS2t:'Intent-based signal', expS2d:'Open Mode — короткий намір: «готовий до знайомства в цьому залі». Сигнал живе обмежений час (сесія візиту) і зникає, коли ти вимикаєш режим або виходиш із геозони.',
+        expS3t:'Verified contact', expS3d:'Запит приходить як push: ти бачиш лише дозволені поля (віковий діапазон, теги, відстань). Після «Прийняти» — обмежений чат або профіль з міткою Diia Verified.',
+        expS4t:'Venue-safe boundaries', expS4d:'Заклад не читає переписки. Є модерація; агресивні акаунти втрачають Open. Комфорт важливіший за сліпе залучення.',
+        demo:'Demo mode · Тестуй зараз',
+        scH:'Реальні сценарії',
+        scLead:'Три типові ситуації в Києві — як виглядає потік від «просто посидіти» до живого контакту.',
+        sc1meta:'Cafe Aura · Поділ · 19:30', sc1title:'Кава перед концертом',
+        sc1body:'Ти забронював столик через Dine, увійшов через Дію. У Ghost ніхто не знає, що ти тут. Вмикаєш Open — сусід бачить сигнал «поруч» і надсилає запит: спільний тег «живий джаз».',
+        sc1foot:'Тривалість Open: ~45 хв або до виходу з зони закладу.',
+        sc2meta:'Coworking N · Шевченківський · 14:00', sc2title:'Тиха зона, спільний стек',
+        sc2body:'Працюєш у фокус-зоні. Open показує лише зону (не точне місце столу), плюс теги — TypeScript, дизайн-системи. Запит: «обмін досвідом 15 хвилин».',
+        sc2foot:'Можна обмежити: тільки верифіковані + вік 25–40.',
+        sc3meta:'Винний бар · центр · 21:15', sc3title:'Вечір без «знайомства в очі»',
+        sc3body:'Увімкнув Open, додав тег «натуральні вина». Інший гість бачить відстань і спільність тегів — надсилає запит. Приймаєш або тихо відхиляєш; Ghost — знову невидимість.',
+        sc3foot:'Жодних імен до моменту взаємної згоди.',
+        cmpH:'Що видно в залі: Ghost vs Open',
+        cmpGhostL:'Ghost Mode',
+        cmpOpenL:'Open Mode',
+        cmpGhostLi:'<li>Інші гості PROSTIR: не бачать тебе в списку «поруч».</li><li>Аватар, вік, інтереси: приховані.</li><li>Заклад: операційні дані (стіл, замовлення), без соц-шару.</li><li>Сповіщення знайомств: не надходять.</li>',
+        cmpOpenLi:'<li>Бачать лише ті, хто теж у Open у цьому закладі/зоні.</li><li>Показ: наближена відстань, 2–3 теги, віковий діапазон (якщо дозволив).</li><li>Ім’я та фото: після прийнятого запиту.</li><li>Сесія керована тобою: вимкнув — зник з радару одразу.</li>',
+        ccMeta:'Стіл №7 · ~4 м · Diia Verified · в Open 12 хв',
+        ccVenue:'Cafe Aura · основний зал · сьогодні 19:42',
+        ccBio:'«Шукаю компанію перед джазом у Порто. Не проти обговорити вінил і подорожі.»',
+        ccTags: ['☕ Specialty coffee','🎵 Живий джаз','🎧 Вінил','🚲 Місто пішки'],
+        chatBeta: 'Beta · демо',
+        chatTitle: 'Андрій · демо-чат',
+        chatSub: 'Cafe Aura · основний зал',
+        chatDemo: 'Демо: переписка після взаємного «Прийняти».',
+        ccCloseAria: 'Закрити картку',
+        chatBackAria: 'Назад до профілю',
+        chatLblThem: 'Андрій',
+        chatLblYou: 'Ви',
+        chatTypingAria: 'Пише…',
+        chatM1: 'Привіт! Бачив тег «живий джаз» — ти теж сьогодні на Porto?',
+        chatM2: 'Так, планую ближче до 21:00. Можемо зустрітись біля сцени?',
+        chatM3: 'Супер. Я за столом 7 — вийду хвилин за 5, допиваю каву.'
+      }
+    },
+    en: {
+      nav: { dine: 'Dine', working: 'Working', moments: 'Moments' },
+      hero: {
+        eyebrow: '04 &nbsp;·&nbsp; Moments',
+        title: 'Be here.<br><span class="accent">Or not.</span>',
+        desc: 'Ghost Mode by default: you are “invisible” to other PROSTIR guests in the venue. Turn on Open — you appear only to others who are also Open here, with Diia verification and clear privacy boundaries.'
+      },
+      moments: {
+        mainTitle: 'Ghost Mode',
+        mainDesc: 'You are invisible to PROSTIR guests in this venue. Open Mode lets only people who are also Open right here see you; the venue does not use this for ads or bulk messaging.',
+        toggleOff: 'Ghost',
+        toggleOn: 'Open',
+        activeDesc: '◉ Open Mode is active &nbsp;·&nbsp; You are open to connections',
+        toastTitle: 'Someone nearby wants to meet you',
+        toastHint: 'Shared tag: live music · request valid ~3 min',
+        toastAccept: 'Accept',
+        toastDecline: 'Not interested',
+        feat1t:'Full anonymity', feat1d:'In Ghost Mode others do not see your social layer; the venue only handles service data like bookings — not “who sits with whom”.',
+        feat2t:'Instant contact', feat2d:'One allowed request — a push to your phone. No feed to scroll: you are already in the same physical space.',
+        feat3t:'Verified identity', feat3d:'Open is available after Diia verification. That removes most fakes and sets clear ground rules in the room.',
+        feat4t:'Session, not a permanent profile', feat4d:'Open is tied to the visit: leave or toggle off — you are off the map again, without a long digital trail.',
+        feat5t:'Moderation & block', feat5d:'Report, block, limits for repeat abuse. Chat content is not sold to third parties.',
+        feat6t:'Venue geofence', feat6d:'“Nearby” in this demo is hall-level; product accuracy will grow with beacons and partner infrastructure.',
+        expTitle:'How Moments works in PROSTIR',
+        expDesc:'Moments is about real places: coffee after work, a quiet coworking corner, a bar near the stage. You choose when to stay in the shadows and when to signal “open to say hi”.',
+        expS1t:'Ghost by default', expS1d:'In Ghost other PROSTIR guests do not see your avatar, age, interests, or “who is around”. The venue sees only operational needs (table, orders) — not the social layer.',
+        expS2t:'Intent-based signal', expS2d:'Open Mode is a short intent: “open to meeting in this room”. It lasts for a bounded time (the visit session) and ends when you toggle off or leave the geofence.',
+        expS3t:'Verified contact', expS3d:'Requests arrive as push notifications; you only see allowed fields (age band, tags, distance). After Accept — limited chat or profile with a Diia Verified badge.',
+        expS4t:'Venue-safe boundaries', expS4d:'The venue does not read chats. Moderation exists; abusive accounts lose Open. Comfort beats blind engagement.',
+        demo:'Demo mode · Test now',
+        scH:'Real-world scenarios',
+        scLead:'Three typical Kyiv situations — from “just sitting down” to a real connection.',
+        sc1meta:'Cafe Aura · Podil · 7:30 PM', sc1title:'Coffee before the gig',
+        sc1body:'You booked via Dine and signed in with Diia. In Ghost no one knows you are here. Turn on Open — someone at the next table sees “nearby” and sends a request: shared tag “live jazz”.',
+        sc1foot:'Open duration: ~45 min or until you leave the venue zone.',
+        sc2meta:'Coworking N · Shevchenkivskyi · 2:00 PM', sc2title:'Quiet zone, same stack',
+        sc2body:'You work in the focus zone. Open shows only the area (not your exact desk) plus tags — e.g. TypeScript, design systems. Request: “15 min knowledge swap”.',
+        sc2foot:'Optional filter: verified only + age 25–40.',
+        sc3meta:'Wine bar · centre · 9:15 PM', sc3title:'Evening without the staring contest',
+        sc3body:'You enable Open, add a tag “natural wine”. Another guest sees distance and tag overlap — sends a request. You accept or decline quietly; Ghost restores full invisibility.',
+        sc3foot:'No names until mutual consent.',
+        cmpH:'What the room sees: Ghost vs Open',
+        cmpGhostL:'Ghost Mode',
+        cmpOpenL:'Open Mode',
+        cmpGhostLi:'<li>Other PROSTIR guests: you are not listed as “nearby”.</li><li>Avatar, age, interests: hidden.</li><li>Venue: operational data (table, orders), no social layer.</li><li>Connection notifications: none.</li>',
+        cmpOpenLi:'<li>Only people also in Open in this venue/zone can see you.</li><li>Shown: approximate distance, 2–3 tags, age band (if you allow).</li><li>Name & photo: after an accepted request.</li><li>Session is yours: toggle off — you disappear from the radar immediately.</li>',
+        ccMeta:'Table №7 · ~4 m · Diia Verified · Open for 12 min',
+        ccVenue:'Cafe Aura · main hall · today 7:42 PM',
+        ccBio:'“Looking for company before the jazz set at Porto. Happy to chat vinyl and travel.”',
+        ccTags: ['☕ Specialty coffee','🎵 Live jazz','🎧 Vinyl','🚲 City on foot'],
+        chatBeta: 'Beta · demo',
+        chatTitle: 'Andriy · demo chat',
+        chatSub: 'Cafe Aura · main hall',
+        chatDemo: 'Demo: conversation after mutual Accept.',
+        ccCloseAria: 'Close card',
+        chatBackAria: 'Back to profile',
+        chatLblThem: 'Andriy',
+        chatLblYou: 'You',
+        chatTypingAria: 'Typing…',
+        chatM1: 'Hey — saw the “live jazz” tag. Are you also heading to Porto tonight?',
+        chatM2: 'Yes, aiming for ~9 PM. Want to meet by the stage?',
+        chatM3: 'Perfect. I’m at table 7 — give me ~5 min to finish my coffee.'
+      }
+    }
+  };
+  window.__prostirMomentsT = t;
+
+  const heroEyebrow = $('hero-eyebrow');
+  const heroTitle = $('hero-title');
+  const heroDesc = $('hero-desc');
+
+  const mainTitle = $('moments-main-title');
+  const mainDesc = $('moments-main-desc');
+  const toggleOff = $('toggle-label-off');
+  const toggleOn = $('toggle-label-on');
+  const activeDesc = $('moments-active-desc');
+
+  const toastTitle = $('moments-toast-title');
+  const toastAccept = $('moments-toast-accept');
+  const toastDecline = $('moments-toast-decline');
+
+  function apply(lang){
+    document.querySelectorAll('[data-nav]').forEach(a=>{
+      const k = a.dataset.nav;
+      if(t[lang].nav[k]) a.textContent = t[lang].nav[k];
+    });
+
+    if(heroEyebrow) heroEyebrow.innerHTML = t[lang].hero.eyebrow;
+    if(heroTitle) heroTitle.innerHTML = t[lang].hero.title;
+    if(heroDesc) heroDesc.textContent = t[lang].hero.desc;
+
+    if(mainTitle) mainTitle.textContent = t[lang].moments.mainTitle;
+    if(mainDesc) mainDesc.textContent = t[lang].moments.mainDesc;
+    if(toggleOff) toggleOff.textContent = t[lang].moments.toggleOff;
+    if(toggleOn) toggleOn.textContent = t[lang].moments.toggleOn;
+    if(activeDesc) activeDesc.innerHTML = t[lang].moments.activeDesc;
+    if(toastTitle) toastTitle.textContent = t[lang].moments.toastTitle;
+    const toastSub = $('moments-toast-sub');
+    const ex = t[lang].moments;
+    if(toastSub){
+      toastSub.textContent = (lang === 'en' ? 'from table #7' : 'зі столика №7') + (lang === 'en' ? ' · main hall' : ' · основний зал');
+    }
+    const toastHint = $('moments-toast-hint');
+    if(toastHint && ex.toastHint) toastHint.textContent = ex.toastHint;
+    if(toastAccept) toastAccept.textContent = t[lang].moments.toastAccept;
+    if(toastDecline) toastDecline.textContent = t[lang].moments.toastDecline;
+    const btnLabel = document.querySelector('.diia-btn .btn-label'); if(btnLabel) btnLabel.textContent = lang==='en'?'Sign in with Diia':'Вхід через Дію';
+    const feats = document.querySelectorAll('.moments-feat-card');
+    const fk = ['feat1t','feat1d','feat2t','feat2d','feat3t','feat3d','feat4t','feat4d','feat5t','feat5d','feat6t','feat6d'];
+    feats.forEach((card, i) => {
+      const ti = card.querySelector('.mfc-title');
+      const de = card.querySelector('.mfc-desc');
+      const tKey = fk[i * 2];
+      const dKey = fk[i * 2 + 1];
+      if (ti && ex[tKey]) ti.textContent = ex[tKey];
+      if (de && ex[dKey]) de.textContent = ex[dKey];
+    });
+    const et = $('mom-exp-title'); if(et) et.textContent = ex.expTitle;
+    const ed = $('mom-exp-desc'); if(ed) ed.textContent = ex.expDesc;
+    const e1t = $('mom-exp-s1t'); if(e1t) e1t.textContent = ex.expS1t;
+    const e1d = $('mom-exp-s1d'); if(e1d) e1d.textContent = ex.expS1d;
+    const e2t = $('mom-exp-s2t'); if(e2t) e2t.textContent = ex.expS2t;
+    const e2d = $('mom-exp-s2d'); if(e2d) e2d.textContent = ex.expS2d;
+    const e3t = $('mom-exp-s3t'); if(e3t) e3t.textContent = ex.expS3t;
+    const e3d = $('mom-exp-s3d'); if(e3d) e3d.textContent = ex.expS3d;
+    const e4t = $('mom-exp-s4t'); if(e4t) e4t.textContent = ex.expS4t;
+    const e4d = $('mom-exp-s4d'); if(e4d) e4d.textContent = ex.expS4d;
+    const dl = $('mom-demo-label'); if(dl) dl.textContent = ex.demo;
+    const sh = $('mom-sc-h'); if(sh) sh.textContent = ex.scH;
+    const sl = $('mom-sc-lead'); if(sl) sl.textContent = ex.scLead;
+    $('mom-sc1-meta') && ( $('mom-sc1-meta').textContent = ex.sc1meta );
+    $('mom-sc1-title') && ( $('mom-sc1-title').textContent = ex.sc1title );
+    $('mom-sc1-body') && ( $('mom-sc1-body').textContent = ex.sc1body );
+    $('mom-sc1-foot') && ( $('mom-sc1-foot').textContent = ex.sc1foot );
+    $('mom-sc2-meta') && ( $('mom-sc2-meta').textContent = ex.sc2meta );
+    $('mom-sc2-title') && ( $('mom-sc2-title').textContent = ex.sc2title );
+    $('mom-sc2-body') && ( $('mom-sc2-body').textContent = ex.sc2body );
+    $('mom-sc2-foot') && ( $('mom-sc2-foot').textContent = ex.sc2foot );
+    $('mom-sc3-meta') && ( $('mom-sc3-meta').textContent = ex.sc3meta );
+    $('mom-sc3-title') && ( $('mom-sc3-title').textContent = ex.sc3title );
+    $('mom-sc3-body') && ( $('mom-sc3-body').textContent = ex.sc3body );
+    $('mom-sc3-foot') && ( $('mom-sc3-foot').textContent = ex.sc3foot );
+    const mcb = $('cc-chat-beta'); if(mcb && ex.chatBeta) mcb.textContent = ex.chatBeta;
+    const mct = $('cc-chat-title'); if(mct && ex.chatTitle) mct.textContent = ex.chatTitle;
+    const mcs = $('cc-chat-sub'); if(mcs && ex.chatSub) mcs.textContent = ex.chatSub;
+    const mcd = $('cc-chat-demo'); if(mcd && ex.chatDemo) mcd.textContent = ex.chatDemo;
+    const mcc = $('cc-chat-back'); if(mcc && ex.chatBackAria) mcc.setAttribute('aria-label', ex.chatBackAria);
+    const cca = $('cc-close'); if(cca && ex.ccCloseAria) cca.setAttribute('aria-label', ex.ccCloseAria);
+    const cmh = $('mom-cmp-h'); if(cmh) cmh.textContent = ex.cmpH;
+    $('mom-cmp-ghost-l') && ( $('mom-cmp-ghost-l').textContent = ex.cmpGhostL );
+    $('mom-cmp-open-l') && ( $('mom-cmp-open-l').textContent = ex.cmpOpenL );
+    const gul = $('mom-cmp-ghost-ul'); if(gul && ex.cmpGhostLi) gul.innerHTML = ex.cmpGhostLi;
+    const oul = $('mom-cmp-open-ul'); if(oul && ex.cmpOpenLi) oul.innerHTML = ex.cmpOpenLi;
+    const footerOffer = document.querySelector('footer .footer-offer');
+    if (footerOffer) footerOffer.textContent = lang === 'en' ? 'Public offer' : 'Публічна оферта';
+    const footerLinks = document.querySelectorAll('.footer-links a');
+    if(footerLinks[0]) footerLinks[0].textContent = lang==='en'?'Terms':'Умови';
+    if(footerLinks[1]) footerLinks[1].textContent = lang==='en'?'Privacy':'Конфіденційність';
+    if(footerLinks[2]) footerLinks[2].textContent = lang==='en'?'Contacts':'Контакти';
+
+    switcher.querySelectorAll('.lang-btn').forEach(b=>{
+      const on = b.dataset.lang === lang;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  const saved = localStorage.getItem('prostir_lang') || 'ua';
+  const initial = saved === 'en' ? 'en' : 'ua';
+  apply(initial);
+
+  switcher.querySelectorAll('.lang-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const lang = b.dataset.lang === 'en' ? 'en' : 'ua';
+      localStorage.setItem('prostir_lang', lang);
+      apply(lang);
+    });
+  });
+})();
+</script>
+
+<!-- Magnetic Button Effect (spring physics, single RAF loop) -->
+<script>
+(function(){if(window.matchMedia("(hover: none)").matches)return;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const K=150,D=15;function spring(){return{pos:0,vel:0,target:0};}function stepSpring(s,dt){const F=-K*(s.pos-s.target)-D*s.vel;s.vel+=F*dt;s.pos+=s.vel*dt;}function atRest(s){return Math.abs(s.pos-s.target)<0.015&&Math.abs(s.vel)<0.015;}let mx=-9999,my=-9999;document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;},{passive:true});const buttons=[];let lastT=0;function loop(now){const dt=Math.min((now-(lastT||now))/1000,0.05);lastT=now;for(const b of buttons){const r=b.el.getBoundingClientRect();const cx=r.left+r.width*.5,cy=r.top+r.height*.5;const dx=mx-cx,dy=my-cy;const dist=Math.hypot(dx,dy);if(dist<b.radius){const pull=(1-dist/b.radius);b.sx.target=(dx/b.radius)*b.maxShift*pull;b.sy.target=(dy/b.radius)*b.maxShift*pull;b.near=true;}else{b.sx.target=b.sy.target=0;b.near=false;}stepSpring(b.sx,dt);stepSpring(b.sy,dt);const x=b.sx.pos,y=b.sy.pos;b.el.style.transform="translate("+x.toFixed(2)+"px,"+y.toFixed(2)+"px)";if(b.inner){b.inner.style.transform="translate("+(x*b.innerR).toFixed(2)+"px,"+(y*b.innerR).toFixed(2)+"px)";}const g=b.near?Math.max(0,(b.radius-dist)/b.radius):0;const gq=Math.round(g*32)/32;if(gq!==b._gq){b._gq=gq;if(gq>0.01){const s1=(18+gq*32).toFixed(0);const a1=(0.10+gq*0.40).toFixed(2);b.el.style.boxShadow="0 0 "+s1+"px rgba(139,92,246,"+a1+"),0 0 "+(gq*72).toFixed(0)+"px rgba(139,92,246,"+(gq*0.12).toFixed(2)+")";}else if(atRest(b.sx)&&atRest(b.sy)){b.el.style.boxShadow="";b.el.style.transform="";if(b.inner)b.inner.style.transform="";}}}requestAnimationFrame(loop);}function initButton(el){if(el._magInit)return;el._magInit=true;const radius=parseInt(el.dataset.magR,10)||70;const maxShift=parseInt(el.dataset.magS,10)||18;const innerR=parseFloat(el.dataset.magI)||0.45;let inner=el.querySelector(":scope > .mag-inner");if(!inner){inner=document.createElement("span");inner.className="mag-inner";while(el.firstChild)inner.appendChild(el.firstChild);el.appendChild(inner);}buttons.push({el,inner,radius,maxShift,innerR,sx:spring(),sy:spring(),near:false,_gq:-1});}function init(){document.querySelectorAll(".cta-btn,.diia-btn,[data-magnetic]").forEach(initButton);if(buttons.length)requestAnimationFrame(loop);}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{requestAnimationFrame(init);}})();
+</script>
+<script src="/AppMultiServicios/diia-auth.bundle.js" defer></script>
+<script src="/AppMultiServicios/shell-enhancements.js" defer></script>
+<script src="/AppMultiServicios/delight.js" defer></script>
+<script src="/AppMultiServicios/faq.js" defer></script>
+<script src="/AppMultiServicios/legal.js" defer></script>
+</body>
+</html>

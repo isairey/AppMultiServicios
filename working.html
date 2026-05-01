@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Working — PROSTIR Hub</title>
+  <link rel="stylesheet" href="/AppMultiServicios/app.css"/>
+  <link rel="stylesheet" href="/AppMultiServicios/prostir-zigzag.css"/>
+  <style>
+    .page-content { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem 6rem; width: 100%; box-sizing: border-box; }
+    @media (max-width: 720px) { .page-content { padding: 0 1.5rem 4rem; } }
+    .module-explain { margin: 0 0 1.4rem; border: 1px solid var(--grey-line); border-radius: 18px; background: var(--bg); box-shadow: var(--card-shadow); padding: 1.25rem; max-width: 100%; box-sizing: border-box; overflow-x: clip; }
+    .me-top { margin-bottom: 0.9rem; }
+    .me-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.03em; color: var(--jet); margin-bottom: 0.35rem; }
+    .me-desc { font-size: 0.84rem; color: var(--grey-soft); line-height: 1.65; max-width: 72ch; }
+    body.theme-noir .me-title { color: #fff; }
+    body.theme-noir .me-desc { color: rgba(255,255,255,0.55); }
+    .me-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0.65rem; }
+    .me-item { border: 1px solid var(--grey-line); border-radius: 13px; padding: 0.8rem 0.85rem; background: var(--grey-fill); }
+    .me-k { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-muted); margin-bottom: 0.32rem; display: flex; align-items: center; gap: 0.35rem; }
+    .me-v { font-size: 0.78rem; color: var(--grey-soft); line-height: 1.55; }
+    .demo-sep { margin: 0.3rem 0 1rem; display: flex; align-items: center; gap: 0.7rem; }
+    .demo-sep-line { height: 1px; flex: 1; background: linear-gradient(90deg,rgba(139,92,246,0),rgba(139,92,246,0.35),rgba(139,92,246,0)); }
+    .demo-sep-pill { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid rgba(139,92,246,0.25); color: var(--violet); border-radius: 999px; padding: 0.26rem 0.7rem; background: rgba(139,92,246,0.06); white-space: nowrap; }
+    @media (max-width: 780px){ .me-grid { grid-template-columns: 1fr; } }
+    .spaces-list { margin: 2rem 0 1rem; display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 0.7rem; min-width: 0; }
+    .space-card { border: 1px solid var(--grey-line); border-radius: 14px; overflow: hidden; background: var(--bg); box-shadow: var(--card-shadow); transition: all .28s var(--ease); cursor: pointer; min-width: 0; max-width: 100%; }
+    .space-card.open { border-color: rgba(139,92,246,0.45); box-shadow: 0 0 0 1px rgba(139,92,246,0.2), 0 16px 30px rgba(139,92,246,0.14); }
+    .space-top { display: block; padding: 0.45rem; overflow: hidden; max-width: 100%; }
+    .space-thumb { width: 100%; max-width: 100%; height: 92px; object-fit: cover; object-position: center; border-radius: 10px; filter: grayscale(100%) contrast(108%); display: block; }
+    .space-card.open .space-thumb { filter: grayscale(20%) contrast(112%); }
+    .space-name { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 .3rem; }
+    .space-meta { font-size: .75rem; color: var(--grey-muted); font-family: var(--font-mono); }
+    .space-mini { padding: .45rem .3rem .4rem; }
+    .space-mini .space-name { font-size: .76rem; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .space-mini .space-meta { font-size: .62rem; margin-top: .15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .space-hero { margin: 0 0 2.4rem; border:1px solid var(--grey-line); border-radius: 20px; background: var(--bg); box-shadow: var(--card-shadow); overflow: hidden; max-width: 100%; box-sizing: border-box; }
+    .space-hero-grid { display:grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 0; min-width: 0; }
+    .space-hero-img { width:100%; max-width:100%; min-width:0; height: 300px; object-fit: cover; object-position: center; filter: grayscale(55%) contrast(112%); display: block; }
+    .space-hero-body { padding: 1.1rem 1.1rem 1.2rem; display:flex; flex-direction:column; gap:.75rem; }
+    .space-hero-title { font-size: 1.35rem; font-weight: 700; letter-spacing:-0.02em; margin:0; }
+    .space-hero-meta { font-family:var(--font-mono); font-size:.68rem; color:var(--grey-muted); }
+    .space-note { border:1px solid var(--grey-line); border-radius: 12px; padding: .75rem .85rem; font-size: .84rem; color: var(--grey-soft); line-height: 1.55; }
+    .space-tags { margin-top: .6rem; display: flex; gap: .45rem; flex-wrap: wrap; }
+    .space-tag { font-family: var(--font-mono); font-size: .64rem; border:1px solid var(--grey-line); border-radius: 999px; padding: .22rem .55rem; color: var(--grey-muted); }
+    .desk-card.desk-focus { border-color: rgba(139,92,246,0.6) !important; box-shadow: 0 0 0 1px rgba(139,92,246,0.35), 0 16px 34px rgba(139,92,246,0.16) !important; transform: translateY(-2px); }
+    .desk-card.desk-dim { opacity: 0.32; filter: saturate(0.75); }
+    @media (max-width: 980px){ .spaces-list{ grid-template-columns: repeat(3,minmax(0,1fr)); } }
+    @media (max-width: 720px){ .spaces-list{ grid-template-columns: repeat(2,minmax(0,1fr)); } .space-hero-grid{ grid-template-columns:1fr; } .space-hero-img{ height:220px; } .space-thumb{ height: 120px; } }
+  </style>
+</head>
+<body class="working-page">
+<div class="grain" aria-hidden="true"></div>
+
+<header id="dock">
+  <a class="logo" href="/AppMultiServicios/" aria-label="PROSTIR home"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+  <nav aria-label="Main navigation">
+    <a href="/AppMultiServicios/dine.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="dine">Dine</a>
+    <a href="/AppMultiServicios/working.html" class="nav-active" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="working">Working</a>
+    <a href="/AppMultiServicios/moments.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="moments">Moments</a>
+    <a href="/AppMultiServicios/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+  </nav>
+  <div class="header-right">
+    <a href="/AppMultiServicios/download.html" class="header-download" data-magnetic data-mag-r="40" data-mag-s="6">Незабаром</a>
+    <a href="#" class="diia-btn" aria-label="Вхід через Дію"><span class="diia-logo" aria-hidden="true">Дія</span><span class="btn-label">Вхід через Дію</span></a>
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ua" aria-pressed="true" aria-label="Українська">
+        <span class="lang-flag" aria-hidden="true">🇺🇦</span><span class="lang-code">UA</span>
+      </button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+        <span class="lang-flag" aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span>
+      </button>
+    </div>
+    <a href="/AppMultiServicios/profile.html" class="user-avatar" title="Профіль" aria-label="Профіль">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="/AppMultiServicios/download.html" class="header-download">Незабаром</a>
+  <a href="/AppMultiServicios/dine.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="dine">Dine</a>
+  <a href="/AppMultiServicios/working.html" class="nav-active" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="working">Working</a>
+  <a href="/AppMultiServicios/moments.html" data-magnetic data-mag-r="44" data-mag-s="7" data-nav="moments">Moments</a>
+  <a href="/AppMultiServicios/business.html" data-magnetic data-mag-r="44" data-mag-s="7">Business</a>
+</div>
+
+<div class="page-hero">
+  <p class="page-hero-eyebrow" id="hero-eyebrow">02 &nbsp;·&nbsp; Working</p>
+  <h1 class="page-hero-h1" id="hero-title">Твій стіл.<br><span class="accent" id="hero-accent">Вже чекає.</span></h1>
+  <p class="page-hero-p" id="hero-desc">PROSTIR Hub — коворкінг з живим статусом кожного робочого місця. Зелений — вільний, бери зараз. Жовтий — в сесії. Червоний — заброньований. Ніяких сюрпризів.</p>
+  <div class="page-hero-divider"></div>
+</div>
+
+<div class="page-content">
+  <section class="module-explain module-explain--zigzag reveal">
+    <div class="me-top">
+      <div class="me-title" id="work-exp-title">Як працює Working у PROSTIR</div>
+      <div class="me-desc" id="work-exp-desc">Working показує не просто вільний стіл, а повний сценарій: реальний статус місця, атмосферу зони, швидке бронювання через Дію та автосесію для Safe Exit.</div>
+    </div>
+    <div class="mom-zig-stack">
+      <div class="mom-zig-row">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>01</span><span id="work-exp-s1t">Live Status</span></div>
+          <p class="mom-zig-body" id="work-exp-s1d">Кожен desk оновлюється в режимі реального часу: вільний, у сесії або заброньований.</p>
+        </div>
+        <div class="mom-zig-art" aria-hidden="true">
+          <svg width="200" height="168" viewBox="0 0 200 168" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="38" y="44" width="42" height="34" rx="6" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.3"/>
+            <circle cx="50" cy="88" r="4" fill="#22c55e"/>
+            <text x="59" y="91" fill="currentColor" fill-opacity="0.5" font-size="9" font-family="ui-monospace,Courier,monospace">FREE</text>
+            <rect x="96" y="44" width="42" height="34" rx="6" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.3"/>
+            <circle cx="108" cy="88" r="4" fill="#f59e0b"/>
+            <text x="117" y="91" fill="currentColor" fill-opacity="0.5" font-size="9" font-family="ui-monospace,Courier,monospace">BUSY</text>
+            <rect x="154" y="44" width="42" height="34" rx="6" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.3"/>
+            <circle cx="166" cy="88" r="4" fill="#ef4444"/>
+            <text x="175" y="91" fill="currentColor" fill-opacity="0.5" font-size="9" font-family="ui-monospace,Courier,monospace">BOOK</text>
+            <path d="M52 56h14M52 64h18" stroke="currentColor" stroke-opacity="0.22" stroke-width="1" stroke-linecap="round"/>
+            <path d="M110 56h14M110 64h18" stroke="currentColor" stroke-opacity="0.22" stroke-width="1" stroke-linecap="round"/>
+            <path d="M168 56h14M168 64h18" stroke="currentColor" stroke-opacity="0.22" stroke-width="1" stroke-linecap="round"/>
+            <path d="M70 118h60" stroke="currentColor" stroke-opacity="0.15" stroke-width="1" stroke-linecap="round" stroke-dasharray="4 4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="mom-zig-row mom-zig-row--reverse">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>02</span><span id="work-exp-s2t">Zone Context</span></div>
+          <p class="mom-zig-body" id="work-exp-s2d">Обирай не лише номер столу, а й тип простору: quiet, collab, window або meeting.</p>
+        </div>
+        <div class="mom-zig-art" aria-hidden="true">
+          <svg width="200" height="168" viewBox="0 0 200 168" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="36" y="40" width="128" height="88" rx="10" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.4"/>
+            <rect x="44" y="48" width="52" height="36" rx="5" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2" fill="currentColor" fill-opacity="0.05"/>
+            <text x="70" y="70" text-anchor="middle" fill="currentColor" fill-opacity="0.45" font-size="8" font-family="ui-monospace,Courier,monospace">QUIET</text>
+            <rect x="104" y="48" width="52" height="36" rx="5" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2" fill="currentColor" fill-opacity="0.04"/>
+            <text x="130" y="70" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="8" font-family="ui-monospace,Courier,monospace">COLLAB</text>
+            <rect x="44" y="92" width="52" height="28" rx="5" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
+            <text x="70" y="109" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="8" font-family="ui-monospace,Courier,monospace">WINDOW</text>
+            <rect x="104" y="92" width="52" height="28" rx="5" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"/>
+            <text x="130" y="109" text-anchor="middle" fill="currentColor" fill-opacity="0.4" font-size="8" font-family="ui-monospace,Courier,monospace">MEET</text>
+          </svg>
+        </div>
+      </div>
+      <div class="mom-zig-row">
+        <div class="mom-zig-copy">
+          <div class="mom-zig-eyebrow"><span>03</span><span id="work-exp-s3t">Secure Booking</span></div>
+          <p class="mom-zig-body" id="work-exp-s3d">Бронювання підтверджується через Дію, після чого активується безпечний сценарій завершення сесії.</p>
+        </div>
+        <div class="mom-zig-art mom-zig-art--hero mom-zig-art--verify" aria-hidden="true">
+          <span class="mom-zig-phone" aria-hidden="true">📱</span>
+          <span class="mom-zig-badge" aria-hidden="true">✓</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="demo-sep reveal">
+    <div class="demo-sep-line"></div>
+    <div class="demo-sep-pill" id="work-demo-label">Demo mode · Test now</div>
+    <div class="demo-sep-line"></div>
+  </div>
+
+  <div class="working-venue-bar reveal">
+    <div>
+      <div class="venue-name">PROSTIR Hub</div>
+      <div class="venue-sub">Вул. Велика Васильківська, 100 &nbsp;·&nbsp; 3-й поверх</div>
+    </div>
+    <span class="live-badge"><span class="live-dot"></span>Відкрито · 08:00 – 22:00</span>
+  </div>
+
+  <div class="spaces-list reveal" id="spaces-list"></div>
+  <section class="space-hero reveal" id="space-hero" aria-live="polite"></section>
+
+  <!-- Skeleton loader for desk grid -->
+  <div class="desk-grid" id="desk-skeleton" aria-hidden="true" style="display:none">
+    <div class="skeleton-card skeleton"><div class="sk-block skeleton" style="height:80px"></div></div>
+    <div class="skeleton-card skeleton"><div class="sk-block skeleton" style="height:80px"></div></div>
+    <div class="skeleton-card skeleton"><div class="sk-block skeleton" style="height:80px"></div></div>
+    <div class="skeleton-card skeleton"><div class="sk-block skeleton" style="height:80px"></div></div>
+    <div class="skeleton-card skeleton"><div class="sk-block skeleton" style="height:80px"></div></div>
+    <div class="skeleton-card skeleton"><div class="sk-block skeleton" style="height:80px"></div></div>
+  </div>
+
+  <!-- Empty state: all desks booked -->
+  <div id="working-empty" style="display:none" aria-live="polite">
+    <div class="empty-state">
+      <div class="empty-icon">💻</div>
+      <div class="empty-title" id="working-empty-title">Усі місця зайняті</div>
+      <div class="empty-desc" id="working-empty-desc">На жаль, всі desk-и заброньовані. Спробуйте вибрати інший час або перевірте знову через кілька хвилин.</div>
+    </div>
+  </div>
+
+  <div class="desk-grid">
+    <div class="desk-card available reveal">
+      <div class="desk-num">DESK · A01</div><div class="desk-label">Стіл #1</div><div class="desk-zone">Зона A · Вікно</div>
+      <div class="desk-status"><span class="status-dot green"></span><span style="color:#16A34A">Вільний</span></div>
+      <button class="desk-reserve-btn">Замовити зараз</button>
+    </div>
+    <div class="desk-card reveal reveal-delay">
+      <div class="desk-num">DESK · A02</div><div class="desk-label">Стіл #2</div><div class="desk-zone">Зона A · Вікно</div>
+      <div class="desk-status"><span class="status-dot amber"></span><span style="color:#B45309">В сесії · до 17:30</span></div>
+    </div>
+    <div class="desk-card reveal reveal-delay2">
+      <div class="desk-num">DESK · A03</div><div class="desk-label">Стіл #3</div><div class="desk-zone">Зона A · Центр</div>
+      <div class="desk-status"><span class="status-dot red"></span><span style="color:#DC2626">Заброньований · до 18:00</span></div>
+    </div>
+    <div class="desk-card available reveal">
+      <div class="desk-num">DESK · A04</div><div class="desk-label">Стіл #4</div><div class="desk-zone">Зона A · Центр</div>
+      <div class="desk-status"><span class="status-dot green"></span><span style="color:#16A34A">Вільний</span></div>
+      <button class="desk-reserve-btn">Замовити зараз</button>
+    </div>
+    <div class="desk-card reveal reveal-delay">
+      <div class="desk-num">DESK · B01</div><div class="desk-label">Стіл #5</div><div class="desk-zone">Зона B · Quiet</div>
+      <div class="desk-status"><span class="status-dot amber"></span><span style="color:#B45309">В сесії · до 19:00</span></div>
+    </div>
+    <div class="desk-card available reveal reveal-delay2">
+      <div class="desk-num">DESK · B02</div><div class="desk-label">Стіл #6</div><div class="desk-zone">Зона B · Quiet</div>
+      <div class="desk-status"><span class="status-dot green"></span><span style="color:#16A34A">Вільний</span></div>
+      <button class="desk-reserve-btn">Замовити зараз</button>
+    </div>
+    <div class="desk-card reveal">
+      <div class="desk-num">DESK · B03</div><div class="desk-label">Стіл #7</div><div class="desk-zone">Зона B · Quiet</div>
+      <div class="desk-status"><span class="status-dot red"></span><span style="color:#DC2626">Заброньований · до 20:00</span></div>
+    </div>
+    <div class="desk-card available reveal reveal-delay">
+      <div class="desk-num">DESK · B04</div><div class="desk-label">Стіл #8</div><div class="desk-zone">Зона B · Стенд</div>
+      <div class="desk-status"><span class="status-dot green"></span><span style="color:#16A34A">Вільний</span></div>
+      <button class="desk-reserve-btn">Замовити зараз</button>
+    </div>
+    <div class="desk-card available reveal reveal-delay2">
+      <div class="desk-num">DESK · C01</div><div class="desk-label">Стіл #9</div><div class="desk-zone">Зона C · Колаб</div>
+      <div class="desk-status"><span class="status-dot green"></span><span style="color:#16A34A">Вільний</span></div>
+      <button class="desk-reserve-btn">Замовити зараз</button>
+    </div>
+    <div class="desk-card reveal">
+      <div class="desk-num">DESK · C02</div><div class="desk-label">Стіл #10</div><div class="desk-zone">Зона C · Колаб</div>
+      <div class="desk-status"><span class="status-dot amber"></span><span style="color:#B45309">В сесії · до 16:45</span></div>
+    </div>
+    <div class="desk-card available reveal reveal-delay">
+      <div class="desk-num">DESK · C03</div><div class="desk-label">Стіл #11</div><div class="desk-zone">Зона C · Колаб</div>
+      <div class="desk-status"><span class="status-dot green"></span><span style="color:#16A34A">Вільний</span></div>
+      <button class="desk-reserve-btn">Замовити зараз</button>
+    </div>
+    <div class="desk-card reveal reveal-delay2">
+      <div class="desk-num">DESK · C04</div><div class="desk-label">Стіл #12</div><div class="desk-zone">Зона C · Переговори</div>
+      <div class="desk-status"><span class="status-dot red"></span><span style="color:#DC2626">Заброньований · до 21:00</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="/AppMultiServicios/"><span class="lp">PR</span><span class="lo">O</span><span class="lrest">STIR</span></a>
+    <span class="footer-copy">© 2026 PROSTIR · Urban OS · Kyiv &nbsp;·&nbsp; <span style="color:rgba(139,92,246,0.7);font-size:0.6rem;">✓ verified by Дія</span></span>
+    <a href="/AppMultiServicios/legal.html" class="footer-offer">Публічна оферта</a>
+    <nav class="footer-links"><a href="#">Умови</a><a href="#">Конфіденційність</a><a href="#">Контакти</a><a href="#" class="faq-link">FAQ</a><a href="/AppMultiServicios/profile.html">Профіль</a></nav>
+  </div>
+</footer>
+
+<button id="theme-toggle-fab" class="theme-fab hidden" type="button" aria-label="Змінити тему">
+  <span id="theme-toggle-icon" aria-hidden="true">◐</span>
+  <span id="theme-toggle-label">Theme</span>
+</button>
+
+<script>
+function $(id){ return document.getElementById(id); }
+
+// Theme: follow device by default, allow one-click override
+(function(){
+  const fab = $('theme-toggle-fab');
+  const icon = $('theme-toggle-icon');
+  const label = $('theme-toggle-label');
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = localStorage.getItem('prostir_theme_choice');
+  function apply(theme){
+    document.body.classList.toggle('theme-noir', theme === 'dark');
+    if(icon) icon.textContent = theme === 'dark' ? '☾' : '☀';
+    if(label) label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  }
+  apply(saved || (mq.matches ? 'dark' : 'light'));
+  if(fab){
+    fab.classList.remove('hidden');
+    if(saved) fab.classList.add('ghosted');
+  }
+  mq.addEventListener('change', e => { if(!localStorage.getItem('prostir_theme_choice')) apply(e.matches ? 'dark' : 'light'); });
+  fab && fab.addEventListener('click', ()=>{
+    const next = document.body.classList.contains('theme-noir') ? 'light' : 'dark';
+    localStorage.setItem('prostir_theme_choice', next);
+    apply(next);
+    fab.classList.add('ghosted');
+  });
+})();
+const dock = $('dock');
+window.addEventListener('scroll', () => { dock.classList.toggle('scrolled', window.scrollY > 8); document.documentElement.style.setProperty('--parallax-y', (-window.scrollY*0.04).toFixed(2)+'px'); }, { passive: true });
+const btn = $('hamburger'), drawer = $('mobile-nav');
+btn && btn.addEventListener('click', () => {
+  const open = drawer.classList.toggle('open'); btn.setAttribute('aria-expanded', open);
+  const s = btn.querySelectorAll('span');
+  if(open){s[0].style.transform='translateY(6.5px) rotate(45deg)';s[1].style.opacity='0';s[2].style.transform='translateY(-6.5px) rotate(-45deg)';}
+  else{s.forEach(x=>{x.style.transform='';x.style.opacity='';}); }
+});
+const io = new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+const spaceData = [
+  { id:'s1', zone:'A', img:'/assets/workspaces/space-1.jpeg', nameUa:'Aurora Booth', nameEn:'Aurora Booth', metaUa:'Фокус · 2 місця · Тихо', metaEn:'Focus · 2 seats · Quiet', noteUa:'Камерний блок для deep-work або швидкого Zoom-call. Ідеально для 1-2 людей, що хочуть приватність.', noteEn:'Compact block for deep work or a quick Zoom call. Perfect for 1-2 people needing privacy.', tags:['Acoustic','Power x2','Near Window'] },
+  { id:'s2', zone:'A', img:'/assets/workspaces/space-2.webp', nameUa:'Mono Desk Line', nameEn:'Mono Desk Line', metaUa:'Shared · 6 місць · Середній шум', metaEn:'Shared · 6 seats · Medium noise', noteUa:'Лінійна зона для довгих сесій. Ергономіка, стабільний Wi-Fi та швидкий доступ до бару.', noteEn:'Linear zone for long sessions. Ergonomics, stable Wi-Fi and quick access to the bar.', tags:['Hot Desk','Fast Wi‑Fi','Near Bar'] },
+  { id:'s3', zone:'C', img:'/assets/workspaces/space-3.webp', nameUa:'Studio Corner', nameEn:'Studio Corner', metaUa:'Creative · 4 місця · М’яке світло', metaEn:'Creative · 4 seats · Soft light', noteUa:'Окремий studio-кут для брейншторму, скетчів і командної міні-сесії.', noteEn:'A separate studio corner for brainstorming, sketching and mini team sessions.', tags:['Collab','Whiteboard','Coffee Service'] },
+  { id:'s4', zone:'C', img:'/assets/workspaces/space-4.jpg', nameUa:'Nomad Bench', nameEn:'Nomad Bench', metaUa:'Open · 8 місць · Живий ритм', metaEn:'Open · 8 seats · Live rhythm', noteUa:'Динамічна зона для digital nomads. Добре підходить для коротких робочих спринтів.', noteEn:'Dynamic area for digital nomads. Great for short work sprints.', tags:['Open Space','USB-C','Standing Option'] },
+  { id:'s5', zone:'B', img:'/assets/workspaces/space-5.jpeg', nameUa:'Quiet Capsule', nameEn:'Quiet Capsule', metaUa:'Private · 2 місця · Мін. шум', metaEn:'Private · 2 seats · Low noise', noteUa:'Найтихіший блок у хабі: для дзвінків, перегляду договорів або інтенсивного фокусу.', noteEn:'Quietest block in the hub: for calls, contract reviews or intensive focus.', tags:['Low Noise','Reserved','Task Light'] },
+];
+
+function zoneOfDesk(card){
+  const z = card.querySelector('.desk-zone')?.textContent || '';
+  if(z.includes('A')) return 'A';
+  if(z.includes('B')) return 'B';
+  if(z.includes('C')) return 'C';
+  return '';
+}
+
+function clearDeskFocus(){
+  document.querySelectorAll('.desk-card').forEach(c=>c.classList.remove('desk-focus','desk-dim'));
+}
+
+function focusDeskZone(zone){
+  const cards = Array.from(document.querySelectorAll('.desk-card'));
+  cards.forEach(card=>{
+    const same = zoneOfDesk(card) === zone;
+    card.classList.toggle('desk-focus', same);
+    card.classList.toggle('desk-dim', !same);
+  });
+}
+
+let activeSpaceId = 's1';
+
+function imgWithFallback(src, alt){ return `<img class="space-thumb" src="${src}" alt="${alt}" loading="lazy" decoding="async">`; }
+function heroImgWithFallback(src, alt){ return `<img class="space-hero-img" src="${src}" alt="${alt}" loading="lazy" decoding="async">`; }
+
+function renderSpaceHero(lang, item){
+  const hero = $('space-hero'); if(!hero || !item) return;
+  hero.innerHTML = `
+    <div class="space-hero-grid">
+      ${heroImgWithFallback(item.img, lang==='en'?item.nameEn:item.nameUa)}
+      <div class="space-hero-body">
+        <h3 class="space-hero-title">${lang==='en'?item.nameEn:item.nameUa}</h3>
+        <div class="space-hero-meta">${lang==='en'?item.metaEn:item.metaUa}</div>
+        <div class="space-note">${lang==='en'?item.noteEn:item.noteUa}</div>
+        <div class="space-tags">${item.tags.map(t=>`<span class="space-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSpaces(lang){
+  const wrap = $('spaces-list'); if(!wrap) return;
+  wrap.innerHTML = spaceData.map(s=>`
+    <article class="space-card ${s.id===activeSpaceId?'open':''}" id="${s.id}" data-space="${s.id}">
+      <div class="space-top">
+        ${imgWithFallback(s.img, lang==='en'?s.nameEn:s.nameUa)}
+        <div class="space-mini">
+          <h3 class="space-name">${lang==='en'?s.nameEn:s.nameUa}</h3>
+          <div class="space-meta">${lang==='en'?s.metaEn:s.metaUa}</div>
+        </div>
+      </div>
+    </article>
+  `).join('');
+  wrap.querySelectorAll('.space-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const id = card.getAttribute('data-space');
+      activeSpaceId = id;
+      wrap.querySelectorAll('.space-card').forEach(c=>c.classList.toggle('open', c===card));
+      const item = spaceData.find(x=>x.id===id);
+      if(item){
+        renderSpaceHero(lang, item);
+        if(item.zone) focusDeskZone(item.zone);
+      }
+    });
+  });
+  const item = spaceData.find(x=>x.id===activeSpaceId) || spaceData[0];
+  if(item){
+    renderSpaceHero(lang, item);
+    if(item.zone) focusDeskZone(item.zone);
+  }
+}
+
+// Language switcher (UA / EN)
+(function(){
+  const switcher = document.getElementById('lang-switch');
+  if(!switcher) return;
+
+  const t = {
+    ua: {
+      nav: { dine: 'Dine', working: 'Working', moments: 'Moments' },
+      common:{quickLogin:'Вхід через Дію', reserve:'Замовити зараз'},
+      hero: {
+        eyebrow: '02 &nbsp;·&nbsp; Working',
+        title: 'Твій стіл.<br><span class="accent">Вже чекає.</span>',
+        desc: 'PROSTIR Hub — коворкінг з живим статусом кожного робочого місця. Зелений — вільний, бери зараз. Жовтий — в сесії. Червоний — заброньований. Ніяких сюрпризів.'
+      },
+      labels:{ liveOpen:'Відкрито · 08:00 – 22:00', free:'Вільний', inSession:'В сесії', booked:'Заброньований' },
+      explain:{
+        title:'Як працює Working у PROSTIR',
+        desc:'Working показує не просто вільний стіл, а повний сценарій: реальний статус місця, атмосферу зони, швидке бронювання через Дію та автосесію для Safe Exit.',
+        s1t:'Live Status', s1d:'Кожен desk оновлюється в режимі реального часу: вільний, у сесії або заброньований.',
+        s2t:'Zone Context', s2d:'Обирай не лише номер столу, а й тип простору: quiet, collab, window або meeting.',
+        s3t:'Secure Booking', s3d:'Бронювання підтверджується через Дію, після чого активується безпечний сценарій завершення сесії.',
+        demo:'Demo mode · Тестуй зараз'
+      }
+    },
+    en: {
+      nav: { dine: 'Dine', working: 'Working', moments: 'Moments' },
+      common:{quickLogin:'Sign in with Diia', reserve:'Reserve now'},
+      hero: {
+        eyebrow: '02 &nbsp;·&nbsp; Working',
+        title: 'Your desk.<br><span class="accent">Ready now.</span>',
+        desc: 'PROSTIR Hub — coworking with a live status for every workstation. Green is free. Yellow is in-session. Red is reserved. No surprises.'
+      },
+      labels:{ liveOpen:'Open · 08:00 – 22:00', free:'Free', inSession:'In session', booked:'Booked' },
+      explain:{
+        title:'How Working operates in PROSTIR',
+        desc:'Working is not just a free desk list. It is a full flow: live seat state, zone context, one-tap Diia booking, and a Safe Exit session lifecycle.',
+        s1t:'Live Status', s1d:'Every desk updates in real time: free, in session, or booked.',
+        s2t:'Zone Context', s2d:'Choose not only a desk number, but also the workspace type: quiet, collab, window, or meeting.',
+        s3t:'Secure Booking', s3d:'Booking is confirmed via Diia, then the secure session flow is activated automatically.',
+        demo:'Demo mode · Test now'
+      }
+    }
+  };
+
+  const heroEyebrow = $('hero-eyebrow');
+  const heroTitle = $('hero-title');
+  const heroDesc = $('hero-desc');
+
+  function apply(lang){
+    document.querySelectorAll('[data-nav]').forEach(a=>{
+      const k = a.dataset.nav;
+      if(t[lang].nav[k]) a.textContent = t[lang].nav[k];
+    });
+    if(heroEyebrow) heroEyebrow.innerHTML = t[lang].hero.eyebrow;
+    if(heroTitle) heroTitle.innerHTML = t[lang].hero.title;
+    if(heroDesc) heroDesc.textContent = t[lang].hero.desc;
+    const btnLabel = document.querySelector('.diia-btn .btn-label'); if(btnLabel) btnLabel.textContent = t[lang].common.quickLogin;
+    const live = document.querySelector('.live-badge'); if(live) live.innerHTML = '<span class="live-dot"></span>'+t[lang].labels.liveOpen;
+    const exp = t[lang].explain;
+    const et = $('work-exp-title'); if(et) et.textContent = exp.title;
+    const ed = $('work-exp-desc'); if(ed) ed.textContent = exp.desc;
+    const e1t = $('work-exp-s1t'); if(e1t) e1t.textContent = exp.s1t;
+    const e1d = $('work-exp-s1d'); if(e1d) e1d.textContent = exp.s1d;
+    const e2t = $('work-exp-s2t'); if(e2t) e2t.textContent = exp.s2t;
+    const e2d = $('work-exp-s2d'); if(e2d) e2d.textContent = exp.s2d;
+    const e3t = $('work-exp-s3t'); if(e3t) e3t.textContent = exp.s3t;
+    const e3d = $('work-exp-s3d'); if(e3d) e3d.textContent = exp.s3d;
+    const dl = $('work-demo-label'); if(dl) dl.textContent = exp.demo;
+    const vsub = document.querySelector('.venue-sub'); if(vsub) vsub.innerHTML = lang==='en'?'Velyka Vasylkivska St, 100 &nbsp;·&nbsp; 3rd floor':'Вул. Велика Васильківська, 100 &nbsp;·&nbsp; 3-й поверх';
+    document.querySelectorAll('.desk-reserve-btn').forEach(b=>b.textContent=t[lang].common.reserve);
+    const footerOffer = document.querySelector('footer .footer-offer');
+    if (footerOffer) footerOffer.textContent = lang === 'en' ? 'Public offer' : 'Публічна оферта';
+    const footerLinks = document.querySelectorAll('.footer-links a');
+    if(footerLinks[0]) footerLinks[0].textContent = lang==='en'?'Terms':'Умови';
+    if(footerLinks[1]) footerLinks[1].textContent = lang==='en'?'Privacy':'Конфіденційність';
+    if(footerLinks[2]) footerLinks[2].textContent = lang==='en'?'Contacts':'Контакти';
+    /* desk-grid label / zone translation */
+    document.querySelectorAll('.desk-label').forEach(el=>{
+      const num = el.textContent.replace(/[^\d]/g,'');
+      el.textContent = lang==='en' ? `Desk #${num}` : `Стіл #${num}`;
+    });
+    const zoneMapToEn = {'Зона A · Вікно':'Zone A · Window','Зона A · Центр':'Zone A · Center','Зона B · Quiet':'Zone B · Quiet','Зона B · Стенд':'Zone B · Stand','Зона C · Колаб':'Zone C · Collab','Зона C · Переговори':'Zone C · Meeting'};
+    const zoneMapToUa = {'Zone A · Window':'Зона A · Вікно','Zone A · Center':'Зона A · Центр','Zone B · Quiet':'Зона B · Quiet','Zone B · Stand':'Зона B · Стенд','Zone C · Collab':'Зона C · Колаб','Zone C · Meeting':'Зона C · Переговори'};
+    document.querySelectorAll('.desk-zone').forEach(el=>{
+      const txt = el.textContent.trim();
+      if(lang==='en' && zoneMapToEn[txt]) el.textContent = zoneMapToEn[txt];
+      else if(lang==='ua' && zoneMapToUa[txt]) el.textContent = zoneMapToUa[txt];
+    });
+    renderSpaces(lang);
+    document.querySelectorAll('.desk-status span:last-child').forEach(el=>{
+      const txt = el.textContent;
+      if(txt.includes('Вільний') || txt.includes('Free')) el.textContent = t[lang].labels.free;
+      if(txt.includes('В сесії') || txt.includes('In session')){
+        const time = txt.includes('до') ? txt.split('до ')[1] : (txt.split('until ')[1]||'');
+        el.textContent = lang==='en' ? `${t[lang].labels.inSession}${time?` · until ${time}`:''}` : `${t[lang].labels.inSession}${time?` · до ${time}`:''}`;
+      }
+      if(txt.includes('Заброньований') || txt.includes('Booked')){
+        const time = txt.includes('до') ? txt.split('до ')[1] : (txt.split('until ')[1]||'');
+        el.textContent = lang==='en' ? `${t[lang].labels.booked}${time?` · until ${time}`:''}` : `${t[lang].labels.booked}${time?` · до ${time}`:''}`;
+      }
+    });
+    switcher.querySelectorAll('.lang-btn').forEach(b=>{
+      const on = b.dataset.lang === lang;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  const saved = localStorage.getItem('prostir_lang') || 'ua';
+  const initial = saved === 'en' ? 'en' : 'ua';
+  apply(initial);
+
+  switcher.querySelectorAll('.lang-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const lang = b.dataset.lang === 'en' ? 'en' : 'ua';
+      localStorage.setItem('prostir_lang', lang);
+      apply(lang);
+    });
+  });
+})();
+</script>
+
+<!-- Magnetic Button Effect (spring physics, single RAF loop) -->
+<script>
+(function(){if(window.matchMedia("(hover: none)").matches)return;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const K=150,D=15;function spring(){return{pos:0,vel:0,target:0};}function stepSpring(s,dt){const F=-K*(s.pos-s.target)-D*s.vel;s.vel+=F*dt;s.pos+=s.vel*dt;}function atRest(s){return Math.abs(s.pos-s.target)<0.015&&Math.abs(s.vel)<0.015;}let mx=-9999,my=-9999;document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;},{passive:true});const buttons=[];let lastT=0;function loop(now){const dt=Math.min((now-(lastT||now))/1000,0.05);lastT=now;for(const b of buttons){const r=b.el.getBoundingClientRect();const cx=r.left+r.width*.5,cy=r.top+r.height*.5;const dx=mx-cx,dy=my-cy;const dist=Math.hypot(dx,dy);if(dist<b.radius){const pull=(1-dist/b.radius);b.sx.target=(dx/b.radius)*b.maxShift*pull;b.sy.target=(dy/b.radius)*b.maxShift*pull;b.near=true;}else{b.sx.target=b.sy.target=0;b.near=false;}stepSpring(b.sx,dt);stepSpring(b.sy,dt);const x=b.sx.pos,y=b.sy.pos;b.el.style.transform="translate("+x.toFixed(2)+"px,"+y.toFixed(2)+"px)";if(b.inner){b.inner.style.transform="translate("+(x*b.innerR).toFixed(2)+"px,"+(y*b.innerR).toFixed(2)+"px)";}const g=b.near?Math.max(0,(b.radius-dist)/b.radius):0;const gq=Math.round(g*32)/32;if(gq!==b._gq){b._gq=gq;if(gq>0.01){const s1=(18+gq*32).toFixed(0);const a1=(0.10+gq*0.40).toFixed(2);b.el.style.boxShadow="0 0 "+s1+"px rgba(139,92,246,"+a1+"),0 0 "+(gq*72).toFixed(0)+"px rgba(139,92,246,"+(gq*0.12).toFixed(2)+")";}else if(atRest(b.sx)&&atRest(b.sy)){b.el.style.boxShadow="";b.el.style.transform="";if(b.inner)b.inner.style.transform="";}}}requestAnimationFrame(loop);}function initButton(el){if(el._magInit)return;el._magInit=true;const radius=parseInt(el.dataset.magR,10)||70;const maxShift=parseInt(el.dataset.magS,10)||18;const innerR=parseFloat(el.dataset.magI)||0.45;let inner=el.querySelector(":scope > .mag-inner");if(!inner){inner=document.createElement("span");inner.className="mag-inner";while(el.firstChild)inner.appendChild(el.firstChild);el.appendChild(inner);}buttons.push({el,inner,radius,maxShift,innerR,sx:spring(),sy:spring(),near:false,_gq:-1});}function init(){document.querySelectorAll(".cta-btn,.diia-btn,[data-magnetic]").forEach(initButton);if(buttons.length)requestAnimationFrame(loop);}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{requestAnimationFrame(init);}})();
+</script>
+<!-- ══ DESK BOOKING MODAL ══ -->
+<div id="desk-modal-overlay" style="
+  position:fixed;inset:0;z-index:8000;
+  background:rgba(0,0,0,0);pointer-events:none;
+  transition:background 0.35s;backdrop-filter:blur(0px);
+  -webkit-backdrop-filter:blur(0px);
+" aria-hidden="true">
+  <div id="desk-modal" role="dialog" aria-modal="true" style="
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+    width:min(540px,100vw);
+    background:#fff;border-radius:28px 28px 0 0;
+    box-shadow:0 -8px 64px rgba(0,0,0,0.18),0 0 0 1px rgba(0,0,0,0.04);
+    padding:0;overflow:hidden;
+    transition:transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    display:flex;flex-direction:column;
+  ">
+    <!-- Handle -->
+    <div style="width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,0.1);margin:12px auto 0;flex-shrink:0"></div>
+
+    <!-- Scrollable body -->
+    <div style="overflow-y:auto;padding:1.25rem 1.75rem 2.5rem;flex:1">
+
+      <!-- Header -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem">
+        <div>
+          <div id="dm-title" style="font-size:1.1rem;font-weight:800;letter-spacing:-0.04em;color:var(--jet)">Забронювати Desk</div>
+          <div id="dm-sub" style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--grey-muted);margin-top:0.25rem">PROSTIR Hub</div>
+        </div>
+        <button id="dm-close" style="width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.06);color:#6B7280;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s" aria-label="Закрити">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l11 11M12 1L1 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Desk info card -->
+      <div id="dm-desk-card" style="background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.14);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.9rem">
+        <div style="width:44px;height:44px;border-radius:13px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.18);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">💻</div>
+        <div>
+          <div id="dm-desk-name" style="font-size:0.9rem;font-weight:700;letter-spacing:-0.02em;color:var(--jet)">Desk #1</div>
+          <div id="dm-desk-zone" style="font-family:var(--font-mono);font-size:0.63rem;color:var(--grey-muted);margin-top:0.1rem">Зона A · Вікно</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:#22c55e;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.22);border-radius:6px;padding:0.2rem 0.55rem" id="dm-desk-status">Вільний</div>
+        </div>
+      </div>
+
+      <!-- Duration picker -->
+      <div style="margin-bottom:1.25rem">
+        <div id="dm-dur-label" style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--grey-muted);margin-bottom:0.65rem">Тривалість</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem" id="dm-durations">
+          <button class="dm-dur-btn" data-hours="2" style="padding:0.6rem 0;border-radius:12px;border:1px solid rgba(139,92,246,0.18);background:rgba(139,92,246,0.05);font-family:var(--font-mono);font-size:0.72rem;font-weight:600;color:#8B5CF6;cursor:pointer;transition:all 0.2s">2 год</button>
+          <button class="dm-dur-btn dm-dur-sel" data-hours="4" style="padding:0.6rem 0;border-radius:12px;border:1px solid #8B5CF6;background:#8B5CF6;font-family:var(--font-mono);font-size:0.72rem;font-weight:600;color:#fff;cursor:pointer;transition:all 0.2s">4 год</button>
+          <button class="dm-dur-btn" data-hours="6" style="padding:0.6rem 0;border-radius:12px;border:1px solid rgba(139,92,246,0.18);background:rgba(139,92,246,0.05);font-family:var(--font-mono);font-size:0.72rem;font-weight:600;color:#8B5CF6;cursor:pointer;transition:all 0.2s">6 год</button>
+          <button class="dm-dur-btn" data-hours="8" style="padding:0.6rem 0;border-radius:12px;border:1px solid rgba(139,92,246,0.18);background:rgba(139,92,246,0.05);font-family:var(--font-mono);font-size:0.72rem;font-weight:600;color:#8B5CF6;cursor:pointer;transition:all 0.2s">Full day</button>
+        </div>
+      </div>
+
+      <!-- Summary row -->
+      <div style="background:var(--grey-fill);border-radius:14px;padding:0.9rem 1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div id="dm-summary-time" style="font-size:0.88rem;font-weight:600;color:var(--jet)">14:00 – 18:00</div>
+          <div id="dm-summary-date" style="font-family:var(--font-mono);font-size:0.62rem;color:var(--grey-muted);margin-top:0.1rem">Сьогодні · 30 берез.</div>
+        </div>
+        <div style="text-align:right">
+          <div id="dm-price" style="font-size:1.05rem;font-weight:800;letter-spacing:-0.03em;color:#8B5CF6">₴ 320</div>
+          <div id="dm-price-sub" style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--grey-muted)">Safe Exit включено</div>
+        </div>
+      </div>
+
+      <!-- States: default / loading / success -->
+      <div id="dm-state-default">
+        <button id="dm-book-btn" style="width:100%;padding:0.9rem;border-radius:16px;border:none;background:#8B5CF6;color:#fff;font-size:0.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;transition:background 0.2s,transform 0.15s">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2l6 3v5c0 3.8-2.6 7.3-6 8.5C4.6 17.3 2 13.8 2 10V5l8-3z"/></svg>
+          <span id="dm-book-label">Підтвердити через Дія</span>
+        </button>
+        <p id="dm-note" style="font-size:0.72rem;color:var(--grey-muted);text-align:center;margin-top:0.75rem;line-height:1.55">Верифікація займає ~10 сек · Zero-click Safe Exit активується автоматично</p>
+      </div>
+
+      <div id="dm-state-loading" style="display:none;text-align:center;padding:1.5rem 0">
+        <div style="width:42px;height:42px;border-radius:50%;border:3px solid rgba(139,92,246,0.15);border-top-color:#8B5CF6;animation:spin 0.8s linear infinite;margin:0 auto 1rem"></div>
+        <div id="dm-loading-text" style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--grey-muted)">Очікування підпису Дія…</div>
+      </div>
+
+      <div id="dm-state-success" style="display:none;text-align:center;padding:1.25rem 0">
+        <div style="width:54px;height:54px;border-radius:50%;background:rgba(34,197,94,0.12);border:2px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 0.85rem">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+        </div>
+        <div id="dm-success-title" style="font-size:1.05rem;font-weight:800;letter-spacing:-0.03em;color:var(--jet);margin-bottom:0.3rem">Заброньовано!</div>
+        <div id="dm-success-detail" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--grey-muted);line-height:1.6"></div>
+        <div style="margin-top:1.1rem;display:flex;gap:0.6rem">
+          <a href="/AppMultiServicios/profile.html" style="flex:1;padding:0.7rem;border-radius:13px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);font-size:0.8rem;font-weight:600;color:#8B5CF6;text-align:center;text-decoration:none;display:block" id="dm-goto-profile">Мій профіль →</a>
+          <button id="dm-done-btn" type="button" style="flex:1;padding:0.7rem;border-radius:13px;background:#8B5CF6;border:none;color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer">Готово</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+  body.theme-noir #desk-modal {
+    background: #0D0D0F !important;
+    box-shadow: 0 -8px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(139,92,246,0.14) !important;
+  }
+  body.theme-noir #dm-title,
+  body.theme-noir #dm-desk-name,
+  body.theme-noir #dm-summary-time,
+  body.theme-noir #dm-success-title { color: #fff !important; }
+  body.theme-noir #dm-desk-card { background: rgba(139,92,246,0.1) !important; }
+  body.theme-noir .dm-dur-btn { color: #c4b5fd !important; }
+  body.theme-noir #dm-desk-card,
+  body.theme-noir #dm-dur-btn { background: rgba(139,92,246,0.09) !important; }
+  body.theme-noir #dm-sub,
+  body.theme-noir #dm-dur-label,
+  body.theme-noir #dm-desk-zone,
+  body.theme-noir #dm-summary-date,
+  body.theme-noir #dm-price-sub,
+  body.theme-noir #dm-loading-text,
+  body.theme-noir #dm-success-detail,
+  body.theme-noir #dm-note { color: rgba(255,255,255,0.3) !important; }
+  body.theme-noir #dm-close { background: rgba(255,255,255,0.07) !important; color: rgba(255,255,255,0.45) !important; }
+  #dm-close:hover { background: rgba(239,68,68,0.12) !important; color: #ef4444 !important; }
+  #dm-book-btn:hover { background: #7c3aed !important; transform: scale(0.99) !important; }
+  body.theme-noir #dm-note { background: transparent !important; }
+</style>
+
+<script>
+(function(){
+  const overlay = document.getElementById('desk-modal-overlay');
+  const modal   = document.getElementById('desk-modal');
+  if (!overlay || !modal) return;
+
+  const PRICES = { 2: 160, 4: 320, 6: 480, 8: 640 };
+  let selectedHours = 4;
+  let activeDeskLabel = '';
+  let activeDeskZone  = '';
+
+  function getLang(){ return localStorage.getItem('prostir_lang') === 'en' ? 'en' : 'ua'; }
+
+  function openModal(deskCard) {
+    const lang = getLang();
+    activeDeskLabel = deskCard.querySelector('.desk-label')?.textContent || 'Desk';
+    activeDeskZone  = deskCard.querySelector('.desk-zone')?.textContent  || '';
+
+    document.getElementById('dm-desk-name').textContent  = activeDeskLabel;
+    document.getElementById('dm-desk-zone').textContent  = activeDeskZone;
+    document.getElementById('dm-desk-status').textContent = lang === 'en' ? 'Free' : 'Вільний';
+    document.getElementById('dm-title').textContent = lang === 'en' ? 'Book a Desk' : 'Забронювати Desk';
+    document.getElementById('dm-dur-label').textContent  = lang === 'en' ? 'Duration' : 'Тривалість';
+    document.getElementById('dm-book-label').textContent = lang === 'en' ? 'Confirm via Diia' : 'Підтвердити через Дія';
+    document.getElementById('dm-note').textContent = lang === 'en'
+      ? 'Verification takes ~10 sec · Zero-click Safe Exit activates automatically'
+      : 'Верифікація займає ~10 сек · Zero-click Safe Exit активується автоматично';
+    document.getElementById('dm-price-sub').textContent = lang === 'en' ? 'Safe Exit included' : 'Safe Exit включено';
+
+    /* duration labels */
+    document.querySelectorAll('.dm-dur-btn').forEach(b => {
+      const h = parseInt(b.dataset.hours);
+      if (lang === 'en') b.textContent = h === 8 ? 'Full day' : `${h}h`;
+      else b.textContent = h === 8 ? 'Full day' : `${h} год`;
+    });
+
+    setDuration(4);
+    showState('default');
+    document.body.style.overflow = 'hidden';
+    overlay.style.pointerEvents = 'all';
+    overlay.style.background = 'rgba(0,0,0,0.6)';
+    overlay.style.backdropFilter = 'blur(4px)';
+    overlay.setAttribute('aria-hidden','false');
+    modal.style.transform = 'translateX(-50%) translateY(0)';
+  }
+
+  function closeModal() {
+    modal.style.transform = 'translateX(-50%) translateY(100%)';
+    overlay.style.background = 'rgba(0,0,0,0)';
+    overlay.style.backdropFilter = 'blur(0px)';
+    overlay.style.pointerEvents = 'none';
+    overlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  function setDuration(h) {
+    selectedHours = h;
+    const lang = getLang();
+    document.querySelectorAll('.dm-dur-btn').forEach(b => {
+      const sel = parseInt(b.dataset.hours) === h;
+      b.style.background   = sel ? '#8B5CF6' : 'rgba(139,92,246,0.05)';
+      b.style.borderColor  = sel ? '#8B5CF6' : 'rgba(139,92,246,0.18)';
+      b.style.color        = sel ? '#fff'     : '#8B5CF6';
+    });
+    const now   = new Date();
+    const start = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    const endH  = new Date(now.getTime() + h * 3600000);
+    const end   = `${String(endH.getHours()).padStart(2,'0')}:${String(endH.getMinutes()).padStart(2,'0')}`;
+    document.getElementById('dm-summary-time').textContent = `${start} – ${end}`;
+    const months = lang === 'en'
+      ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+      : ['січ.','лют.','бер.','квіт.','трав.','черв.','лип.','серп.','вер.','жовт.','лист.','груд.'];
+    document.getElementById('dm-summary-date').textContent =
+      lang === 'en' ? `Today · ${now.getDate()} ${months[now.getMonth()]}`
+                    : `Сьогодні · ${now.getDate()} ${months[now.getMonth()]}`;
+    document.getElementById('dm-price').textContent = `₴ ${PRICES[h]}`;
+  }
+
+  function showState(state) {
+    document.getElementById('dm-state-default').style.display  = state === 'default'  ? '' : 'none';
+    document.getElementById('dm-state-loading').style.display  = state === 'loading'  ? '' : 'none';
+    document.getElementById('dm-state-success').style.display  = state === 'success'  ? '' : 'none';
+  }
+
+  /* Duration buttons */
+  document.getElementById('dm-durations').addEventListener('click', e => {
+    const btn = e.target.closest('.dm-dur-btn');
+    if (btn) setDuration(parseInt(btn.dataset.hours));
+  });
+
+  /* Book */
+  document.getElementById('dm-book-btn').addEventListener('click', () => {
+    showState('loading');
+    const lang = getLang();
+    document.getElementById('dm-loading-text').textContent =
+      lang === 'en' ? 'Waiting for Diia signature…' : 'Очікування підпису Дія…';
+    setTimeout(() => {
+      showState('success');
+      const lang2 = getLang();
+      document.getElementById('dm-success-title').textContent =
+        lang2 === 'en' ? 'Booked!' : 'Заброньовано!';
+      document.getElementById('dm-success-detail').textContent =
+        lang2 === 'en'
+          ? `${activeDeskLabel} · ${document.getElementById('dm-summary-time').textContent}\nSafe Exit active · ₴${PRICES[selectedHours]}`
+          : `${activeDeskLabel} · ${document.getElementById('dm-summary-time').textContent}\nSafe Exit активний · ₴${PRICES[selectedHours]}`;
+      document.getElementById('dm-goto-profile').textContent =
+        lang2 === 'en' ? 'My profile →' : 'Мій профіль →';
+      /* mark desk as booked in grid */
+      document.querySelectorAll('.desk-card.available').forEach(c => {
+        if ((c.querySelector('.desk-label')?.textContent || '') === activeDeskLabel) {
+          c.classList.remove('available');
+          const dot = c.querySelector('.status-dot');
+          if (dot){ dot.className = 'status-dot amber'; }
+          const statusTxt = c.querySelector('.desk-status span:last-child');
+          if (statusTxt){ statusTxt.textContent = lang2 === 'en' ? `In session · until ${document.getElementById('dm-summary-time').textContent.split('–')[1].trim()}` : `В сесії · до ${document.getElementById('dm-summary-time').textContent.split('–')[1].trim()}`; statusTxt.style.color = '#B45309'; }
+          const reserveBtn = c.querySelector('.desk-reserve-btn');
+          if (reserveBtn) reserveBtn.remove();
+        }
+      });
+    }, 1800);
+  });
+
+  /* Close */
+  document.getElementById('dm-close').addEventListener('click', closeModal);
+  document.getElementById('dm-done-btn').addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* Wire reserve buttons */
+  function wireButtons() {
+    document.querySelectorAll('.desk-card.available .desk-reserve-btn').forEach(btn => {
+      if (btn._wired) return;
+      btn._wired = true;
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        openModal(btn.closest('.desk-card'));
+      });
+    });
+  }
+  wireButtons();
+  /* re-wire after renderSpaces (lang switch) */
+  const origRender = window.renderSpaces;
+  const observer = new MutationObserver(() => wireButtons());
+  const grid = document.querySelector('.desk-grid');
+  if (grid) observer.observe(grid, { childList: true, subtree: true });
+})();
+</script>
+
+<script src="/AppMultiServicios/diia-auth.bundle.js" defer></script>
+<script src="/AppMultiServicios/shell-enhancements.js" defer></script>
+<script src="/AppMultiServicios/delight.js" defer></script>
+<script src="/AppMultiServicios/faq.js" defer></script>
+<script src="/AppMultiServicios/legal.js" defer></script>
+</body>
+</html>

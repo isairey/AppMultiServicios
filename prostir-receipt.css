@@ -1,0 +1,360 @@
+/* Torn receipt + tips + waiter chat — shared by business.html & venue.html
+   Spacing on 4px grid (0.25rem) */
+.biz-receipt-experience {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 3.5vw, 2.25rem);
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 var(--space-2, 0.5rem);
+}
+.biz-tips-connection {
+  text-align: center;
+  padding: 0 var(--space-2, 0.5rem);
+  /* If this were <header>, app.css would apply fixed nav — keep block flow */
+  position: relative;
+  display: block;
+  height: auto;
+  inset: auto;
+  z-index: auto;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.biz-tips-connection-title {
+  margin: 0 0 var(--space-3, 0.75rem);
+  font-size: clamp(0.82rem, 2.4vw, 0.95rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  color: #fff;
+}
+.biz-tips-connection-body {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.42);
+  max-width: 48ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.vn-emotion-strip {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto var(--space-8, 2rem);
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  padding: 0 var(--space-2, 0.5rem);
+}
+.vn-receipt-ambient {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  margin: 0 auto;
+  max-width: 300px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.vn-receipt-glow {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 130%;
+  height: 90%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.16), transparent 68%);
+  pointer-events: none;
+  filter: blur(14px);
+}
+/* Зона скролу — лише чек (без чату), щоб прогрес не «гуляв» від зайвої висоти */
+.vn-receipt-scroll-zone {
+  position: relative;
+  width: 100%;
+  max-width: min(300px, 100%);
+}
+.vn-receipt-assembly {
+  position: relative;
+  width: 100%;
+  filter: drop-shadow(0 26px 50px rgba(0, 0, 0, 0.52));
+}
+/* Верхній «корінь», який відривають — рухається при скролі */
+.vn-receipt-stub {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem) var(--space-3, 0.75rem);
+  margin-bottom: -2px;
+  background: #f8f8f6;
+  border-radius: 4px 4px 0 0;
+  text-align: center;
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.38);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.22);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.vn-receipt-stub__line {
+  display: block;
+  line-height: var(--leading-tight, 1.25);
+  word-break: break-word;
+  white-space: normal;
+}
+.vn-receipt-paper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background: #f8f8f6;
+  color: #0a0a0a;
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.06) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  border-radius: 0 0 4px 4px;
+}
+.vn-receipt-inner {
+  padding: var(--space-5, 1.25rem) var(--space-4, 1rem) var(--space-4, 1rem);
+  font-family: ui-monospace, "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  text-align: left;
+}
+.vn-receipt-brand {
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-2, 0.5rem);
+  word-break: break-word;
+}
+.vn-receipt-meta {
+  color: rgba(10, 10, 10, 0.55);
+  font-size: 0.6875rem;
+  margin-bottom: var(--space-3, 0.75rem);
+}
+.vn-receipt-rule {
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.22) 0 4px,
+    transparent 4px 8px
+  );
+  margin: var(--space-2, 0.5rem) 0;
+}
+.vn-receipt-rule--strong {
+  background: rgba(0, 0, 0, 0.35);
+  height: 2px;
+  margin: var(--space-3, 0.75rem) 0 var(--space-2, 0.5rem);
+}
+.vn-receipt-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vn-receipt-line {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  margin-bottom: var(--space-1, 0.25rem);
+  color: #111;
+}
+.vn-receipt-item {
+  flex: 1;
+  min-width: 0;
+}
+.vn-receipt-price {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.vn-receipt-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3, 0.75rem);
+  margin-top: var(--space-1, 0.25rem);
+}
+.vn-receipt-total-label {
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+}
+.vn-receipt-total-val {
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.vn-receipt-footer {
+  margin: var(--space-3, 0.75rem) 0 0;
+  padding-top: var(--space-3, 0.75rem);
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+  font-size: 0.6rem;
+  line-height: 1.5;
+  color: rgba(10, 10, 10, 0.5);
+  text-align: center;
+  font-style: italic;
+}
+.vn-receipt-tips {
+  margin-top: var(--space-3, 0.75rem);
+  padding-top: var(--space-3, 0.75rem);
+  border-top: 1px dashed rgba(0, 0, 0, 0.18);
+}
+.vn-receipt-tips-label {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(10, 10, 10, 0.45);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.vn-receipt-tips-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 0.5rem);
+  justify-content: center;
+}
+.vn-tip-btn {
+  flex: 1 1 calc(25% - var(--space-2, 0.5rem));
+  min-width: 3rem;
+  padding: var(--space-2, 0.5rem) var(--space-2, 0.5rem);
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #f4f4f5;
+  background: rgba(8, 8, 10, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.vn-tip-btn:hover {
+  border-color: rgba(196, 181, 253, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.28),
+    0 0 24px rgba(139, 92, 246, 0.28);
+  color: #e9d5ff;
+}
+.vn-tip-btn:focus-visible {
+  outline: none;
+  border-color: rgba(196, 181, 253, 0.95);
+  box-shadow:
+    0 0 0 2px rgba(139, 92, 246, 0.35),
+    0 0 20px rgba(139, 92, 246, 0.25);
+}
+.vn-tip-btn:active {
+  transform: scale(0.97);
+}
+.vn-tip-btn--active {
+  border-color: rgba(196, 181, 253, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.5),
+    0 0 22px rgba(139, 92, 246, 0.45);
+  color: #fff;
+  background: rgba(88, 28, 135, 0.45);
+}
+.biz-waiter-chat {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3, 0.75rem);
+  width: 100%;
+  max-width: min(320px, 100%);
+  text-align: left;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-1, 0.25rem);
+}
+.biz-waiter-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(196, 181, 253, 0.9);
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.1);
+}
+.biz-waiter-col {
+  flex: 1;
+  min-width: 0;
+}
+.biz-waiter-name {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.biz-waiter-bubble {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px 16px 16px 4px;
+  padding: var(--space-3, 0.75rem);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+.biz-waiter-text {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+.biz-waiter-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+.biz-kiss-wrap {
+  display: flex;
+  justify-content: flex-start;
+}
+.biz-kiss-emoji {
+  font-size: 2.75rem;
+  line-height: 1;
+  display: block;
+  filter: drop-shadow(0 4px 14px rgba(236, 72, 153, 0.35));
+}
+.biz-kiss-hint {
+  margin: var(--space-3, 0.75rem) 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+@media (max-width: 380px) {
+  .vn-tip-btn {
+    flex: 1 1 calc(50% - var(--space-1, 0.25rem));
+    min-width: 0;
+  }
+  .vn-receipt-inner {
+    font-size: 0.6875rem;
+    padding: var(--space-4, 1rem) var(--space-3, 0.75rem);
+  }
+  .vn-receipt-total-val {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .biz-receipt-experience,
+  .vn-emotion-strip {
+    padding: 0 var(--space-1, 0.25rem);
+  }
+}

@@ -102,19 +102,19 @@ Construido con **React + TypeScript (TSX)** y un backend ligero en Node.js.
 ---
 
 ## 🧪 Instalación
-# Clonar repositorio
+### Clonar repositorio
 ```
-git clone https://github.com/shepiitkod/prostir-web.git
+git clone https://github.com/isairey/AppMultiServicios.git
 ```
-# Entrar al proyecto
+### Entrar al proyecto
 ```
-cd prostir-web
+cd AppMultiServicios
 ```
-# Instalar dependencias
+### Instalar dependencias
 ```
 npm install
 ```
-# Ejecutar en desarrollo
+### Ejecutar en desarrollo
 ```
 npm run dev
 ```

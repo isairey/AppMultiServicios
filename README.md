@@ -8,13 +8,6 @@
 [![React](https://img.shields.io/badge/React-UI-61DAFB?style=for-the-badge&logo=react)]
 [![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge&logo=node.js)]
 
----
-
-## 🌐 Demo
-
-🔗 https://shepiitkod.github.io/prostir-web/
-
-> Puedes probar la aplicación directamente desde tu navegador sin necesidad de instalar nada.
 
 ---
 

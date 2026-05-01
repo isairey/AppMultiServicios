@@ -1,145 +1,160 @@
-# PROSTIR — Urban OS
+# 🏙️ PROSTIR — Urban OS
 
 > **ПРОгресивно. ПРОзоро. ПРОсто.**  
-> Your personal urban rhythm.
+> Tu ritmo urbano personal.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-8B5CF6?style=for-the-badge&logo=github&logoColor=white)](https://shepiitkod.github.io/prostir-web/)
-
-**GitHub → [github.com/shepiitkod/prostir-web](https://github.com/shepiitkod/prostir-web)**
-
-### GitHub Pages
-
-Static UI is deployed from the **`gh-pages`** branch on every push to **`main`** or **`master`** (see [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)). In the repo **Settings → Pages**, set the source to **Deploy from a branch** → **`gh-pages`** → **`/ (root)`**.
-
-If your fork uses another owner or repository name, update **`homepage`** in [`package.json`](package.json) and the badge URL above. The build uses `GITHUB_REPOSITORY` to prefix asset paths (e.g. `/prostir-web/app.css`).
-
-**Limits on Pages:** there is no Node/Express API on GitHub Pages. Flows that call `/api/…`, Diia auth against your server, and the venue email form need a separate backend (e.g. Render, Fly.io) or localhost.
+[![Demo en vivo](https://img.shields.io/badge/Ver-Demo-8B5CF6?style=for-the-badge&logo=vercel&logoColor=white)](https://shepiitkod.github.io/prostir-web/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-TSX-blue?style=for-the-badge&logo=typescript)]
+[![React](https://img.shields.io/badge/React-UI-61DAFB?style=for-the-badge&logo=react)]
+[![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge&logo=node.js)]
 
 ---
 
-## What is PROSTIR?
+## 🌐 Demo
 
-PROSTIR is a premium urban operating system for city dwellers. It lets you book a restaurant table, reserve a coworking desk, and connect with people nearby — all verified in 10 seconds through **Diia** (Ukraine's state digital identity app). No passwords. No friction. One tap and you're in.
+🔗 https://shepiitkod.github.io/prostir-web/
 
-The product is built as a high-fidelity front-end prototype with a live Node.js/Express backend, demonstrating a complete booking flow from authentication to zero-click **Safe Exit** auto-payment.
-
----
-
-## Modules
-
-| Module | Description |
-|---|---|
-| **Dine** | Interactive SVG floor plan for Cafe Aura. Select a table, pick a time slot, sign via Diia. Digital receipt with cinematic reveal animation. |
-| **Working** | Coworking desk grid with live availability status. Click a zone card to highlight the corresponding desk area. |
-| **Moments** | Privacy-first social discovery. Ghost Mode toggle, opt-in connection requests, Diia-verified profiles only. |
-| **Business** | Partner dashboard mockup — live floor plan editor, revenue analytics chart with draw-in animation, customer flow bar chart. |
-| **Profile** | User profile page with active bookings, history, settings (Ghost Mode, Safe Exit auto-pay, push notifications), and Diia verification status. |
+> Puedes probar la aplicación directamente desde tu navegador sin necesidad de instalar nada.
 
 ---
 
-## Key Features
+## 🚀 Descripción
 
-- **Diia Sign-In** — one-tap state-verified authentication, zero passwords
-- **Safe Exit** — geofencing auto-closes your tab and sends a push receipt when you leave
-- **Live iOS Widgets** — Safe Exit timer, geofence route map, Moments notification
-- **Magnetic Buttons** — spring-physics hover effect (Framer Motion-style, vanilla JS)
-- **Manifesto Intro** — full-screen word sequence animation on first visit
-- **Dark / Light theme** — Noir-Violet (black) and Neoclassical (white) modes
-- **UA / EN language** — instant full-page language switching, persisted in localStorage
-- **Interactive Pricing** — monthly/yearly toggle with count-up animation, neon border, glassmorphism badge, SVG draw-in checkmarks
-- **FAQ Drawer** — slide-up sheet shared across all pages (`faq.js`)
-- **Skeleton loaders & empty states** — on Dine and Working modules
+**PROSTIR** es una plataforma digital urbana que integra múltiples servicios en una sola aplicación, diseñada para simplificar la vida en la ciudad.
+
+Permite a los usuarios:
+
+- 🍽️ Reservar restaurantes  
+- 💻 Apartar espacios de coworking  
+- 🤝 Conectar con personas cercanas  
+- 👤 Gestionar su perfil y actividades  
+
+Construido con **React + TypeScript (TSX)** y un backend ligero en Node.js.
 
 ---
 
-## Tech Stack
+## 🧩 Módulos
 
-### Frontend
-- Vanilla HTML5 / CSS3 / JavaScript (ES6+) — zero frameworks
-- CSS custom properties, `clamp()`, `backdrop-filter`, `@property`, `conic-gradient`
-- `IntersectionObserver` for scroll-triggered animations
-- `requestAnimationFrame` spring physics engine (stiffness 150, damping 15)
-- FLIP animation technique for manifesto → logo transition
-- SVG: interactive floor plans, animated charts, route maps, icon animations
-- `sessionStorage` (intro once) + `localStorage` (theme, language)
+| Módulo | Descripción |
+|-------|------------|
+| 🍽️ **Dine** | Reserva de mesas con plano interactivo |
+| 💻 **Working** | Reservación de espacios de trabajo |
+| 🌐 **Moments** | Conexión social con enfoque en privacidad |
+| 🏢 **Business** | Panel para negocios y socios |
+| 👤 **Profile** | Perfil de usuario y configuración |
+
+---
+
+## ✨ Características
+
+- 🔐 Autenticación rápida (lista para integración con Diia)  
+- ⚡ Navegación fluida con React  
+- 🎨 Interfaz moderna (modo oscuro / claro)  
+- 🌍 Soporte multi-idioma  
+- 📊 Visualización dinámica de datos  
+- 📱 Diseño totalmente responsive  
+- 🧠 Animaciones e interacciones avanzadas  
+
+---
+
+## 🧱 Tecnologías utilizadas
+
+### Frontend (TSX)
+- **React + TypeScript (TSX)**  
+- CSS moderno (variables, flexbox, grid)  
+- Hooks y manejo de estado  
 
 ### Backend
-- **Node.js** + **Express.js**
-- `db.json` — flat-file JSON data store (no database dependency)
-- CORS-enabled REST API
-- Static file serving from `/public`
+- **Node.js + Express**  
+- API REST  
+- Base de datos JSON ligera  
 
 ---
 
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/tables/:venueId` | Get tables for a venue |
-| `GET` | `/api/desks/:venueId` | Get coworking desks for a venue |
-| `GET` | `/api/apartments` | Get apartment listings |
-| `GET` | `/api/bookings` | Get all bookings |
-| `POST` | `/api/book` | Create a new booking |
-| `DELETE` | `/api/bookings/:id` | Cancel a booking |
-
----
-
-## Project Structure
-
-```
-prostir/
-├── public/
-│   ├── index.html          # Landing page + Live Widgets + How It Works
-│   ├── dine.html           # Restaurant table booking
-│   ├── working.html        # Coworking desk booking
-│   ├── moments.html        # Social discovery (Ghost Mode)
-│   ├── business.html       # Partner / Business page
-│   ├── profile.html        # User profile & settings
-│   ├── app.css             # Global styles
-│   ├── faq.js              # Shared FAQ slide-up drawer
-│   ├── delight.js          # Micro-interaction layer
-│   └── assets/             # Workspace images
-├── server.js               # Express server + REST API
-├── db.json                 # Local data store
-└── package.json
-```
-
----
-
-## Run Locally
+## 🏗️ Estructura del Proyecto
 
 ```bash
-# Install dependencies
-npm install
-
-# Start the server (compile first: npm run build — listens on PORT or 8080, host 0.0.0.0)
-npm start
+📦 prostir
+ ┣ 📂 src
+ ┃ ┣ 📂 components
+ ┃ ┣ 📂 pages
+ ┃ ┣ 📂 hooks
+ ┃ ┣ 📂 services
+ ┃ ┗ 📜 App.tsx
+ ┣ 📂 public
+ ┣ 📜 server.js
+ ┣ 📜 db.json
+ ┣ 📜 package.json
+ ┗ 📜 README.md
 ```
+---
 
-Open [http://localhost:8080](http://localhost:8080). For Diia mock redirects when the API is public, set **`PUBLIC_APP_URL`** to that same public URL (e.g. `https://prostir-web-production.up.railway.app` on Railway).
+## 🔌 API Endpoints
+
+| Método | Endpoint                  | Descripción            |
+|--------|---------------------------|------------------------|
+| GET    | /api/tables/:venueId      | Obtener mesas          |
+| GET    | /api/desks/:venueId       | Obtener espacios       |
+| GET    | /api/bookings             | Listar reservas        |
+| POST   | /api/book                 | Crear reserva          |
+| DELETE | /api/bookings/:id         | Cancelar reserva       |
 
 ---
 
-## Design System
+## 🧪 Instalación
+# Clonar repositorio
+```
+git clone https://github.com/shepiitkod/prostir-web.git
+```
+# Entrar al proyecto
+```
+cd prostir-web
+```
+# Instalar dependencias
+```
+npm install
+```
+# Ejecutar en desarrollo
+```
+npm run dev
+```
+---
 
-| Token | Value |
-|---|---|
-| Accent | `#8B5CF6` Neon Violet |
-| Background (light) | `#FFFFFF` Pure White |
-| Background (dark) | `#000000` Pure Black |
-| Card (dark) | `#0D0D0F` with `32px` radius |
-| Font | System UI stack (`-apple-system`, `Inter`, `Segoe UI`) |
-| Mono font | `SF Mono`, `JetBrains Mono`, `monospace` |
-| Base grid | 8px / 16px |
-| Transitions | `cubic-bezier(0.22, 1, 0.36, 1)` |
+## ⚙️ Scripts disponibles
+
+- npm run dev      # Ejecutar en desarrollo
+- npm run build    # Compilar para producción
+- npm run preview  # Vista previa del build
+- npm start        # Ejecutar backend
 
 ---
 
-## Status
+🎨 Sistema de Diseño
 
-> **Front-end prototype** — UI/UX complete, mock API live.  
-> Backend with real database, Diia OAuth integration, and push notifications are the next milestone.
+Elemento	Valor
+- 🎨 Color principal	#8B5CF6
+- ⚫ Modo oscuro	#000000
+- ⚪ Modo claro	#FFFFFF
+- 🔤 Tipografía	System UI / Inter
+- 📐 Grid base	8px
+- ⚡ Animaciones	cubic-bezier(0.22, 1, 0.36, 1)
 
 ---
 
-*Built with intent. Designed for Kyiv.*
+## 📈 Estado del Proyecto
+
+- 🟢 Frontend completo
+- 🟡 Backend en desarrollo
+- 🚧 Integraciones pendientes
+
+---
+
+## 👨‍💻 Autor
+
+**Isai Reyes**
+
+---
+
+## 📄 Licencia
+
+MIT License
